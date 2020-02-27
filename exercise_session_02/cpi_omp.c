@@ -25,7 +25,7 @@ int main(int argc, char** argv){
         printf("Thread rank: %d\n", omp_get_thread_num());
     }
 
-    #pragma omp parallel for reduction(+:sum) private(x)
+    #pragma omp parallel for reduction(+:sum)
 	for (int i = 0 ; i < nSteps; i ++) {
 	    x = h * ((double)i - 0.5);
 	    sum += 4.0 / (1.0 + x*x);
