@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <sys/time.h>
 #include <omp.h>
-#define MAX_THREADS 8
 
 static long nSteps = 1000000000;
 static double PI25DT = 3.141592653589793238462643;
@@ -23,7 +22,6 @@ int main(int argc, char** argv){
 
     #pragma omp parallel
     {
-        int myRank = omp_get_thread_num();
         printf("Thread rank: %d\n", omp_get_thread_num());
     }
 
