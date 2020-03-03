@@ -10,6 +10,7 @@
 #SBATCH --partition=normal
 #SBATCH --constraint=mc
 #SBATCH --hint=nomultithread
+#SBATCH --account=uzh8
 
 export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
 
