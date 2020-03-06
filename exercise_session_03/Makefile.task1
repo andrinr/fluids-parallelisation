@@ -1,0 +1,12 @@
+CFLAGS=-Wall -O3 -ffast-math -mavx2 
+CC=cc
+
+cpi_mpi	: cpi_mpi.o getTime.o
+
+cpi_mpi.o	: cpi_mpi.c getTime.h
+
+getTime.o:	getTime.c getTime.h
+
+clean: 	rm -f cpi_mpi cpi_mpi.o getTime.o
+
+	
