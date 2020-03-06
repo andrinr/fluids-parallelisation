@@ -4,4 +4,4 @@ In this folder you can find:
 
 * cpi.c : the serial version of last week parallel code, needed for Exercise 1
 * cpi_mpi.c : the MPI version of cpi code, for Exercise 1
-* ex3_2.c : the code needed for Exercise 2 
+* sum.c : the code needed for Exercise 2 
