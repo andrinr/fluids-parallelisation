@@ -1,12 +1,19 @@
-CFLAGS=-Wall -O3 -ffast-math -mavx2 
-CC=cc
 
-cpi_mpi	: cpi_mpi.o getTime.o
+sum0	: sum0.o getTime.o
+	gcc -o sum sum0.o getTime.o
 
-cpi_mpi.o	: cpi_mpi.c getTime.h
+sum1	: sum1.o getTime.o
+	gcc -o sum sum1.o getTime.o
+
+sum2	: sum2.o getTime.o
+	gcc -o sum sum2.o getTime.o
+
+sum3	: sum3.o getTime.o
+	gcc -o sum sum3.o getTime.o
+
+sum.o	: sum.c getTime.h
 
 getTime.o:	getTime.c getTime.h
 
-clean: 	rm -f cpi_mpi cpi_mpi.o getTime.o
+clean: 	rm -f sum sum.o getTime.o
 
-	

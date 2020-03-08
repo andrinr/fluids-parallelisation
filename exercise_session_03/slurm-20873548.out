@@ -1,0 +1,92 @@
+Process rank: 10
+Time passed: 0.158904.
+Process rank: 13
+Time passed: 0.158848.
+Process rank: 14
+Time passed: 0.158801.
+Process rank: 17
+Time passed: 0.158825.
+Process rank: 22
+Time passed: 0.158938.
+Process rank: 23
+Time passed: 0.158861.
+Process rank: 24
+Time passed: 0.158832.
+Process rank: 28
+Time passed: 0.158896.
+Process rank: 29
+Time passed: 0.158871.
+Process rank: 31
+Time passed: 0.158829.
+Process rank: 32
+Time passed: 0.158837.
+Process rank: 33
+Time passed: 0.158870.
+Process rank: 35
+Time passed: 0.158844.
+Process rank: 1
+Time passed: 0.158849.
+Process rank: 2
+Time passed: 0.158928.
+Process rank: 3
+Time passed: 0.158882.
+Process rank: 4
+Time passed: 0.158900.
+Process rank: 5
+Time passed: 0.158933.
+Process rank: 6
+Time passed: 0.158914.
+Process rank: 7
+Time passed: 0.158834.
+Process rank: 8
+Time passed: 0.158903.
+Process rank: 9
+Time passed: 0.158902.
+Process rank: 11
+Time passed: 0.158873.
+Process rank: 12
+Time passed: 0.158957.
+Process rank: 15
+Time passed: 0.158928.
+Process rank: 16
+Time passed: 0.158840.
+Process rank: 18
+Time passed: 0.158951.
+Process rank: 19
+Time passed: 0.158940.
+Process rank: 20
+Time passed: 0.158834.
+Process rank: 21
+Time passed: 0.158904.
+Process rank: 25
+Time passed: 0.158936.
+Process rank: 26
+Time passed: 0.158893.
+Process rank: 27
+Time passed: 0.158831.
+Process rank: 30
+Time passed: 0.159022.
+Process rank: 34
+Time passed: 0.158885.
+Process rank: 0
+pi is approximately 3.1415926555898399, Error is 0.0000000020000468
+Computed in 0.0492 seconds
+Time passed: 0.057805.
+ 
+Batch Job Summary Report for Job "CPI MPI" (20873548) on daint
+-----------------------------------------------------------------------------------------------------
+             Submit            Eligible               Start                 End    Elapsed  Timelimit 
+------------------- ------------------- ------------------- ------------------- ---------- ---------- 
+2020-03-08T12:40:40 2020-03-08T12:40:40 2020-03-08T12:42:03 2020-03-08T12:42:11   00:00:08   00:05:00 
+-----------------------------------------------------------------------------------------------------
+Username    Account     Partition   NNodes   Energy
+----------  ----------  ----------  ------  --------------
+course93    uzh8        normal           1      265 joules
+ 
+This job did not utilize any GPUs
+ 
+----------------------------------------------------------
+Scratch File System        Files       Quota
+--------------------  ----------  ----------
+/scratch/snx3000               7     1000000
+ 

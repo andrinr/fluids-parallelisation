@@ -1,4 +1,4 @@
-CFLAGS=-Wall -O3 -ffast-math -mavx2 
+FLAGS=-Wall -O3 -ffast-math -mavx2 
 CC=cc
 
 cpi_mpi	: cpi_mpi.o getTime.o
@@ -10,3 +10,4 @@ getTime.o:	getTime.c getTime.h
 clean: 	rm -f cpi_mpi cpi_mpi.o getTime.o
 
 	
+

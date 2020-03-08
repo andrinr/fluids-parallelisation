@@ -43,7 +43,7 @@ int main(int argc, char** argv){
     double end = getTime();
     double timePassed = end - start;
     
-    printf("Time passed:",timePassed);
+    printf("Time passed: %f.\n",timePassed);
 
     return 0;
 }
