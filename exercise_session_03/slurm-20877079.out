@@ -1,0 +1,22 @@
+slurmstepd: error: Detected 1 oom-kill event(s) in step 20877079.0 cgroup. Some of your processes may have been killed by the cgroup out-of-memory handler.
+srun: error: nid00028: tasks 0-35: Out Of Memory
+srun: Terminating job step 20877079.0
+slurmstepd: error: Detected 1 oom-kill event(s) in step 20877079.batch cgroup. Some of your processes may have been killed by the cgroup out-of-memory handler.
+ 
+Batch Job Summary Report for Job "CPI MPI" (20877079) on daint
+-----------------------------------------------------------------------------------------------------
+             Submit            Eligible               Start                 End    Elapsed  Timelimit 
+------------------- ------------------- ------------------- ------------------- ---------- ---------- 
+2020-03-08T14:43:22 2020-03-08T14:43:22 2020-03-08T14:44:37 2020-03-08T14:45:21   00:00:44   00:05:00 
+-----------------------------------------------------------------------------------------------------
+Username    Account     Partition   NNodes   Energy
+----------  ----------  ----------  ------  --------------
+course93    uzh8        normal           1        0 joules
+ 
+This job did not utilize any GPUs
+ 
+----------------------------------------------------------
+Scratch File System        Files       Quota
+--------------------  ----------  ----------
+/scratch/snx3000               7     1000000
+ 

@@ -1,0 +1,29 @@
+
+sum0	: sum0.o getTime.o
+	cc -o sum sum0.o getTime.o
+
+sum1	: sum1.o getTime.o
+	cc -o sum sum1.o getTime.o
+
+sum2	: sum2.o getTime.o
+	cc -o sum sum2.o getTime.o
+
+sum3	: sum3.o getTime.o
+	cc -o sum sum3.o getTime.o
+
+sum0.o	: sum.c getTime.h
+	cc -O0 -ffast-math -c -o sum0.o sum.c
+
+sum1.o	: sum.c getTime.h
+	cc -O1 -ffast-math -c -o sum1.o sum.c
+
+sum2.o	: sum.c getTime.h
+	cc -O2 -ffast-math -c -o sum2.o sum.c
+
+sum3.o	: sum.c getTime.h
+	cc -O3 -ffast-math -c -o sum3.o sum.c
+
+getTime.o:	getTime.c getTime.h
+
+clean: 	rm -f sum sum.o getTime.o
+
