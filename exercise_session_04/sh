@@ -614,4 +614,45 @@ course93@daint105:~/hpc_esc401/exercise_session_04> ./checkPrime.sh 100
 [?2004h[?1049h[22;0;0t[?1h=[?2004h[1;26r[?12h[?12l[27m[23m[29m[m[H[2J[?25l[26;1H"checkPrime.sh" 9L, 113C[2;1H▽[6n[2;1H  [1;1H[>c]10;?]11;?[1;1H[38;5;130mif ![m  [35m[[[m [35m$1[m [38;5;130m=~[m [31m^[0-9]+$[m [35m]][m[2;9H[38;5;130mthen[3;17Hecho[m[31m integers only![m
 [38;5;130melse[5;9Hfor[m index [38;5;130min[m [35m{[m[31m2[m..[31m100[m[35m}[m[6;9H[38;5;130mdo[7;17Hecho[m[31m [m[38;5;130m"[m[35m$index[m[38;5;130m"[8;9Hdone
 fi[m
-[94m~                                                                                                      [11;1H~                                                                                                      [12;1H~                                                                                                      [13;1H~                                                                                                      [14;1H~                                                                                                      [15;1H~                                                                                                      [16;1H~                                                                                                      [17;1H~                                                                                                      [18;1H~                                                                                                      [19;1H~                                                                                                      [20;1H~                                                                                                      [21;1H~                                                                                                      [22;1H~                                                                                                    
+[94m~                                                                                                      [11;1H~                                                                                                      [12;1H~                                                                                                      [13;1H~                                                                                                      [14;1H~                                                                                                      [15;1H~                                                                                                      [16;1H~                                                                                                      [17;1H~                                                                                                      [18;1H~                                                                                                      [19;1H~                                                                                                      [20;1H~                                                                                                      [21;1H~                                                                                                      [22;1H~                                                                                                      [23;1H~                                                                                                      [24;1H~                                                                                                      [25;1H~                                                                                                      [m[26;86H8,1-8[9CAll[8;8H[?25h[?25l[26;86H7[7;8H[?25h[?25l[26;86H6[6;8H[?25h[?25l[26;88H2-9[6;9H[?25h[?25l[26;88H3-10[6;10H[?25h[?25l[26;86H5[5;10H[?25h[?25l[26;88H4-11[5;11H[?25h[?25l[26;88H5-12[5;12H[?25h[?25l[26;88H6-13[5;13H[?25h[?25l[26;88H7-14[5;14H[?25h[?25l[26;88H8-15[5;15H[?25h[?25l[26;88H9-16[5;16H[?25h[?25l[26;88H10-17[5;17H[?25h[?25l[26;89H1-18[5;18H[?25h[?25l[26;89H2-19[5;19H[?25h[?25l[26;89H3-20[5;20H[?25h[?25l[26;89H4-21[5;21H[?25h[?25l [35m[106m{[6C}[m[26;89H5-22[5;22H[?25h[?25l[35m{[6C}[m[26;89H6-23[5;23H[?25h[?25l[26;89H7-24[5;24H[?25h[?25l[26;89H8-25[5;25H[?25h[?25l[26;89H9-26[5;26H[?25h[?25l[26;88H20-27[5;27H[?25h[?25l[26;89H1-28[5;28H[?25h[?25l[35m[106m{[6C}[m[26;89H2-29[5;29H[?25h[?25l[26;1H[1m-- INSERT --[m[26;13H[K[26;86H5,22-29[7CAll[5;29H[?25h[?25l[35m}[m[5;29H[K[5;28H[35m[106m}[m[26;89H1-28[5;28H[?25h[?25l[35m}[m[5;28H[K[5;27H[35m[106m}[m[26;89H0-27[5;27H[?25h[?25l[35m}[m[5;27H[K[5;26H[35m[106m}[m[26;88H19-26[5;26H[?25h[?25l[106m$[m[35m}[m$[35m[106m}[m[26;88H20-27[5;27H[?25h[?25l[35m$[m[35m[106m1[m[35m}[m[35m1[m[35m[106m}[m[26;89H1-28[5;28H[?25h[26;1H[K[5;27H[?25l[35m{[5C}[m[26;86H5,20-27[7CAll[5;27H[?25h[?25l[26;86H[K[26;1H:[?2004h[?25hw[?25l[?25h[?25l"checkPrime.sh" 9L, 112C written[53C5,20-27[7CAll[26;86H[K[26;86H5,20-27[7CAll[5;27H[?25h[?25l[?25h[?25l[26;1H[K[26;1H:[?2004h[?25hq[?25l[?25h[?25l[?2004l[26;1H[K[26;1H[?2004l[?1l>[?25h[?1049l[23;0;0tcourse93@daint105:~/hpc_esc401/exercise_session_04> vim checkPrime.sh ./checkPrime.sh 100
+{2..100}
+course93@daint105:~/hpc_esc401/exercise_session_04> ./checkPrime.sh 100
+{2..100}
+course93@daint105:~/hpc_esc401/exercise_session_04> git add -A
+course93@daint105:~/hpc_esc401/exercise_session_04> git commit -m "progress ex43[K"
+[master d758b5d] progress ex4
+ Committer: Crs03 Course <course93@daint105.login.cscs.ch>
+Your name and email address were configured automatically based
+on your username and hostname. Please check that they are accurate.
+You can suppress this message by setting them explicitly. Run the
+following command and follow the instructions in your editor to edit
+your configuration file:
+
+    git config --global --edit
+
+After doing this, you may fix the identity used for this commit with:
+
+    git commit --amend --reset-author
+
+ 9 files changed, 1314 insertions(+)
+ create mode 100755 exercise_session_04/checkPrime.sh
+ create mode 100755 exercise_session_04/double.sh
+ create mode 100644 exercise_session_04/doubleOut.txt
+ create mode 100755 exercise_session_04/remove.sh
+ create mode 100644 exercise_session_04/sh
+ create mode 100644 exercise_session_04/test
+ create mode 100755 exercise_session_04/tripple.sh
+ create mode 100644 exercise_session_04/trippleOut.txt
+ create mode 100644 exercise_session_04/typescript
+course93@daint105:~/hpc_esc401/exercise_session_04> git push
+Username for 'https://gitlab.uzh.ch': andrin- .rehmann
+Password for 'https://andrin.rehmann@gitlab.uzh.ch': 
+warning: redirecting to https://gitlab.uzh.ch/andrin.rehmann/hpc_esc401_solutions.git/
+Counting objects: 30, done.
+Delta compression using up to 20 threads.
+Compressing objects:   3% (1/27)   Compressing objects:   7% (2/27)   Compressing objects:  11% (3/27)   Compressing objects:  14% (4/27)   Compressing objects:  18% (5/27)   Compressing objects:  22% (6/27)   Compressing objects:  25% (7/27)   Compressing objects:  29% (8/27)   Compressing objects:  33% (9/27)   Compressing objects:  37% (10/27)   Compressing objects:  40% (11/27)   Compressing objects:  44% (12/27)   Compressing objects:  48% (13/27)   Compressing objects:  51% (14/27)   Compressing objects:  55% (15/27)   Compressing objects:  59% (16/27)   Compressing objects:  62% (17/27)   Compressing objects:  66% (18/27)   Compressing objects:  70% (19/27)   Compressing objects:  74% (20/27)   Compressing objects:  77% (21/27)   Compressing objects:  81% (22/27)   Compressing objects:  85% (23/27)   Compressing objects:  88% (24/27)   Compressing objects:  92% (25/27)   Compressing objects:  96% (26/27)   Compressing objects: 100% (27/27)   Compressing objects: 100% (27/27), done.
+Writing objects:   3% (1/30)   Writing objects:   6% (2/30)   Writing objects:  10% (3/30)   Writing objects:  13% (4/30)   Writing objects:  16% (5/30)   Writing objects:  20% (6/30)   Writing objects:  23% (7/30)   Writing objects:  26% (8/30)   Writing objects:  30% (9/30)   Writing objects:  33% (10/30)   Writing objects:  36% (11/30)   Writing objects:  43% (13/30)   Writing objects:  46% (14/30)   Writing objects:  50% (15/30)   Writing objects:  56% (17/30)   Writing objects:  60% (18/30)   Writing objects:  63% (19/30)   Writing objects:  66% (20/30)   Writing objects:  70% (21/30)   Writing objects:  73% (22/30)   Writing objects:  76% (23/30)   Writing objects:  80% (24/30)   Writing objects:  83% (25/30)   Writing objects:  86% (26/30)   Writing objects:  90% (27/30)   Writing objects:  93% (28/30)   Writing objects:  96% (29/30)   Writing objects: 100% (30/30)   Writing objects: 100% (30/30), 22.30 KiB | 3.18 MiB/s, done.
+Total 30 (delta 12), reused 0 (delta 0)
+To https://gitlab.uzh.ch/andrin.rehmann/hpc_esc401_solutions
+   e363f56..d758b5d  master -> master
+course93@daint105:~/hpc_esc401/exercise_session_04> exit

@@ -2,8 +2,10 @@ if !  [[ $1 =~ ^[0-9]+$ ]]
 	then 
 		echo integers only!
 else
-	for index in {2..$1}
+  END=$1
+	for index in {2..$END}
 	do
-		echo "$index"
+		echo $index
 	done
+
 fi
