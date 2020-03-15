@@ -1,15 +1,20 @@
 is_prime () {
-  for i in $(seq 2 $number) 
+  i=1
+  root= bc -l <<< "sqrt($number)"
+  root= bc -l <<< "($root+1.0)/1"  
+  echo $root
+  
+  while [ $i -lt $root ]
   do
-    echo $i
+    i=$(( $i + 1 ))
     if test `expr $number % $i` -eq 0
     then
-      echo not prime
+      echo not prime 
       return 0
     fi
-    echo is prime
-    return 1
-  done    
+  done
+  echo is prime
+  return 1
 }
 
 if [[ $# == 0 ]]
