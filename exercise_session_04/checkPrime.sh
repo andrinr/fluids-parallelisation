@@ -1,15 +1,25 @@
 is_prime () {
-  i=1
-  root= bc -l <<< "sqrt($number)"
-  root= bc -l <<< "($root+1.0)/1"  
-  echo $root
   
-  while [ $i -lt $root ]
+  if test `expr $number % 2` -eq 0
+  then
+    echo not prime, divisable by 2
+    return 0
+  fi
+
+  if test `expr $number % 3` -eq 0
+  then
+    echo not prime, divisable by 3
+    return 0
+  fi
+
+  i=1
+  
+  while [ $i -le  `expr $number / $i` ]
   do
-    i=$(( $i + 1 ))
+    i=$(( $i + 6 ))
     if test `expr $number % $i` -eq 0
     then
-      echo not prime 
+      echo not prime, divisable by $i
       return 0
     fi
   done
