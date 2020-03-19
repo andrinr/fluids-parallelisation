@@ -1,0 +1,6 @@
+*.mod
+*.o
+
+poisson
+exact_solution
+*output_*
