@@ -72,7 +72,7 @@ subroutine init_f
     !  of the Poisson equation.
     !
 
-    print*,'subroutine init_rhs: Not fully implemented yet...' 
+    print*,'subroutine init_f: Not fully implemented yet...' 
 end subroutine init_f
 
 subroutine init_exact
