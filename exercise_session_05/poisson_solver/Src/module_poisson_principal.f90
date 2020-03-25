@@ -51,7 +51,11 @@ subroutine jacobi_step
     uold = unew
 
     ! Compute a new estimate.
-    print*,'subroutine jacobi_step: Not fully implemented yet...' 
+    do j = 1, jmax
+        do i = 1, imax
+            unew ( i, j ) = forth * ( uold(i-1,j) + uold(i+1,j) + uold(i,j-1) + uold(i,j+1) - f(i,j))
+        end do
+    end do
 
     ! compute difference and errors
     udiff = unew - uold
@@ -72,7 +76,19 @@ subroutine init_f
     !  of the Poisson equation.
     !
 
-    print*,'subroutine init_f: Not fully implemented yet...' 
+    do j = 1, jmax
+        y = real ( j - 1,kind=prec_real) / real ( ny - 1,kind=prec_real)
+        do i = 1, imax
+            x = real ( i - 1,kind=prec_real) / real ( nx - 1,kind=prec_real)
+            ! check boundary conditions
+            if (i == 1 .or. i == imax .or. j == 1 .or. j == jmax) then
+               f(i,j) = boundary ( x, y )
+            else
+               f(i,j) = source_term ( x, y )
+            end if
+        end do
+    end do
+
 end subroutine init_f
 
 subroutine init_exact

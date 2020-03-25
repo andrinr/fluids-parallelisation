@@ -25,7 +25,7 @@ program euler
   call MPI_INIT(ierror)
   
   ! Get my_rank and n_proc
-  call MPI_COMM_RANK(MPI_COMM_WORLD, my_rank, ierror)
+  call MPI_COMM_RANK(MPI_COMM_WORLD, my_rank, ierror)c
   call MPI_COMM_SIZE(MPI_COMM_WORLD, n_proc, ierror)
 
   N = 1000000000
