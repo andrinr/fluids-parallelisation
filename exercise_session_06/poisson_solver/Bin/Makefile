@@ -4,7 +4,7 @@
 
 
 #------------------
-F90 = mpif90
+F90 = ftn
 
 # Fortran compilation options
 #-----------------------------
