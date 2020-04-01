@@ -34,7 +34,7 @@ subroutine init_mpi
     print *
   endif
 
-  print *,'I am proc ',myrank,' and my coordinates are ', coords
+  print *,'I am proc ',myrank,' and my processor coordinates are ', coords
 
   !
   ! Setup ranks of left and right neighbors.

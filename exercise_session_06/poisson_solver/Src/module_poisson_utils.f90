@@ -20,22 +20,47 @@ subroutine halo
     implicit none
 
     ! Local variables
-    integer :: request_left, request_right
+    integer, dimension(8) :: requests = (/0,0,0,0,0,0,0,0/)
+    integer :: code
     real(kind=prec_real) :: snd_buf_left(ny), rcv_buf_left(ny)
     real(kind=prec_real) :: snd_buf_right(ny), rcv_buf_right(ny)
     real(kind=prec_real) :: snd_buf_down(ny), rcv_buf_down(ny)
     real(kind=prec_real) :: snd_buf_up(ny), rcv_buf_up(ny)
+    integer, dimension(MPI_STATUS_SIZE) :: status;
+
+    print*,requests
+    do i = 1, 8, +1
+        requests(i) = MPI_REQUEST_NULL
+    end do
 
     ! Send/Receive data from left
     ! Store the reveiced array in "uold"
     if (boundary_left .eqv. .true.) then
         print*,'subroutine halo: Need to communicate with left neighbor'
+        call MPI_IRECV(uold(imin, jmin : jmax), jmax - jmin, MPI_INTEGER, myleft, 1, COMM_CART, requests(1), code)
+        call MPI_ISEND(uold(imin+1, jmin : jmax), jmax - jmin, MPI_INTEGER, myleft, 2, COMM_CART, requests(2), code)
     end if
     ! Send/Receive data from right
-    ! Store the reveiced array in "uold"
     if (boundary_right .eqv. .true.) then
-        print*,'subroutine halo: Need to communicate with right neighbor'  
+        print*,'subroutine halo: Need to communicate with right neighbor'
+        call MPI_IRECV(uold(imax, jmin : jmax), jmax - jmin, MPI_INTEGER, myright, 2, COMM_CART, requests(3), code)
+        call MPI_ISEND(uold(imax-1, jmin : jmax), jmax - jmin, MPI_INTEGER, myright, 1, COMM_CART, requests(4), code)
     end if
+
+    if (boundary_down .eqv. .true.) then
+        print*,'subroutine halo: Need to communicate with down neighbor'
+        call MPI_IRECV(uold(imin : imax, jmin), imax - imin, MPI_INTEGER, mydown, 3, COMM_CART, requests(5), code)
+        call MPI_ISEND(uold(imin : imax, jmin+1), imax - imin, MPI_INTEGER, mydown, 4, COMM_CART, requests(6), code)
+    end if
+
+    if (boundary_up .eqv. .true.) then
+        print*,'subroutine halo: Need to communicate with up neighbor'
+        call MPI_IRECV(uold(imin : imax, jmax), imax - imin, MPI_INTEGER, myup, 4, COMM_CART, requests(7), code)
+        call MPI_ISEND(uold(imin : imax, jmax-1), imax - imin, MPI_INTEGER, myup, 3, COMM_CART, requests(8), code)
+    end if
+
+    print*,'reached'
+    call MPI_WAITALL(8,requests, status)
 
     call MPI_BARRIER(MPI_COMM_WORLD,ierror)
     return 

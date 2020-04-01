@@ -23,15 +23,27 @@ subroutine init_poisson
     jmin=1
     jmax=ny
 
+    ! X axis
     if (boundary_left .eqv. .true.) then
-        imin = myimin - 1
+        imin = mymin(1) - 1
     else
-        imin = myimin
+        imin = mymin(1)
     end if 
     if (boundary_right .eqv. .true.) then
-        imax = myimax + 1
+        imax = mymax(1) + 1
     else 
-        imax = myimax
+        imax = mymax(1)
+    end if
+    ! Y axis
+    if (boundary_down .eqv. .true.) then
+        jmin = mymin(2) - 1
+    else
+        jmin = mymin(2)
+    end if
+    if (boundary_up .eqv. .true.) then
+        jmax = mymax(2) + 1
+    else
+        jmax = mymax(2)
     end if
     
     dx = 1.0D+00 / real ( nx - 1, kind=prec_real)
@@ -46,7 +58,7 @@ subroutine init_poisson
 
     allocate(uold(imin:imax,jmin:jmax))
     allocate(unew(imin:imax,jmin:jmax))
-    allocate(udiff(myimin:myimax,jmin:jmax))
+    allocate(udiff(imin:imax,jmin:jmax))
 
     uold(imin:imax,jmin:jmax) = f(imin:imax,jmin:jmax)
     unew(imin:imax,jmin:jmax) = uold(imin:imax,jmin:jmax)
@@ -66,7 +78,7 @@ subroutine jacobi_step
 
     ! Compute a new estimate.
     do j = jmin, jmax
-        do i = myimin, myimax
+        do i = mymin(1), mymax(1)
             if ( i == 1 .or. i == nx .or. j == 1 .or. j == ny ) then
                 unew(i,j) = f(i,j)
             else
