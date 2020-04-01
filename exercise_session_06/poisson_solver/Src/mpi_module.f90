@@ -5,6 +5,7 @@ module poisson_mpi
   implicit none
   integer, parameter :: tag = 123
   integer :: myrank, nproc, ierror
+  integer :: ndims = 2
   integer :: myleft, myright
   integer :: myimin, myimax, myn, rest
   logical :: boundary_left, boundary_right
@@ -15,8 +16,10 @@ subroutine init_mpi
 
   use poisson_parameters
 
-  call MPI_COMM_RANK(MPI_COMM_WORLD, myrank, ierror)
   call MPI_COMM_SIZE(MPI_COMM_WORLD, nproc, ierror)
+  call MPI_DIMS_CREATE(size, ndims, dims)
+  call MPI_CART_CREATE(MPI_COMM_WORLD, ndims, dims, periods, reorder, COMM_CART, ierror)
+  call MPI_COMM_RANK(COMM_CART, myrank, ierror)
 
   if (myrank==0) then
     print *
