@@ -23,6 +23,8 @@ subroutine halo
     integer :: request_left, request_right
     real(kind=prec_real) :: snd_buf_left(ny), rcv_buf_left(ny)
     real(kind=prec_real) :: snd_buf_right(ny), rcv_buf_right(ny)
+    real(kind=prec_real) :: snd_buf_down(ny), rcv_buf_down(ny)
+    real(kind=prec_real) :: snd_buf_up(ny), rcv_buf_up(ny)
 
     ! Send/Receive data from left
     ! Store the reveiced array in "uold"
@@ -33,7 +35,8 @@ subroutine halo
     ! Store the reveiced array in "uold"
     if (boundary_right .eqv. .true.) then
         print*,'subroutine halo: Need to communicate with right neighbor'  
-    end if 
+    end if
+
     call MPI_BARRIER(MPI_COMM_WORLD,ierror)
     return 
 
