@@ -18,10 +18,6 @@ subroutine init_poisson
     use poisson_mpi
 
     implicit none
-    
-    ! Local variables
-    jmin=1
-    jmax=ny
 
     ! X axis
     if (boundary_left .eqv. .true.) then
@@ -71,6 +67,10 @@ subroutine jacobi_step
     use poisson_utils  
     use poisson_mpi
 
+    integer :: code
+    real(kind=prec_real) :: localdiff = 0.0
+    real(kind=prec_real) :: localerror = 0.0
+
     ! Save the current estimate. 
     uold = unew
     
@@ -78,19 +78,26 @@ subroutine jacobi_step
 
     ! Compute a new estimate.
     do j = jmin, jmax
-        do i = mymin(1), mymax(1)
+        do i = imin, imax
             if ( i == 1 .or. i == nx .or. j == 1 .or. j == ny ) then
                 unew(i,j) = f(i,j)
             else
                 unew(i,j) = 0.25 * ( uold(i-1,j) + uold(i,j+1) + uold(i,j-1) + uold(i+1,j) - f(i,j) * dx * dy )
             end if
-
         end do
     end do
 
     ! Compute difference and errors /!\ on the entire domain /!\
     ! The routine mat_norm2 returns the sum of the components squared of a matrix
-    print*,'subroutine jacobi_step: Need compute "error" and "diff"'
+    udiff = unew - uold
+    localdiff = mat_norm2(udiff( imin : imax, jmin : jmax ))
+    udiff = unew - uexact
+    localerror = mat_norm2(udiff( imin: imax, jmin : jmax ))
+
+    call MPI_ALLREDUCE(localdiff, diff, 1, MPI_DOUBLE, MPI_SUM, COMM_CART, code)
+    call MPI_ALLREDUCE(localerror, error, 1, MPI_DOUBLE, MPI_SUM, COMM_CART, code)
+    print*,'mine ', localdiff, ' global: ', diff
+    print*,'mine ', localerror, ' global: ', error
 
 end subroutine jacobi_step
 

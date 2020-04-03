@@ -130,10 +130,11 @@ function mat_norm2 (mat)
 
     implicit none
     
-    real(kind=prec_real) mat(myn,ny)
+    real(kind=prec_real) mat(myn(1),myn(2))
     real(kind=prec_real) mat_norm2
 
     mat_norm2 =  sum ( mat(:,:)**2 )
+
     return
 end function mat_norm2
 

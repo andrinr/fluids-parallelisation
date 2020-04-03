@@ -7,8 +7,7 @@ module poisson_mpi
   integer :: myrank, nproc, ierror, COMM_CART
   integer :: ndims = 2
   integer :: myleft, myright, mydown, myup
-  integer :: myn, rest
-  integer, dimension(2) :: dimensions, coords, mymin, mymax = (/0,0/)
+  integer, dimension(2) :: dimensions, coords, mymin, mymax, myn = (/0,0/)
   logical, dimension(2) :: periods = (/.True. , .True./)
   logical :: boundary_left, boundary_right, boundary_down, boundary_up
   logical :: reorder = .true.
@@ -78,8 +77,10 @@ subroutine init_mpi
     mymax(2) = ny
   end if
 
-  print*, 'I am proc ',myrank,' and my x-domain goes from ',mymin(1),' to ',mymax(1)
-  print*, 'I am proc ',myrank,' and my y-domain goes from ',mymin(2),' to ',mymax(2)
+  myn(1) = mymax(1) - mymin(1)
+  myn(2) = mymax(2) - mymin(2)
+  print*, 'I am proc ',myrank,' and my x-domain goes from ',mymin(1),' to ',mymax(1), ' and is of size ', myn(1)
+  print*, 'I am proc ',myrank,' and my y-domain goes from ',mymin(2),' to ',mymax(2), ' and is of size ', myn(2)
   
 end subroutine init_mpi
 
