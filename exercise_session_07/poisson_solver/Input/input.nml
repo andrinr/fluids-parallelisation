@@ -1,0 +1,12 @@
+This namelist contains various input parameters for the Poisson solver
+
+&MESH
+nx=161
+ny=161
+/
+
+&JACOBI
+noutput=1000
+nstep_max=10000
+tolerance=1.0D-15
+/
