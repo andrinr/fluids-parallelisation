@@ -9,7 +9,7 @@ args = parser.parse_args()
 print("Reading "+args.file)
 
 # path the the file
-path_to_output = "Output/"+args.file+".00000"
+path_to_output = args.file+".00000"
 
 # read image data
 with FortranFile(path_to_output, 'r') as f:
