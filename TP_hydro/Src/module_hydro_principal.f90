@@ -20,6 +20,7 @@ subroutine init_hydro
   integer(kind=prec_int) :: i,j
 
   imin=1
+  ! ghost cells for boundary conditions, 2 for each side
   imax=nx+4
   jmin=1
   jmax=ny+4
@@ -40,6 +41,7 @@ subroutine init_hydro
 !!$  end do
 
   ! Wind tunnel with point explosion
+  ! We ignore the ghost cells here
   do j=jmin+2,jmax-2
      do i=imin+2,imax-2
         uold(i,j,ID)=1.0
@@ -48,6 +50,7 @@ subroutine init_hydro
         uold(i,j,IP)=1.d-5
      end do
   end do
+  ! Put point explotion in lower left corner
   uold(imin+2,jmin+2,IP)=1./dx/dx
 
 !!$  ! 1D Sod test
@@ -67,7 +70,7 @@ subroutine init_hydro
 !!$  end do
 end subroutine init_hydro
 
-
+! reduction !!!, should be the same for all processors
 subroutine cmpdt(dt)
   use hydro_commons
   use hydro_const

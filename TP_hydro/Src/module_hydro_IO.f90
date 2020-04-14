@@ -23,13 +23,6 @@ subroutine read_params
   namelist/hydro/gamma,courant_factor,smallr,smallc,niter_riemann, &
        &         iorder,scheme,slope_type
 
-!   narg = iargc()
-!   IF(narg .NE. 1)THEN
-!      write(*,*)'You should type: a.out input.nml'
-!      write(*,*)'File input.nml should contain a parameter namelist'
-!      STOP
-!   END IF
-!   CALL getarg(1,infile)
   infile="../Input/input.nml"
   open(1,file=infile)
   read(1,NML=run)

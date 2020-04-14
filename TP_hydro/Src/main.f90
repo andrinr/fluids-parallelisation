@@ -33,18 +33,23 @@ program hydro_main
         call output
       end if
 
-     ! Compute new time-step
+     ! Compute new time-step, only for even time steps
      if(MOD(nstep,2)==0)then
         call cmpdt(dt)
+        ! safety marigin for start
         if(nstep==0)dt=dt/2.
      endif
 
      ! Directional splitting
      if(MOD(nstep,2)==0)then
+        ! x sweep
         call godunov(1,dt)
+        ! y sweep
         call godunov(2,dt)
      else
+        ! y sweep
         call godunov(2,dt)
+        ! x sweep
         call godunov(1,dt)
      end if
 
