@@ -96,8 +96,6 @@ subroutine jacobi_step
 
     call MPI_ALLREDUCE(localdiff, diff, 1, MPI_DOUBLE, MPI_SUM, COMM_CART, code)
     call MPI_ALLREDUCE(localerror, error, 1, MPI_DOUBLE, MPI_SUM, COMM_CART, code)
-    print*,'mine ', localdiff, ' global: ', diff
-    print*,'mine ', localerror, ' global: ', error
 
 end subroutine jacobi_step
 

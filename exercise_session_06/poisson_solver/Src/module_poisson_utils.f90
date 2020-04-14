@@ -20,58 +20,49 @@ subroutine halo
     implicit none
 
     ! Local variables
-    integer :: code, reqind = 0
-    real(kind=prec_real) :: snd_buf_left(ny), rcv_buf_left(ny)
-    real(kind=prec_real) :: snd_buf_right(ny), rcv_buf_right(ny)
-    real(kind=prec_real) :: snd_buf_down(ny), rcv_buf_down(ny)
-    real(kind=prec_real) :: snd_buf_up(ny), rcv_buf_up(ny)
+    integer ::  reqind = 0
     integer, dimension(8) :: requests
     integer, dimension(MPI_STATUS_SIZE,8) :: status
+
+    requests(:) = MPI_REQUEST_NULL
 
     ! Send/Receive data from left
     ! Store the reveiced array in "uold"
     if (boundary_left .eqv. .true.) then
-        print*,'subroutine halo: Need to communicate with left neighbor'
-        call MPI_IRECV(uold(imin, jmin : jmax), jmax - jmin, MPI_INTEGER, myleft, 1, COMM_CART, &
-                requests(reqind + 1), code)
-        call MPI_ISEND(uold(imin+1, jmin : jmax), jmax - jmin, MPI_INTEGER, myleft, 1, COMM_CART, &
-                requests(reqind + 2), code)
+        call MPI_IRECV(uold(imin, jmin : jmax), jmax - jmin, MPI_DOUBLE, myleft, 1, COMM_CART, &
+                requests(reqind + 1), ierror)
+        call MPI_ISEND(uold(imin+1, jmin : jmax), jmax - jmin, MPI_DOUBLE, myleft, 1, COMM_CART, &
+                requests(reqind + 2), ierror)
         reqind = reqind + 2
     end if
     ! Send/Receive data from right
     if (boundary_right .eqv. .true.) then
-        print*,'subroutine halo: Need to communicate with right neighbor'
-        call MPI_IRECV(uold(imax, jmin : jmax), jmax - jmin, MPI_INTEGER, myright, 1, COMM_CART, &
-                requests(reqind + 1), code)
-        call MPI_ISEND(uold(imax-1, jmin : jmax), jmax - jmin, MPI_INTEGER, myright, 1, COMM_CART, &
-                requests(reqind + 2), code)
+        call MPI_IRECV(uold(imax, jmin : jmax), jmax - jmin, MPI_DOUBLE, myright, 1, COMM_CART, &
+                requests(reqind + 1), ierror)
+        call MPI_ISEND(uold(imax-1, jmin : jmax), jmax - jmin, MPI_DOUBLE, myright, 1, COMM_CART, &
+                requests(reqind + 2), ierror)
         reqind = reqind + 2
     end if
     ! Send/Receive data from down
     if (boundary_down .eqv. .true.) then
-        print*,'subroutine halo: Need to communicate with down neighbor'
-        call MPI_IRECV(uold(imin : imax, jmin), imax - imin, MPI_INTEGER, mydown, 1, COMM_CART, &
-                requests(reqind + 1), code)
-        call MPI_ISEND(uold(imin : imax, jmin+1), imax - imin, MPI_INTEGER, mydown, 1, COMM_CART, &
-                requests(reqind + 2), code)
+        call MPI_IRECV(uold(imin : imax, jmin), imax - imin, MPI_DOUBLE, mydown, 1, COMM_CART, &
+                requests(reqind + 1), ierror)
+        call MPI_ISEND(uold(imin : imax, jmin+1), imax - imin, MPI_DOUBLE, mydown, 1, COMM_CART, &
+                requests(reqind + 2), ierror)
         reqind = reqind + 2
     end if
     ! Send/Receive data from up
     if (boundary_up .eqv. .true.) then
-        print*,'subroutine halo: Need to communicate with up neighbor'
-        call MPI_IRECV(uold(imin : imax, jmax), imax - imin, MPI_INTEGER, myup, 1, COMM_CART, &
-                requests(reqind + 1), code)
-        call MPI_ISEND(uold(imin : imax, jmax-1), imax - imin, MPI_INTEGER, myup, 1, COMM_CART, &
-                requests(reqind + 2), code)
+        call MPI_IRECV(uold(imin : imax, jmax), imax - imin, MPI_DOUBLE, myup, 1, COMM_CART, &
+                requests(reqind + 1), ierror)
+        call MPI_ISEND(uold(imin : imax, jmax-1), imax - imin, MPI_DOUBLE, myup, 1, COMM_CART, &
+                requests(reqind + 2), ierror)
         reqind = reqind + 2
     end if
 
-    do i = 1, reqind, +1
-        call MPI_WAIT(requests(i), status, code)
-    end do
+    call MPI_WAITALL(reqind, requests, MPI_STATUSES_IGNORE, ierror)
 
-    call MPI_BARRIER(MPI_COMM_WORLD,ierror)
-    return 
+    return
 
 end subroutine halo
 

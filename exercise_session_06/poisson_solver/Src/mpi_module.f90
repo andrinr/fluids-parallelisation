@@ -23,7 +23,7 @@ subroutine init_mpi
   call MPI_DIMS_CREATE(nproc, ndims, dimensions, ierror)
   call MPI_CART_CREATE(MPI_COMM_WORLD, ndims, dimensions, periods, reorder, COMM_CART, ierror)
   call MPI_COMM_RANK(COMM_CART, myrank, ierror)
-  call MPI_CART_COORDS(COMM_CART, myrank, dimensions, coords, ierror)
+  call MPI_CART_COORDS(COMM_CART, myrank, ndims, coords, ierror)
 
   if (myrank==0) then
     print *
@@ -49,11 +49,10 @@ subroutine init_mpi
   boundary_up = .true.
 
   ! Default slab size
-  mymin(1) = coords(1) * nx / dimensions(1)
-  mymin(2) = coords(2) * ny / dimensions(2)
-
-  mymax(1) = ( 1 + coords(1) ) * nx / dimensions(1) - 1
-  mymax(2) = ( 1 + coords(2) ) * ny / dimensions(2) - 1
+  mymin(1) = 1+coords(1) * nx / dimensions(1)
+  mymin(2) = 1+coords(2) * ny / dimensions(2)
+  mymax(1) = ( 1 + coords(1) ) * nx / dimensions(1)
+  mymax(2) = ( 1 + coords(2) ) * ny / dimensions(2)
 
   if (coords(1) == 0) then
     boundary_left = .false.

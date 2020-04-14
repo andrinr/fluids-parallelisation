@@ -49,8 +49,8 @@ subroutine output_exact
     filename='../Output/exact_solution_'//trim(x1)
 
     open(10,file=filename,form='unformatted')
-    write(10)myn,ny
-    write(10)real(uexact(myimin:myimax,jmin:jmax),kind=prec_output)
+    write(10)myn(1),myn(2)
+    write(10)real(uexact(mymin(1):mymax(1),mymin(2):mymax(2)),kind=prec_output)
     close(10)
 
 end subroutine output_exact
@@ -76,8 +76,8 @@ subroutine output
     open(10,file=filename,form='unformatted')
     rewind(10)
     write(10)real(nstep,kind=prec_output),real(diff,kind=prec_output),real(error,kind=prec_output)
-    write(10)myn,ny
-    write(10)real(uold(myimin:myimax,jmin:jmax),kind=prec_output)
+    write(10)myn(1),myn(2)
+    write(10)real(uold(mymin(1):mymax(1),mymin(2):mymax(2)),kind=prec_output)
     close(10)
 
 contains
