@@ -67,10 +67,6 @@ contains
         use poisson_utils
         use poisson_mpi
 
-        !integer :: code
-        real(kind=prec_real) :: localdiff = 0.0
-        real(kind=prec_real) :: localerror = 0.0
-
         ! Save the current estimate.
         uold = unew
 
@@ -93,21 +89,18 @@ contains
         ! Compute difference and errors /!\ on the entire domain /!\
         ! The routine mat_norm2 returns the sum of the components squared of a matrix
         udiff = unew - uold
-        localdiff = mat_norm2(udiff( imin : imax, jmin : jmax ))
+        mydiff = mat_norm2(udiff( imin : imax, jmin : jmax ))
         udiff = unew - uexact
-        localerror = mat_norm2(udiff( imin: imax, jmin : jmax ))
+        myerror = mat_norm2(udiff( imin: imax, jmin : jmax ))
 
-        call MPI_ALLREDUCE(localdiff, diff, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD, ierror)
-        call MPI_ALLREDUCE(localerror, error, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD, ierror)
-
-        print*,'mine ', localdiff, ' global: ', diff
-        print*,'mine ', localerror, ' global: ', error
+        call MPI_ALLREDUCE(mydiff, diff, 1, MPI_DOUBLE, MPI_SUM, COMM_CART, ierror)
+        call MPI_ALLREDUCE(myerror, error, 1, MPI_DOUBLE, MPI_SUM, COMM_CART, ierror)
 
         diff = sqrt (diff)
         error = sqrt (error)
 
-        print*,'mine ', localdiff, ' global: ', diff
-        print*,'mine ', localerror, ' global: ', error
+        print*,'mine ', mydiff, ' global: ', diff
+        print*,'mine ', myerror, ' global: ', error
 
     end subroutine jacobi_step
 
