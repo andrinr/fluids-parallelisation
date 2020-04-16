@@ -1,5 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="CMakeWorkspace" PROJECT_DIR="$PROJECT_DIR$" />
+  <component name="CidrRootsConfiguration">
+    <sourceRoots>
+      <file path="$PROJECT_DIR$/exercise_session_06/poisson_solver/Src" />
+    </sourceRoots>
+    <excludeRoots>
+      <file path="$PROJECT_DIR$/TP_hydro" />
+      <file path="$PROJECT_DIR$/TP_hydro/Output" />
+      <file path="$PROJECT_DIR$/exercise_session_02" />
+      <file path="$PROJECT_DIR$/exercise_session_03" />
+      <file path="$PROJECT_DIR$/exercise_session_04" />
+      <file path="$PROJECT_DIR$/exercise_session_05" />
+      <file path="$PROJECT_DIR$/exercise_session_05/poisson_solver/Output" />
+      <file path="$PROJECT_DIR$/exercise_session_06" />
+      <file path="$PROJECT_DIR$/exercise_session_06/poisson_solver/Output" />
+      <file path="$PROJECT_DIR$/exercise_session_07" />
+      <file path="$PROJECT_DIR$/master" />
+    </excludeRoots>
+  </component>
   <component name="JavaScriptSettings">
     <option name="languageLevel" value="ES6" />
   </component>

@@ -7,7 +7,7 @@
 
 program max
 
-  !$  use OMP_LIB
+  !$ use OMP_LIB
 
   implicit none
 
@@ -30,29 +30,29 @@ program max
 
   ! First Loop
   !   find max value by looping on the whole array
-  ! $OMP PARALLEL PRIVATE(rank)
+  !$OMP PARALLEL PRIVATE(rank)
   rank = OMP_GET_THREAD_NUM()
-  print*,'My rank: ',rank
-  ! $OMP DO
+  !$OMP DO
   do i = 1, n
     if (dat(i) .gt. maxvalue) then
       maxvalue = dat(i)
     end if
   end do
-  ! $OMP END DO
-  ! $OMP END PARALLEL
+  !$OMP END DO
+  !$OMP END PARALLEL
 
   ! Second Loop
   !   each time a 0 is present, increase the counter
-  ! $OMP PARALLEL
-  ! $OMP DO
+  !$OMP PARALLEL PRIVATE(rank)
+  rank = OMP_GET_THREAD_NUM()
+  !$OMP DO REDUCTION(+:n0)
   do i = 1,n
     if (dat(i) == 0) then
       n0 = n0 + 1
     end if
   end do
-  ! $OMP END DO
-  ! $OMP END PARALLEL
+  !$OMP END DO
+  !$OMP END PARALLEL
 
   ! Outputs
   print*,'My Number of 0  : ',n0

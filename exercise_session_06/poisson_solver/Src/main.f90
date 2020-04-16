@@ -1,5 +1,5 @@
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -*- Mode: F90 -*- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!! main.f90 --- 
+!! main.f90 ---
 !!!!
 !! program poisson_main
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -29,9 +29,9 @@ program poisson_main
     do
         ! output approximate solution each noutput iterations
         if(MOD(nstep,noutput)==0) then
-            if (myrank == 0) then 
+            if (myrank == 0) then
                 print*,'New step, nstep = ',nstep,', diff = ',diff,', error = ',error
-            end if 
+            end if
             call output
         end if
 
@@ -40,17 +40,17 @@ program poisson_main
         nstep = nstep + 1
 
         ! check tolerance
-        
+
         if ( diff <= tolerance ) then
             converged = .true.
-        exit
-        end if 
+            exit
+        end if
     end do
-    
+
     if (myrank==0) then
         print*, 'Done'
     end if
-    
+
     call MPI_FINALIZE(ierror)
 
 end program poisson_main

@@ -45,12 +45,15 @@ end subroutine init_poisson
 subroutine jacobi_step
     use poisson_commons
     use poisson_parameters
-    use poisson_utils  
+    use poisson_utils
+    !$ use OMP_LIB
 
     ! Save the current estimate. 
     uold = unew
 
     ! Compute a new estimate.
+    !$OMP PARALLEL
+    !$OMP DO
     do j = jmin, jmax
         do i = imin, imax
             if ( i == 1 .or. i == nx .or. j == 1 .or. j == ny ) then
@@ -61,6 +64,8 @@ subroutine jacobi_step
 
         end do
     end do
+    !$OMP END DO
+    !$OMP END PARALLEL
 
     ! compute difference and errors
     udiff = unew - uold
