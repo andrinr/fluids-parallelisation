@@ -70,7 +70,7 @@ contains
         ! Save the current estimate.
         uold = unew
 
-        !call halo
+        call halo
 
         ! Compute a new estimate.
         !print*,'I get there'
@@ -93,8 +93,10 @@ contains
         udiff = unew - uexact
         myerror = mat_norm2(udiff( imin: imax, jmin : jmax ))
 
-        call MPI_ALLREDUCE(mydiff, diff, 1, MPI_DOUBLE, MPI_SUM, COMM_CART, ierror)
-        call MPI_ALLREDUCE(myerror, error, 1, MPI_DOUBLE, MPI_SUM, COMM_CART, ierror)
+        ! call MPI_ALLREDUCE(mydiff, diff, 1, MPI_DOUBLE, MPI_SUM, COMM_CART, ierror)
+        ! call MPI_ALLREDUCE(myerror, error, 1, MPI_DOUBLE, MPI_SUM, COMM_CART, ierror)
+
+
 
         diff = sqrt (diff)
         error = sqrt (error)

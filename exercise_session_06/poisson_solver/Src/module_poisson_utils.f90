@@ -20,14 +20,11 @@ contains
         implicit none
 
         ! Local variables
-        integer ::  reqind = 0!code,
-        real(kind=prec_real) :: snd_buf_left(ny), rcv_buf_left(ny)
-        real(kind=prec_real) :: snd_buf_right(ny), rcv_buf_right(ny)
-        real(kind=prec_real) :: snd_buf_down(ny), rcv_buf_down(ny)
-        real(kind=prec_real) :: snd_buf_up(ny), rcv_buf_up(ny)
+        integer ::  reqind = 0
         integer, dimension(8) :: requests
         integer, dimension(MPI_STATUS_SIZE,8) :: status
 
+        reqind = 0
         requests(:) = MPI_REQUEST_NULL
         ! Send/Receive data from left
         ! Store the reveiced array in "uold"
@@ -67,12 +64,9 @@ contains
             reqind = reqind + 2
         end if
 
+        print*,reqind
         call MPI_WAITALL(reqind, requests, MPI_STATUSES_IGNORE, ierror)
-        ! do i = 1, reqind, +1
-        !     call MPI_WAIT(requests(i), status(:,i), ierror)
-        ! end do
 
-        !   call MPI_BARRIER(MPI_COMM_WORLD,ierror)
         return
 
     end subroutine halo
