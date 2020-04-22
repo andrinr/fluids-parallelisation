@@ -62,13 +62,26 @@ end function exact_solution
 function mat_norm (mat)
     use poisson_commons
     use poisson_parameters
+    !$ use OMP_LIB
 
     implicit none
 
     real(kind=prec_real) mat(nx,ny)
     real(kind=prec_real) mat_norm
     ! norm of a matrix
-    mat_norm = sqrt ( sum ( mat(1:nx,1:ny)**2 ) / real ( nx * ny,kind=prec_real) )
+    ! mat_norm = sqrt ( sum ( mat(1:nx,1:ny)**2 ) / real ( nx * ny,kind=prec_real) )
+
+    !$OMP PARALLEL
+    !$OMP DO
+    do i = 1, nx
+        do j = 1, ny
+            mat_norm = mat_norm + mat(i,j)*mat(i,j) / real ( nx * ny,kind=prec_real)
+        end do
+    end do
+    !$OMP END DO
+    !$OMP END PARALLEL
+
+    mat_norm = sqrt(mat_norm)
 
     return
 end function mat_norm

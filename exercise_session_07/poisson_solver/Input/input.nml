@@ -1,8 +1,8 @@
 This namelist contains various input parameters for the Poisson solver
 
 &MESH
-nx=161
-ny=161
+nx=128
+ny=128
 /
 
 &JACOBI

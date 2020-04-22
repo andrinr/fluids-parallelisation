@@ -52,8 +52,9 @@ subroutine timing(elapsed, nproc)
     implicit none
     integer :: nproc
     real :: elapsed
-    open(11,file='../Ouput/timing', form='unformatted')
-    write(11) elapsed, nproc, nx, ny
+    open(11,file='../Output/timing', form='unformatted', position="append")
+    write(11) elapsed
+    write(11) nproc, nx, ny
     close(11)
 end subroutine timing
 
