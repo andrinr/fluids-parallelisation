@@ -8,11 +8,11 @@ F90 = gfortran
 
 # Fortran compilation options
 #-----------------------------
-CFLAGS = -O3
+CFLAGS = -O3 -fopenmp
 
 # Linker options
 #---------------
-LDFLAGS = -O3
+LDFLAGS = -O3 -fopenmp
 
 
 # Sources directories

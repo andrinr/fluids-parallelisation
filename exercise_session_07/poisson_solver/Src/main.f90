@@ -9,18 +9,24 @@ program poisson_main
     use poisson_parameters
     use poisson_IO
     use poisson_principal
+    !$ use OMP_LIB
 
     implicit none
+
+    real :: start_time, stop_time, elapsed
+    integer :: nproc
 
     ! read parameters from input file
     call read_params
 
-    print*,'Starting integration, nx = ',nx,' ny = ',ny  
+    print*,'Starting integration, nx = ',nx,' ny = ',ny
 
     ! initialize variables according to inputs
     call init_poisson
     ! output the exact solution
     call output_exact
+
+    call cpu_time(start_time)
 
     ! loop until error tolerance is satisfied
     do
@@ -41,5 +47,11 @@ program poisson_main
         end if
     end do
 
+    call cpu_time(stop_time)
+    elapsed = stop_time - start_time
+    nproc = OMP_GET_NUM_THREADS()
+
+    print*,'nproc: ', nproc, ' elapsed: ', elapsed
+    call timing(elapsed, nproc)
 
 end program poisson_main

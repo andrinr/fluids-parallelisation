@@ -46,6 +46,17 @@ subroutine output_exact
 
 end subroutine output_exact
 
+subroutine timing(elapsed, nproc)
+    use poisson_commons
+    use poisson_parameters
+    implicit none
+    integer :: nproc
+    real :: elapsed
+    open(11,file='../Ouput/timing', form='unformatted')
+    write(11) elapsed, nproc, nx, ny
+    close(11)
+end subroutine timing
+
 subroutine output
     use poisson_commons
     use poisson_parameters
