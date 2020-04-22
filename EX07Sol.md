@@ -93,5 +93,6 @@ mat_norm = sqrt(mat_norm)
 
 Unfortunately still couldn't get task6 running since I used the cartesian portioning which turned out to be very complicated. 
 
+Also havn't found the time to make the plots yet. 
 
 
