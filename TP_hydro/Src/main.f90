@@ -41,12 +41,17 @@ program hydro_main
         call output
       end if
 
+
      ! Compute new time-step, only for even time steps
-     if(MOD(nstep,2)==0)then
+     if(MOD(nstep,2)==0 .and. myrank == 0 )then
         call cmpdt(dt)
         ! safety marigin for start
         if(nstep==0)dt=dt/2.
      endif
+
+     call MPI_BCAST(dt, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD, ierror)
+
+     print*, 'MAIN || ', 'I am rank ', myrank, ' of ', nproc, ' and dt is ', dt
 
      ! Directional splitting
      if(MOD(nstep,2)==0)then
