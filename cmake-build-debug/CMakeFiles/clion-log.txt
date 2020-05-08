@@ -1,1 +1,1 @@
-Toolchains are not configured Configure
+CMake executable not found: \usr\bin\cmake Configure

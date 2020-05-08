@@ -7,13 +7,18 @@ program hydro_main
   use hydro_parameters
   use hydro_IO
   use hydro_principal
-  implicit none
+  use hydro_mpi
 
+  implicit none
 
   real(kind=prec_real)   :: dt, tps_elapsed, tps_cpu, t_deb, t_fin
   integer(kind=prec_int) :: nbp_init, nbp_final, nbp_max, freq_p
 
+   ! Itialize MPI environment
   call MPI_INIT(ierror)
+
+  ! init MPI
+  call init_mpi
 
   ! Initialize clock counter
   call system_clock(count_rate=freq_p, count_max=nbp_max)
@@ -22,9 +27,6 @@ program hydro_main
 
   ! Read run parameters
   call read_params
-
-  ! init MPI
-  call init_mpi
 
   ! Initialize hydro grid
   call init_hydro
@@ -67,6 +69,8 @@ program hydro_main
 
   ! Final output
   call output
+
+  ! add comment
 
   ! Timing
   call cpu_time(t_fin)
