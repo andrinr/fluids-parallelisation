@@ -95,6 +95,11 @@ subroutine cmpdt(dt)
 
   do j=jmin+2,jmax-2
 
+   ! uold is of size x,y,nvar 
+   ! nvar defines the number of textures, in our case 4
+   ! ID, IU, IP and IV are different textures
+   ! I assume density, ?, pressure and velocity
+
      do i=1,nx
         q(i,ID) = max(uold(i+2,j,ID),smallr)
         q(i,IU) = uold(i+2,j,IU)/q(i,ID)
