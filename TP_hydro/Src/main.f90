@@ -14,7 +14,7 @@ program hydro_main
   real(kind=prec_real)   :: dt, tps_elapsed, tps_cpu, t_deb, t_fin
   integer(kind=prec_int) :: nbp_init, nbp_final, nbp_max, freq_p
 
-   ! Itialize MPI environment
+  ! Itialize MPI environment
   call MPI_INIT(ierror)
 
   ! init MPI
@@ -71,6 +71,7 @@ program hydro_main
   call output
 
   ! add comment
+  
 
   ! Timing
   call cpu_time(t_fin)
