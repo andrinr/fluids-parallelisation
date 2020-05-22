@@ -147,6 +147,7 @@ subroutine godunov(idim,dt)
   if (idim==1)then
 
      ! Allocate work space for 1D sweeps
+      ! when sweeping along X-axis we need to allocate the dimension in x
      call allocate_work_space(imin,imax,nx+1)
 
      do j=jmin+2,jmax-2
@@ -211,6 +212,7 @@ subroutine godunov(idim,dt)
   else
 
      ! Allocate work space for 1D sweeps
+   ! when sweeping along Y-axis we need to allocate the dimension in y
      call allocate_work_space(jmin,jmax,ny+1)
 
      do i=imin+2,imax-2
