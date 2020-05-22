@@ -55,20 +55,33 @@ subroutine blur_twice_gpu_naive(nsteps, n, in, out)
   allocate(buffer(n))
 
   do istep = 1,nsteps
-     ! TODO: offload this loop to the GPU
+     
+      ! DATA IN
+      !$acc data copyin(in) copyin(n) copyin(buffer) copyin(out) copyin(in)
+      !$acc end data
+
+      !$acc parallel loop
      do i = 2,n-1
         buffer(i) = blur(i, in, n)
      enddo
+      !$acc end parallel loop
 
-     ! TODO: offload this loop to the GPU
+      !$acc data copyin(buffer) copyin(n)
+
+     !$acc parallel loop
      do i = 3,n-2
         out(i) = blur(i, buffer, n)
      enddo
+     !$acc end parallel loop
 
-     ! TODO: offload this loop to the GPU
+     !$acc parallel loop
      do i = 1,n
         in(i) = out(i)
      enddo
+     !$acc end parallel loop
+
+     !$acc update self(buffer) self(out) self(in)
+      !$acc end data
   enddo
 
   deallocate(buffer)
@@ -88,22 +101,31 @@ subroutine blur_twice_gpu_nocopies(nsteps, n, in, out)
   allocate(buffer(n))
 
   ! TODO: move the data needed by the algorithm to the GPU
+  ! DATA IN
+   !$acc data copyin(in) copyin(n) copyin(buffer) copyin(out) copyin(in)
+   !$acc end data
+
   do istep = 1,nsteps
-     ! TODO: offload this loop to the GPU
+     !$acc parallel loop
      do i = 2,n-1
         buffer(i) = blur(i, in, n)
      enddo
+     !$acc end parallel loop
 
-     ! TODO: offload this loop to the GPU
+      !$acc parallel loop
      do i = 3,n-2
         out(i) = blur(i, buffer, n)
      enddo
+     !$acc end parallel loop
 
-     ! TODO: offload this loop to the GPU (pay attention to the compiler diagnostics!)
+      !$acc parallel loop
      do i = 1,n
         in(i) = out(i)
      enddo
+     !$acc end parallel loop
   enddo
+  !$acc update self(buffer) self(out) self(in)
+   !$acc end data
 
   deallocate(buffer)
 end subroutine blur_twice_gpu_nocopies
@@ -150,7 +172,7 @@ program main
   time_host = get_time() - time_host
 
   time_gpu = get_time()
-  call blur_twice_gpu_naive(nsteps, n, x0, x1)
+  call blur_twice_gpu_nocopies(nsteps, n, x0, x1)
   time_gpu = get_time() - time_gpu
 
   ! Validate kernel

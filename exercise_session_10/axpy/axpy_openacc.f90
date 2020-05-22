@@ -1,3 +1,4 @@
+
 subroutine axpy(n, alpha, x, y)
   integer, intent(in) :: n
   real(kind(0d0)), intent(in) :: alpha
@@ -22,9 +23,11 @@ subroutine axpy_gpu(n, alpha, x, y)
   integer i
 
   ! TODO: offload this loop to the GPU
+  !$acc parallel loop
   do i = 1,n
      y(i) = y(i) + alpha*x(i)
   enddo
+  !$acc end parallel loop
 
 end subroutine axpy_gpu
 
@@ -55,6 +58,8 @@ program main
 
   copyin_start = get_time()
   ! TODO: Copy the necessary data to the GPU, so as to measute the transfer time
+  !$acc data copyin(n) copyin(y) copyin(x)
+  !$acc end data
   time_copyin = get_time() - copyin_start
 
   axpy_start = get_time()
@@ -63,6 +68,8 @@ program main
 
   copyout_start = get_time()
   ! TODO: Copy the necessary data from the GPU, so as to measute the transfer time
+  !$acc update self(y)
+  !$acc end data
   time_copyout = get_time() - copyout_start
 
   print *, '-------'
