@@ -51,6 +51,8 @@ subroutine init_hydro
      end do
   end do
   ! Put point explotion in lower left corner
+
+  ! TODO: make sure this works properly with parellisation
   uold(imin+2,jmin+2,IP)=1./dx/dx
 
 !!$  ! 1D Sod test

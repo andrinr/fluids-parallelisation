@@ -14,12 +14,6 @@ program hydro_main
   real(kind=prec_real)   :: dt, tps_elapsed, tps_cpu, t_deb, t_fin
   integer(kind=prec_int) :: nbp_init, nbp_final, nbp_max, freq_p
 
-   ! Itialize MPI environment
-  call MPI_INIT(ierror)
-
-  ! init MPI
-  call init_mpi
-
   ! Initialize clock counter
   call system_clock(count_rate=freq_p, count_max=nbp_max)
   call system_clock(nbp_init)
@@ -29,7 +23,15 @@ program hydro_main
   call read_params
 
   ! Initialize hydro grid
+  ! do this before mpi because initialisation needs to be equal for all threads
+  ! TODO: could be reduced
   call init_hydro
+
+   ! Itialize MPI environment
+  call MPI_INIT(ierror)
+
+  ! init MPI
+  call init_mpi
 
   print*,'Starting time integration, nx = ',nx,' ny = ',ny  
 
@@ -43,7 +45,7 @@ program hydro_main
 
 
      ! Compute new time-step, only for even time steps
-     if(MOD(nstep,2)==0 .and. myrank == 0 )then
+     if(MOD(nstep,2)==0 .and. rank == 0 )then
         call cmpdt(dt)
         ! safety marigin for start
         if(nstep==0)dt=dt/2.
@@ -51,7 +53,7 @@ program hydro_main
 
      call MPI_BCAST(dt, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD, ierror)
 
-     ! print*, 'MAIN || ', 'I am rank ', myrank, ' of ', nproc, ' and dt is ', dt
+     ! print*, 'MAIN || ', 'I am rank ', rank, ' of ', nproc, ' and dt is ', dt
 
      ! Directional splitting
      if(MOD(nstep,2)==0)then
