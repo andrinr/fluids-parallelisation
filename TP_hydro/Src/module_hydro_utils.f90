@@ -37,6 +37,8 @@ subroutine make_boundary(idim)
      do ivar=1,nvar
         do i=1,2           
            sign=1.0
+           ! different boundary conditions as specified in the input file
+           ! we could possibly add another boundary condition for MPI comm?
            if(boundary_left==1)then
               i0=5-i
               if(ivar==IU)sign=-1.0

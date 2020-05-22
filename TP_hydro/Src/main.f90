@@ -51,7 +51,7 @@ program hydro_main
 
      call MPI_BCAST(dt, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD, ierror)
 
-     print*, 'MAIN || ', 'I am rank ', myrank, ' of ', nproc, ' and dt is ', dt
+     ! print*, 'MAIN || ', 'I am rank ', myrank, ' of ', nproc, ' and dt is ', dt
 
      ! Directional splitting
      if(MOD(nstep,2)==0)then
