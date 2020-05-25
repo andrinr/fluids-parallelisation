@@ -23,7 +23,6 @@ program hydro_main
   call read_params
 
   ! Initialize hydro grid
-  ! do this before mpi because initialisation needs to be equal for all threads
   ! TODO: could be reduced
   call init_hydro
 

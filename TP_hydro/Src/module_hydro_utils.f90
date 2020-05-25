@@ -21,6 +21,7 @@ subroutine make_boundary(idim)
   use hydro_commons
   use hydro_const
   use hydro_parameters
+  use hydro_mpi
   implicit none
 
   ! Dummy arguments
@@ -34,24 +35,31 @@ subroutine make_boundary(idim)
   if(idim==1)then
      
      ! Left boundary
-     do ivar=1,nvar
-        do i=1,2           
-           sign=1.0
-           ! different boundary conditions as specified in the input file
-           ! we could possibly add another boundary condition for MPI comm?
-           if(boundary_left==1)then
-              i0=5-i
-              if(ivar==IU)sign=-1.0
-           else if(boundary_left==2)then
-              i0=3
-           else
-              i0=nx+i
-           end if
-           do j=jmin+2,jmax-2
-              uold(i,j,ivar)=uold(i0,j,ivar)*sign
-           end do
-        end do
-     end do
+      if (rankl == -1) then
+         do ivar=1,nvar
+            do i=1,2           
+               sign=1.0
+               ! different boundary conditions as specified in the input file
+               ! we could possibly add another boundary condition for MPI comm?
+               if(boundary_left==1)then
+                  i0=5-i
+                  if(ivar==IU)sign=-1.0
+               else if(boundary_left==2)then
+                  i0=3
+               else
+                  i0=nx+i
+               end if
+               do j=jmin+2,jmax-2
+                  uold(i,j,ivar)=uold(i0,j,ivar)*sign
+               end do
+            end do
+         end do
+      else
+         !TODO: fetch left
+      end if
+      
+
+   
 
      ! Right boundary
      do ivar=1,nvar

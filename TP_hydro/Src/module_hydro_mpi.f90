@@ -29,18 +29,18 @@ contains
 
         print*, 'HYDRO_MPI.INIT_MPI || ', 'I communicate with :' , rankl, rankr, rankb, rankt
 
-        slabimin = coords(1) * nx / dimensions(1)
-        slabimax = (coords(1) + 1) * nx / dimensions(1)
+        slabimin = coords(1) * nx+4 / dimensions(1)
+        slabimax = (coords(1) + 1) * nx / dimensions(1) + 4
 
         slabjmin = coords(2) * ny / dimensions(2)
-        slabjmax = (coords(2) + 1) * ny / dimensions(2)
+        slabjmax = (coords(2) + 1) * ny / dimensions(2) + 4
         
         if (rankr == -1) then
-            slabimax = nx
+            slabimax = nx + 4
         end if
 
         if (rankt == -1) then 
-            slabjmax = ny
+            slabjmax = ny + 4
         end if
 
         print*, 'HYDRO_MPI.INIT_MPI || ', 'My rank is', rank , 'and my slab reaches from', slabimin, slabjmin, 'to', slabimax, slabjmax
@@ -50,8 +50,42 @@ contains
 
     end subroutine init_mpi
 
-    subroutine end_mpi
+    subroutine get_surround
+        if (rankl .NE. -1) then
+            call MPI_IRECV( &
+                uold(slabimin, slabjmin : slabjmax),&
+                slabjmax - slabjmin,&
+                MPI_DOUBLE,&
+                rankl,&
+                1,&
+                COMM_CART,&
+                requests(reqind + 1),&
+                ierror&
+            )
+            call MPI_ISEND(&
+                uold(imin+1, jmin : jmax),&
+                jmax - jmin,&
+                MPI_DOUBLE,&
+                myleft,&
+                1,&
+                COMM_CART,&
+                requests(reqind + 2),&
+                ierror&
+            )
 
-    end subroutine end_mpi
+        end if
+
+        if (rankr .NE. -1) then
+            
+        end if
+
+        if (rankt .NE. -1) then
+            
+        end if
+
+        if (rankb .NE. -1) then
+            
+        end if
+    end subroutine get_surround
 
 end module hydro_mpi
