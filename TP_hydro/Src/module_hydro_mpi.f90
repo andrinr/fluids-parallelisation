@@ -11,6 +11,11 @@ module hydro_mpi
     integer, dimension(2) :: dimensions, coords = (/0,0/)
     logical, dimension(2) :: periods = (/.False. , .False./)
 
+    integer :: countj
+    integer :: counti
+    integer, dimension(4,4) :: receivingdomain, sendingdomain
+    integer, dimension(4) :: counts, ranks
+
 
 contains
 
@@ -29,7 +34,7 @@ contains
 
         print*, 'HYDRO_MPI.INIT_MPI || ', 'I communicate with :' , rankl, rankr, rankb, rankt
 
-        slabimin = coords(1) * nx+4 / dimensions(1)
+        slabimin = coords(1) * nx / dimensions(1)
         slabimax = (coords(1) + 1) * nx / dimensions(1) + 4
 
         slabjmin = coords(2) * ny / dimensions(2)
@@ -45,47 +50,89 @@ contains
 
         print*, 'HYDRO_MPI.INIT_MPI || ', 'My rank is', rank , 'and my slab reaches from', slabimin, slabjmin, 'to', slabimax, slabjmax
 
+        call init_surround
+
         call MPI_BARRIER(COMM_CART, ierrror)
 
 
     end subroutine init_mpi
 
+    subroutine init_surround
+
+        countj = ((slabjmax+2) - (slabjmin-2))*2
+        counti = ((slabimax+2) - (slabimin-2))*2
+
+        print*,countj
+        print*,counti
+
+        ! order : left, right, top, bottom
+        receivingdomain = RESHAPE(&
+            (/slabimin, slabimin+1, slabjmin+2, slabjmax-2,&
+            slabimax-1, slabimax, slabjmin+2, slabjmax-2,&
+            slabimin+2, slabimax-2, slabjmin, slabjmin+1,&
+            slabimin+2, slabimax-2, slabimax-1, slabimax/),&
+            (/4,4/)&
+        )
+
+        sendingdomain = RESHAPE(&
+            (/slabimin+2, slabimin+3, slabjmin+2, slabjmax-2,&
+            slabimax-3, slabimax-2, slabjmin+2, slabjmax-2,&
+            slabimin+2, slabimax-2, slabjmin+2, slabjmin+3,&
+            slabimin+2, slabimax-2, slabjmax-2, slabjmax-3/),&
+            (/4,4/)&
+        )
+
+        counts = (/countj, countj, counti, counti/)
+        ranks = (/rankl, rankr, rankt, rankb/)
+
+    end subroutine init_surround
+
     subroutine get_surround
-        if (rankl .NE. -1) then
-            call MPI_IRECV( &
-                uold(slabimin, slabjmin : slabjmax),&
-                slabjmax - slabjmin,&
-                MPI_DOUBLE,&
-                rankl,&
-                1,&
-                COMM_CART,&
-                requests(reqind + 1),&
-                ierror&
-            )
-            call MPI_ISEND(&
-                uold(imin+1, jmin : jmax),&
-                jmax - jmin,&
-                MPI_DOUBLE,&
-                myleft,&
-                1,&
-                COMM_CART,&
-                requests(reqind + 2),&
-                ierror&
-            )
+        
+        integer :: d
+        integer ::  reqind = 1
+        integer, dimension(32) :: requests
 
-        end if
+        requests(:) = MPI_REQUEST_NULL
 
-        if (rankr .NE. -1) then
-            
-        end if
+        ! Iterate over 4 directions
+        do d=1,4
+            if (ranks(d) .NE. -1) then
+                do ivar=1,nvar
+                
+                    call MPI_IRECV(&
+                        uold(&
+                            receivingdomain(d,1):&
+                            receivingdomain(d,2),&
+                            receivingdomain(d,3):&
+                            receivingdomain(d,4),&
+                            ivar&
+                        ),&
+                        counts(d), MPI_DOUBLE,&
+                        ranks(d), 1, COMM_CART, requests(reqind), ierror&
+                    )
 
-        if (rankt .NE. -1) then
-            
-        end if
+                    reqind = reqind + 1
 
-        if (rankb .NE. -1) then
-            
-        end if
+                    call MPI_ISEND(&
+                        uold(&
+                            sendingdomain(d,1):&
+                            sendingdomain(d,2),&
+                            sendingdomain(d,3):&
+                            sendingdomain(d,4),&
+                            ivar&
+                        ),&
+                        counts(d), MPI_DOUBLE,&
+                        ranks(d), 1, COMM_CART, requests(reqind), ierror&
+                    )
+
+                    reqind = reqind + 1
+                end do
+            end if
+        end do
+
+        call MPI_WAITALL(32, requests, MPI_STATUSES_IGNORE, ierror)
+    
     end subroutine get_surround
 
 end module hydro_mpi
