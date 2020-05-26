@@ -2,6 +2,7 @@ module hydro_mpi
 
     use mpi
     use hydro_commons
+    use hydro_const
     use hydro_parameters
     
     integer :: ierror, nproc, COMM_CART
@@ -62,9 +63,6 @@ contains
         countj = ((slabjmax+2) - (slabjmin-2))*2
         counti = ((slabimax+2) - (slabimin-2))*2
 
-        print*,countj
-        print*,counti
-
         ! order : left, right, top, bottom
         receivingdomain = RESHAPE(&
             (/slabimin, slabimin+1, slabjmin+2, slabjmax-2,&
@@ -96,10 +94,12 @@ contains
         requests(:) = MPI_REQUEST_NULL
 
         ! Iterate over 4 directions
+        
         do d=1,4
             if (ranks(d) .NE. -1) then
                 do ivar=1,nvar
                 
+                    if (.false.) then
                     call MPI_IRECV(&
                         uold(&
                             receivingdomain(d,1):&
@@ -111,6 +111,7 @@ contains
                         counts(d), MPI_DOUBLE,&
                         ranks(d), 1, COMM_CART, requests(reqind), ierror&
                     )
+                end if
 
                     reqind = reqind + 1
 
@@ -125,6 +126,7 @@ contains
                         counts(d), MPI_DOUBLE,&
                         ranks(d), 1, COMM_CART, requests(reqind), ierror&
                     )
+                 
 
                     reqind = reqind + 1
                 end do

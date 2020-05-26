@@ -154,12 +154,12 @@ subroutine godunov(idim,dt)
 
       ! Allocate work space for 1D sweeps
       ! when sweeping along X-axis we need to allocate the dimension in x
-      call allocate_work_space(imin,imax,nx+1)
+      call allocate_work_space(slabimin,slabimax,nx+1)
 
-      do j=jmin+2,jmax-2
+      do j=slabjmin+2,slabjmax-2
 
          ! Gather conservative variables
-         do i=imin,imax
+         do i=slabimin,slabimax
             u(i,ID)=uold(i,j,ID)
             u(i,IU)=uold(i,j,IU)
             u(i,IV)=uold(i,j,IV)
@@ -167,7 +167,7 @@ subroutine godunov(idim,dt)
          end do
          if(nvar>4)then
             do in = 5,nvar
-               do i=imin,imax
+               do i=slabimin,slabimax
                   u(i,in)=uold(i,j,in)
                end do
             end do
@@ -196,7 +196,7 @@ subroutine godunov(idim,dt)
          call cmpflx(qgdnv,flux)
 
          ! Update conservative variables 
-         do i=imin+2,imax-2
+         do i=slabimin+2,slabimax-2
             uold(i,j,ID)=u(i,ID)+(flux(i-2,ID)-flux(i-1,ID))*dtdx
             uold(i,j,IU)=u(i,IU)+(flux(i-2,IU)-flux(i-1,IU))*dtdx
             uold(i,j,IV)=u(i,IV)+(flux(i-2,IV)-flux(i-1,IV))*dtdx
@@ -204,7 +204,7 @@ subroutine godunov(idim,dt)
          end do
          if(nvar>4)then
             do in = 5,nvar
-               do i=imin+2,imax-2
+               do i=slabimin+2,slabimax-2
                   uold(i,j,in)=u(i,in)+(flux(i-2,in)-flux(i-1,in))*dtdx
                end do
             end do
@@ -219,12 +219,12 @@ subroutine godunov(idim,dt)
 
       ! Allocate work space for 1D sweeps
       ! when sweeping along Y-axis we need to allocate the dimension in y
-      call allocate_work_space(jmin,jmax,ny+1)
+      call allocate_work_space(slabjmin,slabjmax,ny+1)
 
-      do i=imin+2,imax-2
+      do i=slabimin+2,slabimax-2
 
          ! Gather conservative variables
-         do j=jmin,jmax
+         do j=slabjmin,slabjmax
             u(j,ID)=uold(i,j,ID)
             u(j,IU)=uold(i,j,IV)
             u(j,IV)=uold(i,j,IU)
@@ -232,7 +232,7 @@ subroutine godunov(idim,dt)
          end do
          if(nvar>4)then
             do in = 5,nvar
-               do j=jmin,jmax
+               do j=slabjmin,slabjmax
                   u(j,in)=uold(i,j,in)
                end do
             end do
@@ -261,7 +261,7 @@ subroutine godunov(idim,dt)
          call cmpflx(qgdnv,flux)
 
          ! Update conservative variables 
-         do j=jmin+2,jmax-2
+         do j=slabjmin+2,slabjmax-2
             uold(i,j,ID)=u(j,ID)+(flux(j-2,ID)-flux(j-1,ID))*dtdx
             uold(i,j,IU)=u(j,IV)+(flux(j-2,IV)-flux(j-1,IV))*dtdx
             uold(i,j,IV)=u(j,IU)+(flux(j-2,IU)-flux(j-1,IU))*dtdx
@@ -269,7 +269,7 @@ subroutine godunov(idim,dt)
          end do
          if(nvar>4)then
             do in = 5,nvar
-               do j=jmin+2,jmax-2
+               do j=slabjmin+2,slabjmax-2
                   uold(i,j,in)=u(j,in)+(flux(j-2,in)-flux(j-1,in))*dtdx
                end do
             end do
