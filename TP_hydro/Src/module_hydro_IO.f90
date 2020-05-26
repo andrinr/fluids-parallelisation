@@ -35,6 +35,7 @@ end subroutine read_params
 subroutine output
   use hydro_commons
   use hydro_parameters
+  use hydro_mpi
   implicit none
 
   ! Local variables
@@ -44,7 +45,7 @@ subroutine output
 
   nout=nstep/noutput
   call title(nout,char)
-  call title(MYPE,charpe)
+  call title(rank,charpe)
   filename='output_'//TRIM(char)//'.'//TRIM(charpe)
   open(10,file=filename,form='unformatted')
   rewind(10)

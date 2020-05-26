@@ -105,7 +105,7 @@ contains
             if (ranks(d) .NE. -1) then
                 do ivar=1,nvar
                 
-                    print*,requests(reqind)
+                    ! print*,requests(reqind)
 
                     if (.false.) then
                     call MPI_IRECV(&
