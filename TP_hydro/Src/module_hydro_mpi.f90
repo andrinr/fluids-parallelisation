@@ -12,8 +12,8 @@ module hydro_mpi
     integer, dimension(2) :: dimensions, coords = (/0,0/)
     logical, dimension(2) :: periods = (/.False. , .False./)
 
-    integer :: countj
-    integer :: counti
+    integer :: countj, counti
+    integer :: nneighbours
     integer, dimension(4,4) :: receivingdomain, sendingdomain
     integer, dimension(4) :: counts, ranks
 
@@ -69,15 +69,15 @@ contains
             slabimax-1, slabimax, slabjmin+2, slabjmax-2,&
             slabimin+2, slabimax-2, slabjmin, slabjmin+1,&
             slabimin+2, slabimax-2, slabimax-1, slabimax/),&
-            (/4,4/)&
+            (/4,4/),ORDER = (/2, 1/)&
         )
 
         sendingdomain = RESHAPE(&
             (/slabimin+2, slabimin+3, slabjmin+2, slabjmax-2,&
             slabimax-3, slabimax-2, slabjmin+2, slabjmax-2,&
             slabimin+2, slabimax-2, slabjmin+2, slabjmin+3,&
-            slabimin+2, slabimax-2, slabjmax-2, slabjmax-3/),&
-            (/4,4/)&
+            slabimin+2, slabimax-2, slabjmax-3, slabjmax-2/),&
+            (/4,4/),ORDER = (/2, 1/)&
         )
 
         counts = (/countj, countj, counti, counti/)
@@ -86,10 +86,16 @@ contains
     end subroutine init_surround
 
     subroutine get_surround
+
+        use hydro_commons
+        use hydro_const
+        use hydro_parameters
         
         integer :: d
         integer ::  reqind = 1
         integer, dimension(32) :: requests
+        integer :: requestA, requestB
+        integer :: tmp
 
         requests(:) = MPI_REQUEST_NULL
 
@@ -99,6 +105,8 @@ contains
             if (ranks(d) .NE. -1) then
                 do ivar=1,nvar
                 
+                    print*,requests(reqind)
+
                     if (.false.) then
                     call MPI_IRECV(&
                         uold(&
@@ -111,10 +119,11 @@ contains
                         counts(d), MPI_DOUBLE,&
                         ranks(d), 1, COMM_CART, requests(reqind), ierror&
                     )
-                end if
+
+                    !requests(reqind) = 1
 
                     reqind = reqind + 1
-
+                    
                     call MPI_ISEND(&
                         uold(&
                             sendingdomain(d,1):&
@@ -126,9 +135,16 @@ contains
                         counts(d), MPI_DOUBLE,&
                         ranks(d), 1, COMM_CART, requests(reqind), ierror&
                     )
-                 
+
+                    !requests(reqind) = 1
 
                     reqind = reqind + 1
+
+                    end if
+
+                    !call MPI_WAIT(requestA, MPI_STATUSES_IGNORE, ierror)
+                
+
                 end do
             end if
         end do
@@ -136,5 +152,9 @@ contains
         call MPI_WAITALL(32, requests, MPI_STATUSES_IGNORE, ierror)
     
     end subroutine get_surround
+
+    subroutine reduce
+        ! do stuff
+    end subroutine reduce
 
 end module hydro_mpi

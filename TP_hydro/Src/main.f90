@@ -23,7 +23,7 @@ program hydro_main
   call read_params
 
   ! Initialize hydro grid
-  ! TODO: could be reduced
+  ! TODO: could be broadcasted
   call init_hydro
 
    ! Itialize MPI environment
