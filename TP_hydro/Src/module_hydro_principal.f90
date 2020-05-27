@@ -140,21 +140,20 @@ subroutine godunov(idim,dt)
    integer(kind=prec_int) :: i,j,in
    real(kind=prec_real)   :: dtdx
 
-
    ! constant
    dtdx=dt/dx
 
+   !
+   call get_surround
+
    ! Update boundary conditions
    call make_boundary(idim)
-
-   ! get surrounding cells from neighbouring processors
-   call get_surround
 
    if (idim==1)then
 
       ! Allocate work space for 1D sweeps
       ! when sweeping along X-axis we need to allocate the dimension in x
-      call allocate_work_space(slabimin,slabimax,nx+1)
+      call allocate_work_space(imin,imax,nx+1)
 
       do j=slabjmin+2,slabjmax-2
 
@@ -219,7 +218,7 @@ subroutine godunov(idim,dt)
 
       ! Allocate work space for 1D sweeps
       ! when sweeping along Y-axis we need to allocate the dimension in y
-      call allocate_work_space(slabjmin,slabjmax,ny+1)
+      call allocate_work_space(jmin,jmax,ny+1)
 
       do i=slabimin+2,slabimax-2
 

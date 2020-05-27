@@ -14,6 +14,9 @@ program hydro_main
   real(kind=prec_real)   :: dt, tps_elapsed, tps_cpu, t_deb, t_fin
   integer(kind=prec_int) :: nbp_init, nbp_final, nbp_max, freq_p
 
+  ! Itialize MPI environment
+  call MPI_INIT(ierror)
+
   ! Initialize clock counter
   call system_clock(count_rate=freq_p, count_max=nbp_max)
   call system_clock(nbp_init)
@@ -22,15 +25,12 @@ program hydro_main
   ! Read run parameters
   call read_params
 
+  ! init MPI
+  call init_mpi
+
   ! Initialize hydro grid
   ! TODO: could be broadcasted
   call init_hydro
-
-   ! Itialize MPI environment
-  call MPI_INIT(ierror)
-
-  ! init MPI
-  call init_mpi
 
   print*,'Starting time integration, nx = ',nx,' ny = ',ny  
 

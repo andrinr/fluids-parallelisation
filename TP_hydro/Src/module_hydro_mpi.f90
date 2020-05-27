@@ -1,14 +1,11 @@
 module hydro_mpi
 
     use mpi
-    use hydro_commons
-    use hydro_const
-    use hydro_parameters
     
     integer :: ierror, nproc, COMM_CART
     integer :: ndims = 2
     integer :: rankl, rankr, rankt, rankb, rank
-    integer :: slabimin, slabimax, slabjmin, slabjmax
+    integer :: slabimin, slabimax, slabjmin, slabjmax = 0
     integer, dimension(2) :: dimensions, coords = (/0,0/)
     logical, dimension(2) :: periods = (/.False. , .False./)
 
@@ -21,6 +18,9 @@ module hydro_mpi
 contains
 
     subroutine init_mpi
+
+        use hydro_commons
+        use hydro_parameters
         
         call MPI_COMM_SIZE(MPI_COMM_WORLD, nproc, ierror)
         call MPI_DIMS_CREATE(nproc, ndims, dimensions, ierror)
@@ -35,25 +35,35 @@ contains
 
         print*, 'HYDRO_MPI.INIT_MPI || ', 'I communicate with :' , rankl, rankr, rankb, rankt
 
+        !if (.false.) then
+    
+        !if (rank == 0) then
         slabimin = coords(1) * nx / dimensions(1)
         slabimax = (coords(1) + 1) * nx / dimensions(1) + 4
 
         slabjmin = coords(2) * ny / dimensions(2)
         slabjmax = (coords(2) + 1) * ny / dimensions(2) + 4
-        
-        if (rankr == -1) then
+
+        if (rankr == MPI_PROC_NULL) then
             slabimax = nx + 4
         end if
 
-        if (rankt == -1) then 
+        if (rankt == MPI_PROC_NULL) then 
             slabjmax = ny + 4
         end if
 
-        print*, 'HYDRO_MPI.INIT_MPI || ', 'My rank is', rank , 'and my slab reaches from', slabimin, slabjmin, 'to', slabimax, slabjmax
+        slabimin = 5
+        slabjmin = 5
+        slabjmax = 10
+        slabjmax = 10
+
+    !end if
+
+        print*, 'HYDRO_MPI.INIT_MPI || ', 'rank', rank , 'slab', slabimin, slabjmin, 'to', slabimax, slabjmax
 
         call init_surround
 
-        call MPI_BARRIER(COMM_CART, ierrror)
+        call MPI_BARRIER(COMM_CART, ierror)
 
 
     end subroutine init_mpi
@@ -102,12 +112,12 @@ contains
         ! Iterate over 4 directions
         
         do d=1,4
-            if (ranks(d) .NE. -1) then
+            if (ranks(d) .NE. MPI_PROC_NULL) then
                 do ivar=1,nvar
                 
                     ! print*,requests(reqind)
 
-                    if (.false.) then
+                    !if (.false.) then
                     call MPI_IRECV(&
                         uold(&
                             receivingdomain(d,1):&
@@ -117,7 +127,7 @@ contains
                             ivar&
                         ),&
                         counts(d), MPI_DOUBLE,&
-                        ranks(d), 1, COMM_CART, requests(reqind), ierror&
+                        ranks(d), 1, COMM_CART, tmp, ierror&
                     )
 
                     !requests(reqind) = 1
@@ -133,14 +143,14 @@ contains
                             ivar&
                         ),&
                         counts(d), MPI_DOUBLE,&
-                        ranks(d), 1, COMM_CART, requests(reqind), ierror&
+                        ranks(d), 1, COMM_CART, tmp, ierror&
                     )
 
                     !requests(reqind) = 1
 
                     reqind = reqind + 1
 
-                    end if
+                    !end if
 
                     !call MPI_WAIT(requestA, MPI_STATUSES_IGNORE, ierror)
                 
