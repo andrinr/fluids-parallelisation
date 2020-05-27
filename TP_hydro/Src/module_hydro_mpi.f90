@@ -11,7 +11,7 @@ module hydro_mpi
     logical, dimension(2) :: periods = (/.FALSE. , .FALSE./)
 
     integer :: countj, counti
-    integer :: nneighbours
+    integer :: nneighbours = 0
     integer, dimension(4,4) :: receivingdomain, sendingdomain
     integer, dimension(4) :: counts, ranks
 
@@ -100,10 +100,12 @@ contains
         use hydro_parameters
         implicit none
         
-        integer :: d, ivar, reqind = 0
-        integer, dimension(32) :: requests
-    
-        requests(1:32) = MPI_REQUEST_NULL
+        ! Warning: initialisation only happens once !!
+        integer :: d, ivar, reqind, tmp
+        integer, dimension(8*nvar) :: request
+
+        reqind = 0
+        request = MPI_REQUEST_NULL
 
         ! Iterate over 4 directions
         
@@ -141,7 +143,7 @@ contains
                             ivar&
                         ),&
                         counts(d), MPI_DOUBLE,&
-                        ranks(d), 1, COMM_CART, requests(reqind), ierror&
+                        ranks(d), 1, COMM_CART, request(reqind), ierror&
                     )
 
                     reqind = reqind + 1
@@ -155,7 +157,7 @@ contains
                             ivar&
                         ),&
                         counts(d), MPI_DOUBLE,&
-                        ranks(d), 1, COMM_CART,  requests(reqind), ierror&
+                        ranks(d), 1, COMM_CART, request(reqind), ierror&
                     )
 
                     !end if
@@ -164,7 +166,16 @@ contains
             end if
         end do
 
-        !call MPI_WAITALL(32, requests, MPI_STATUSES_IGNORE, ierror)
+        ! DEBUGING
+        ! print*,size(request)
+        ! print*,size(request(1:reqind))
+        ! print*,reqind
+        !do d=1,reqind
+        !    print*,request(d)
+        !end do
+        ! DEBUGING
+
+        !call MPI_WAITALL(reqind, request, MPI_STATUSES_IGNORE, ierror)
     
     end subroutine get_surround
 

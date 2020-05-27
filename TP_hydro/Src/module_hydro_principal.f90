@@ -143,6 +143,8 @@ subroutine godunov(idim,dt)
    ! constant
    dtdx=dt/dx
 
+   call get_surround
+
    ! Update boundary conditions
    call make_boundary(idim)
 
