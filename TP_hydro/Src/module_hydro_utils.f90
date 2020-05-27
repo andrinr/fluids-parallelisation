@@ -35,7 +35,7 @@ subroutine make_boundary(idim)
   if(idim==1)then
      
      ! Left boundary
-      if (rankl == -1) then
+      if (rankl == MPI_PROC_NULL) then
          do ivar=1,nvar
             do i=1,2           
                sign=1.0
@@ -54,50 +54,49 @@ subroutine make_boundary(idim)
                end do
             end do
          end do
-      else
-         !TODO: fetch left
       end if
       
-
-   
-
      ! Right boundary
-     do ivar=1,nvar
-        do i=nx+3,nx+4
-           sign=1.0
-           if(boundary_right==1)then
-              i0=2*nx+5-i
-              if(ivar==IU)sign=-1.0
-           else if(boundary_right==2)then
-              i0=nx+2
-           else
-              i0=i-nx
-           end if
-           do j=jmin+2,jmax-2
-              uold(i,j,ivar)=uold(i0,j,ivar)*sign
-           end do
-        end do
-     end do
+      if (rankr == MPI_PROC_NULL) then
+         do ivar=1,nvar
+            do i=nx+3,nx+4
+               sign=1.0
+               if(boundary_right==1)then
+                  i0=2*nx+5-i
+                  if(ivar==IU)sign=-1.0
+               else if(boundary_right==2)then
+                  i0=nx+2
+               else
+                  i0=i-nx
+               end if
+               do j=jmin+2,jmax-2
+                  uold(i,j,ivar)=uold(i0,j,ivar)*sign
+               end do
+            end do
+         end do
+      end if
 
   else
 
      ! Lower boundary
-     do ivar=1,nvar
-        do j=1,2           
-           sign=1.0
-           if(boundary_down==1)then
-              j0=5-j
-              if(ivar==IV)sign=-1.0
-           else if(boundary_down==2)then
-              j0=3
-           else
-              j0=ny+i
-           end if
-           do i=imin+2,imax-2
-              uold(i,j,ivar)=uold(i,j0,ivar)*sign
-           end do
-        end do
-     end do
+      if (rankb == MPI_PROC_NULL) then
+         do ivar=1,nvar
+            do j=1,2           
+               sign=1.0
+               if(boundary_down==1)then
+                  j0=5-j
+                  if(ivar==IV)sign=-1.0
+               else if(boundary_down==2)then
+                  j0=3
+               else
+                  j0=ny+i
+               end if
+               do i=imin+2,imax-2
+                  uold(i,j,ivar)=uold(i,j0,ivar)*sign
+               end do
+            end do
+         end do
+      end if
 
 !!$        djet=1.0
 !!$        ujet=300.
@@ -115,22 +114,24 @@ subroutine make_boundary(idim)
 !!$        end do
 
      ! Upper boundary
-     do ivar=1,nvar
-        do j=ny+3,ny+4
-           sign=1.0
-           if(boundary_up==1)then
-              j0=2*ny+5-j
-              if(ivar==IV)sign=-1.0
-           else if(boundary_up==2)then
-              j0=ny+2
-           else
-              j0=j-ny
-           end if
-           do i=imin+2,imax-2
-              uold(i,j,ivar)=uold(i,j0,ivar)*sign
-           end do
-        end do
-     end do
+      if (rankt == MPI_PROC_NULL) then
+         do ivar=1,nvar
+            do j=ny+3,ny+4
+               sign=1.0
+               if(boundary_up==1)then
+                  j0=2*ny+5-j
+                  if(ivar==IV)sign=-1.0
+               else if(boundary_up==2)then
+                  j0=ny+2
+               else
+                  j0=j-ny
+               end if
+               do i=imin+2,imax-2
+                  uold(i,j,ivar)=uold(i,j0,ivar)*sign
+               end do
+            end do
+         end do
+      end if
 
   end if
 end subroutine make_boundary

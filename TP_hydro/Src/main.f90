@@ -13,6 +13,7 @@ program hydro_main
 
   real(kind=prec_real)   :: dt, tps_elapsed, tps_cpu, t_deb, t_fin
   integer(kind=prec_int) :: nbp_init, nbp_final, nbp_max, freq_p
+  integer :: i
 
   ! Itialize MPI environment
   call MPI_INIT(ierror)
@@ -32,6 +33,12 @@ program hydro_main
   ! TODO: could be broadcasted
   call init_hydro
 
+  do i=1,2
+  call get_surround
+  end do
+
+  if (.false.) then
+
   print*,'Starting time integration, nx = ',nx,' ny = ',ny  
 
   ! Main time loop
@@ -42,7 +49,6 @@ program hydro_main
         call output
       end if
 
-
      ! Compute new time-step, only for even time steps
      if(MOD(nstep,2)==0 .and. rank == 0 )then
         call cmpdt(dt)
@@ -50,10 +56,11 @@ program hydro_main
         if(nstep==0)dt=dt/2.
      endif
 
-     call MPI_BCAST(dt, 1, MPI_DOUBLE, 0, MPI_COMM_WORLD, ierror)
+     call MPI_BCAST(dt, 1, MPI_DOUBLE, 0, COMM_CART, ierror)
 
      ! print*, 'MAIN || ', 'I am rank ', rank, ' of ', nproc, ' and dt is ', dt
 
+     !call get_surround
      ! Directional splitting
      if(MOD(nstep,2)==0)then
         ! x sweep
@@ -69,9 +76,11 @@ program hydro_main
 
      nstep=nstep+1
      t=t+dt
-     write(*,'("step=",I6," t=",1pe10.3," dt=",1pe10.3)')nstep,t,dt
+     !write(*,'("step=",I6," t=",1pe10.3," dt=",1pe10.3)')nstep,t,dt
 
   end do
+
+   end if
 
   ! Final output
   call output

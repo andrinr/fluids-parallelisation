@@ -1,18 +1,21 @@
 module hydro_mpi
 
     use mpi
+    implicit none
     
     integer :: ierror, nproc, COMM_CART
     integer :: ndims = 2
     integer :: rankl, rankr, rankt, rankb, rank
     integer :: slabimin, slabimax, slabjmin, slabjmax = 0
     integer, dimension(2) :: dimensions, coords = (/0,0/)
-    logical, dimension(2) :: periods = (/.False. , .False./)
+    logical, dimension(2) :: periods = (/.FALSE. , .FALSE./)
 
     integer :: countj, counti
     integer :: nneighbours
     integer, dimension(4,4) :: receivingdomain, sendingdomain
     integer, dimension(4) :: counts, ranks
+
+    logical :: VERBOSE = .TRUE.
 
 
 contains
@@ -21,10 +24,11 @@ contains
 
         use hydro_commons
         use hydro_parameters
+        implicit none
         
         call MPI_COMM_SIZE(MPI_COMM_WORLD, nproc, ierror)
         call MPI_DIMS_CREATE(nproc, ndims, dimensions, ierror)
-        call MPI_CART_CREATE(MPI_COMM_WORLD, ndims, dimensions, periods, .True., COMM_CART, ierror)
+        call MPI_CART_CREATE(MPI_COMM_WORLD, ndims, dimensions, periods, .TRUE., COMM_CART, ierror)
         call MPI_COMM_RANK(COMM_CART, rank, ierror)
         call MPI_CART_COORDS(COMM_CART, rank, ndims, coords, ierror)
 
@@ -35,13 +39,10 @@ contains
 
         print*, 'HYDRO_MPI.INIT_MPI || ', 'I communicate with :' , rankl, rankr, rankb, rankt
 
-        !if (.false.) then
-    
-        !if (rank == 0) then
-        slabimin = coords(1) * nx / dimensions(1)
+        slabimin = coords(1) * nx / dimensions(1) + 1
         slabimax = (coords(1) + 1) * nx / dimensions(1) + 4
 
-        slabjmin = coords(2) * ny / dimensions(2)
+        slabjmin = coords(2) * ny / dimensions(2) + 1
         slabjmax = (coords(2) + 1) * ny / dimensions(2) + 4
 
         if (rankr == MPI_PROC_NULL) then
@@ -51,13 +52,6 @@ contains
         if (rankt == MPI_PROC_NULL) then 
             slabjmax = ny + 4
         end if
-
-        slabimin = 5
-        slabjmin = 5
-        slabjmax = 10
-        slabjmax = 10
-
-    !end if
 
         print*, 'HYDRO_MPI.INIT_MPI || ', 'rank', rank , 'slab', slabimin, slabjmin, 'to', slabimax, slabjmax
 
@@ -70,15 +64,17 @@ contains
 
     subroutine init_surround
 
-        countj = ((slabjmax+2) - (slabjmin-2))*2
-        counti = ((slabimax+2) - (slabimin-2))*2
+        implicit none
+
+        countj = ((slabjmax-2) - (slabjmin+2))*2+2
+        counti = ((slabimax-2) - (slabimin+2))*2+2
 
         ! order : left, right, top, bottom
         receivingdomain = RESHAPE(&
             (/slabimin, slabimin+1, slabjmin+2, slabjmax-2,&
             slabimax-1, slabimax, slabjmin+2, slabjmax-2,&
             slabimin+2, slabimax-2, slabjmin, slabjmin+1,&
-            slabimin+2, slabimax-2, slabimax-1, slabimax/),&
+            slabimin+2, slabimax-2, slabjmax-1, slabjmax/),&
             (/4,4/),ORDER = (/2, 1/)&
         )
 
@@ -93,6 +89,8 @@ contains
         counts = (/countj, countj, counti, counti/)
         ranks = (/rankl, rankr, rankt, rankb/)
 
+        print*,'HYDRO_MPI.INIT_SURROUND || proc', rank, 'sizes: ', counts(1), counts(2), counts(3), counts(4)
+
     end subroutine init_surround
 
     subroutine get_surround
@@ -100,24 +98,40 @@ contains
         use hydro_commons
         use hydro_const
         use hydro_parameters
+        implicit none
         
-        integer :: d
-        integer ::  reqind = 1
+        integer :: d, ivar, reqind = 0
         integer, dimension(32) :: requests
-        integer :: requestA, requestB
-        integer :: tmp
-
-        requests(:) = MPI_REQUEST_NULL
+    
+        requests(1:32) = MPI_REQUEST_NULL
 
         ! Iterate over 4 directions
         
         do d=1,4
             if (ranks(d) .NE. MPI_PROC_NULL) then
-                do ivar=1,nvar
-                
-                    ! print*,requests(reqind)
 
-                    !if (.false.) then
+                if (VERBOSE) then 
+                    print*,'HYDRO_MPI.GET_SURROUND || rank', rank ,'comm with', ranks(d)
+
+                    print*,'HYDRO_MPI.GET_SURROUND || proc', rank, 'receiving: ', receivingdomain(d,1), receivingdomain(d,2), receivingdomain(d,3), receivingdomain(d,4)
+                    print*,'HYDRO_MPI.GET_SURROUND || proc', rank, 'sending: ', sendingdomain(d,1), sendingdomain(d,2), sendingdomain(d,3), sendingdomain(d,4)
+
+                    print*,'HYDRO_MPI.GET_SURROUND || proc', rank, 'expected size: ', counts(d)
+
+                    print*,'HYDRO_MPI.GET_SURROUND || proc', rank, 'actual size: ', SIZE(uold(&
+                        receivingdomain(d,1):&
+                        receivingdomain(d,2),&
+                        receivingdomain(d,3):&
+                        receivingdomain(d,4),&
+                        1))
+                end if
+
+                do ivar=1,nvar
+
+                    !if (.FALSE.) then 
+
+                    reqind = reqind + 1
+
                     call MPI_IRECV(&
                         uold(&
                             receivingdomain(d,1):&
@@ -127,10 +141,8 @@ contains
                             ivar&
                         ),&
                         counts(d), MPI_DOUBLE,&
-                        ranks(d), 1, COMM_CART, tmp, ierror&
+                        ranks(d), 1, COMM_CART, requests(reqind), ierror&
                     )
-
-                    !requests(reqind) = 1
 
                     reqind = reqind + 1
                     
@@ -143,28 +155,17 @@ contains
                             ivar&
                         ),&
                         counts(d), MPI_DOUBLE,&
-                        ranks(d), 1, COMM_CART, tmp, ierror&
+                        ranks(d), 1, COMM_CART,  requests(reqind), ierror&
                     )
 
-                    !requests(reqind) = 1
-
-                    reqind = reqind + 1
-
                     !end if
-
-                    !call MPI_WAIT(requestA, MPI_STATUSES_IGNORE, ierror)
-                
 
                 end do
             end if
         end do
 
-        call MPI_WAITALL(32, requests, MPI_STATUSES_IGNORE, ierror)
+        !call MPI_WAITALL(32, requests, MPI_STATUSES_IGNORE, ierror)
     
     end subroutine get_surround
-
-    subroutine reduce
-        ! do stuff
-    end subroutine reduce
 
 end module hydro_mpi
