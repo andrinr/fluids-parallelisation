@@ -132,6 +132,7 @@ subroutine godunov(idim,dt)
   integer(kind=prec_int) :: i,j,in
   real(kind=prec_real)   :: dtdx
 
+  integer :: chunksize = 32
 
   ! constant
   dtdx=dt/dx
@@ -144,6 +145,8 @@ subroutine godunov(idim,dt)
      ! Allocate work space for 1D sweeps
      call allocate_work_space(imin,imax,nx+1)
 
+     !$OMP PARALLEL
+     !$OMP DO SCHEDULE(DYNAMIC,chunksize)
      do j=jmin+2,jmax-2
 
         ! Gather conservative variables
@@ -199,6 +202,9 @@ subroutine godunov(idim,dt)
         end if
 
      end do
+     !$OMP END DO
+
+     !$OMP END PARALLEL
 
      ! Deallocate work space
      call deallocate_work_space()
@@ -208,6 +214,8 @@ subroutine godunov(idim,dt)
      ! Allocate work space for 1D sweeps
      call allocate_work_space(jmin,jmax,ny+1)
 
+     !$OMP PARALLEL
+      !$OMP DO SCHEDULE(DYNAMIC,chunksize)
      do i=imin+2,imax-2
 
         ! Gather conservative variables
@@ -263,6 +271,8 @@ subroutine godunov(idim,dt)
         end if
 
      end do
+     !$OMP END DO
+     !$OMP END PARALLEL
 
      ! Deallocate work space
      call deallocate_work_space()
