@@ -15,7 +15,7 @@ module hydro_mpi
     integer, dimension(4,4) :: receivingdomain, sendingdomain
     integer, dimension(4) :: counts, ranks
 
-    logical :: VERBOSE = .TRUE.
+    logical :: VERBOSE = .FALSE.
 
 
 contains
@@ -39,18 +39,18 @@ contains
 
         print*, 'HYDRO_MPI.INIT_MPI || ', 'I communicate with :' , rankl, rankr, rankb, rankt
 
-        slabimin = coords(1) * nx / dimensions(1) + 1
-        slabimax = (coords(1) + 1) * nx / dimensions(1) + 4
+        slabimin = 1
+        slabimax = nx / dimensions(1) + 4
 
-        slabjmin = coords(2) * ny / dimensions(2) + 1
-        slabjmax = (coords(2) + 1) * ny / dimensions(2) + 4
+        slabjmin = 1
+        slabjmax = ny / dimensions(2) + 4
 
         if (rankr == MPI_PROC_NULL) then
-            slabimax = nx + 4
+            slabimax = nx - (dimensions(1) -1) *  nx / dimensions(1) + 4
         end if
 
         if (rankt == MPI_PROC_NULL) then 
-            slabjmax = ny + 4
+            slabjmax = ny - (dimensions(2) -1) *  ny / dimensions(2) + 4
         end if
 
         print*, 'HYDRO_MPI.INIT_MPI || ', 'rank', rank , 'slab', slabimin, slabjmin, 'to', slabimax, slabjmax
@@ -66,8 +66,8 @@ contains
 
         implicit none
 
-        countj = ((slabjmax-2) - (slabjmin+2))*2+2
-        counti = ((slabimax-2) - (slabimin+2))*2+2
+        countj = (slabJmax-4)*2
+        counti = (slabimax-4)*2
 
         ! order : left, right, top, bottom
         receivingdomain = RESHAPE(&
@@ -115,8 +115,10 @@ contains
                 if (VERBOSE) then 
                     print*,'HYDRO_MPI.GET_SURROUND || proc', rank ,'comm with', ranks(d)
 
-                    print*,'HYDRO_MPI.GET_SURROUND || proc', rank, 'receiving: ', receivingdomain(d,1), receivingdomain(d,2), receivingdomain(d,3), receivingdomain(d,4)
-                    print*,'HYDRO_MPI.GET_SURROUND || proc', rank, 'sending: ', sendingdomain(d,1), sendingdomain(d,2), sendingdomain(d,3), sendingdomain(d,4)
+                    print*,'HYDRO_MPI.GET_SURROUND || proc', rank, 'receiving: ',&
+                        receivingdomain(d,1), receivingdomain(d,2), receivingdomain(d,3), receivingdomain(d,4)
+                    print*,'HYDRO_MPI.GET_SURROUND || proc', rank, 'sending: ',&
+                        sendingdomain(d,1), sendingdomain(d,2), sendingdomain(d,3), sendingdomain(d,4)
 
                     print*,'HYDRO_MPI.GET_SURROUND || proc', rank, 'expected size: ', counts(d)
 
@@ -182,7 +184,7 @@ contains
         !end do
         ! DEBUGING
 
-        !call MPI_WAITALL(32, request, MPI_STATUSES_IGNORE, ierror)
+        call MPI_WAITALL(8*nvar, request, MPI_STATUSES_IGNORE, ierror)
     
     end subroutine get_surround
 

@@ -23,6 +23,13 @@ subroutine read_params
   namelist/hydro/gamma,courant_factor,smallr,smallc,niter_riemann, &
        &         iorder,scheme,slope_type
 
+!   narg = iargc()
+!   IF(narg .NE. 1)THEN
+!      write(*,*)'You should type: a.out input.nml'
+!      write(*,*)'File input.nml should contain a parameter namelist'
+!      STOP
+!   END IF
+!   CALL getarg(1,infile)
   infile="../Input/input.nml"
   open(1,file=infile)
   read(1,NML=run)
@@ -35,7 +42,6 @@ end subroutine read_params
 subroutine output
   use hydro_commons
   use hydro_parameters
-  use hydro_mpi
   implicit none
 
   ! Local variables
@@ -45,7 +51,7 @@ subroutine output
 
   nout=nstep/noutput
   call title(nout,char)
-  call title(rank,charpe)
+  call title(MYPE,charpe)
   filename='output_'//TRIM(char)//'.'//TRIM(charpe)
   open(10,file=filename,form='unformatted')
   rewind(10)
