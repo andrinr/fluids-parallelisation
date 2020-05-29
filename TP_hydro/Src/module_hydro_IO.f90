@@ -39,16 +39,15 @@ subroutine read_params
 end subroutine read_params
 
 
-subroutine output
+subroutine output(rank)
   use hydro_commons
   use hydro_parameters
-  use hydro_mpi
   implicit none
 
   ! Local variables
   character(LEN=80) :: filename
   character(LEN=5)  :: char,charpe
-  integer(kind=prec_int) :: nout,MYPE=0
+  integer(kind=prec_int) :: nout,rank
 
   nout=nstep/noutput
   call title(nout,char)

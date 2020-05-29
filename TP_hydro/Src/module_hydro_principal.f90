@@ -14,15 +14,18 @@ subroutine init_hydro
   use hydro_commons
   use hydro_const
   use hydro_parameters
+  use hydro_mpi
   implicit none
 
   ! Local variables
   integer(kind=prec_int) :: i,j
 
-  imin=1
-  imax=nx+4
-  jmin=1
-  jmax=ny+4
+  imin=slabimin
+  imax=slabimax
+  jmin=slabjmin
+  jmax=slabjmax
+  nx = slabimax - 4
+  ny = slabjmax - 4
   
   allocate(uold(imin:imax,jmin:jmax,1:nvar))
 

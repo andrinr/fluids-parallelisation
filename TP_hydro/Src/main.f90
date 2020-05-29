@@ -37,7 +37,7 @@ program hydro_main
 
      ! Output results
      if(MOD(nstep,noutput)==0)then
-        call output
+        call output(rank)
       end if
 
      ! Compute new time-step
@@ -62,7 +62,7 @@ program hydro_main
   end do
 
   ! Final output
-  call output
+  call output(rank)
 
   ! Timing
   call cpu_time(t_fin)
