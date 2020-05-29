@@ -7,10 +7,14 @@ program hydro_main
   use hydro_parameters
   use hydro_IO
   use hydro_principal
+  use hydro_mpi
   implicit none
 
   real(kind=prec_real)   :: dt, tps_elapsed, tps_cpu, t_deb, t_fin
   integer(kind=prec_int) :: nbp_init, nbp_final, nbp_max, freq_p
+
+  ! Itialize MPI environment
+  call MPI_INIT(ierror)
 
   ! Initialize clock counter
   call system_clock(count_rate=freq_p, count_max=nbp_max)
@@ -22,6 +26,9 @@ program hydro_main
 
   ! Initialize hydro grid
   call init_hydro
+
+  ! Initialize mpi
+  call init_mpi
 
   print*,'Starting time integration, nx = ',nx,' ny = ',ny  
 
@@ -68,5 +75,7 @@ program hydro_main
   endif  
   print *,'Temps CPU (s.)     : ',tps_cpu
   print *,'Temps elapsed (s.) : ',tps_elapsed
+
+  call MPI_FINALIZE(ierror)
   
 end program hydro_main
