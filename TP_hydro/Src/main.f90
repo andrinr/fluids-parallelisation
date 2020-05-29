@@ -69,7 +69,7 @@ program hydro_main
 
      nstep=nstep+1
      t=t+dt
-     write(*,'("step=",I6," t=",1pe10.3," dt=",1pe10.3)')nstep,t,dt
+     !write(*,'("step=",I6," t=",1pe10.3," dt=",1pe10.3)')nstep,t,dt
 
   end do
 

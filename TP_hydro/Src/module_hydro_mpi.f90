@@ -113,18 +113,25 @@ contains
             if (ranks(d) .NE. MPI_PROC_NULL) then
 
                 if (VERBOSE) then 
-                    print*,'HYDRO_MPI.GET_SURROUND || rank', rank ,'comm with', ranks(d)
+                    print*,'HYDRO_MPI.GET_SURROUND || proc', rank ,'comm with', ranks(d)
 
                     print*,'HYDRO_MPI.GET_SURROUND || proc', rank, 'receiving: ', receivingdomain(d,1), receivingdomain(d,2), receivingdomain(d,3), receivingdomain(d,4)
                     print*,'HYDRO_MPI.GET_SURROUND || proc', rank, 'sending: ', sendingdomain(d,1), sendingdomain(d,2), sendingdomain(d,3), sendingdomain(d,4)
 
                     print*,'HYDRO_MPI.GET_SURROUND || proc', rank, 'expected size: ', counts(d)
 
-                    print*,'HYDRO_MPI.GET_SURROUND || proc', rank, 'actual size: ', SIZE(uold(&
+                    print*,'HYDRO_MPI.GET_SURROUND || proc', rank, 'actual size rec: ', SIZE(uold(&
                         receivingdomain(d,1):&
                         receivingdomain(d,2),&
                         receivingdomain(d,3):&
                         receivingdomain(d,4),&
+                        1))
+
+                    print*,'HYDRO_MPI.GET_SURROUND || proc', rank, 'actual size send: ', SIZE(uold(&
+                        sendingdomain(d,1):&
+                        sendingdomain(d,2),&
+                        sendingdomain(d,3):&
+                        sendingdomain(d,4),&
                         1))
                 end if
 
@@ -175,7 +182,7 @@ contains
         !end do
         ! DEBUGING
 
-        !call MPI_WAITALL(reqind, request, MPI_STATUSES_IGNORE, ierror)
+        !call MPI_WAITALL(32, request, MPI_STATUSES_IGNORE, ierror)
     
     end subroutine get_surround
 
