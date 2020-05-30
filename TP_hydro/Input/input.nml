@@ -7,7 +7,7 @@ noutput=50
 
 &MESH
 nx=50
-ny=300
+ny=40
 dx=0.08
 boundary_left=1
 boundary_right=1

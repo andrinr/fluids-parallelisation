@@ -11,12 +11,10 @@ module hydro_mpi
     logical, dimension(2) :: periods = (/.FALSE. , .FALSE./)
 
     integer :: countj, counti
-    integer :: nneighbours = 0
     integer, dimension(4,4) :: receivingdomain, sendingdomain
     integer, dimension(4) :: counts, ranks
 
     logical :: VERBOSE = .FALSE.
-
 
 contains
 
@@ -34,8 +32,8 @@ contains
 
         print*, 'HYDRO_MPI.INIT_MPI || ', 'I am rank ', rank, ' of ', nproc, 'and my coords are', coords
 
-        call MPI_CART_SHIFT(COMM_CART, 0, 1, rankl, rankr, ierror)
-        call MPI_CART_SHIFT(COMM_CART, 1, 1, rankb, rankt, ierror)
+        call MPI_CART_SHIFT(COMM_CART, 1, 1, rankl, rankr, ierror)
+        call MPI_CART_SHIFT(COMM_CART, 0, 1, rankb, rankt, ierror)
 
         print*, 'HYDRO_MPI.INIT_MPI || ', 'I communicate with :' , rankl, rankr, rankb, rankt
 
@@ -66,23 +64,23 @@ contains
 
         implicit none
 
-        countj = (slabJmax-4)*2
+        countj = (slabjmax-4)*2
         counti = (slabimax-4)*2
 
         ! order : left, right, top, bottom
         receivingdomain = RESHAPE(&
-            (/slabimin, slabimin+1, slabjmin+2, slabjmax-2,&
-            slabimax-1, slabimax, slabjmin+2, slabjmax-2,&
-            slabimin+2, slabimax-2, slabjmin, slabjmin+1,&
-            slabimin+2, slabimax-2, slabjmax-1, slabjmax/),&
+            (/1, 2,                     3, slabjmax-2,&
+            slabimax-1, slabimax,       3, slabjmax-2,&
+            3, slabimax-2,              slabjmin, slabjmin+1,&
+            3, slabimax-2,              slabjmax-1, slabjmax/),&
             (/4,4/),ORDER = (/2, 1/)&
         )
 
         sendingdomain = RESHAPE(&
-            (/slabimin+2, slabimin+3, slabjmin+2, slabjmax-2,&
-            slabimax-3, slabimax-2, slabjmin+2, slabjmax-2,&
-            slabimin+2, slabimax-2, slabjmin+2, slabjmin+3,&
-            slabimin+2, slabimax-2, slabjmax-3, slabjmax-2/),&
+            (/3, 4,                     3, slabjmax-2,&
+            slabimax-3, slabimax-2,     3, slabjmax-2,&
+            3, slabimax-2,              3, 4,&
+            3, slabimax-2,              slabjmax-3, slabjmax-2/),&
             (/4,4/),ORDER = (/2, 1/)&
         )
 
@@ -139,8 +137,6 @@ contains
 
                 do ivar=1,nvar
 
-                    if (.FALSE.) then 
-
                     reqind = reqind + 1
 
                     call MPI_IRECV(&
@@ -169,22 +165,11 @@ contains
                         ranks(d), 1, COMM_CART, request(reqind), ierror&
                     )
 
-                    end if
-
                 end do
             end if
         end do
 
-        ! DEBUGING
-        ! print*,size(request)
-        ! print*,size(request(1:reqind))
-        ! print*,reqind
-        !do d=1,reqind
-        !    print*,request(d)
-        !end do
-        ! DEBUGING
-
-        !call MPI_WAITALL(8*nvar, request, MPI_STATUSES_IGNORE, ierror)
+        call MPI_WAITALL(8*nvar, request, MPI_STATUSES_IGNORE, ierror)
     
     end subroutine get_surround
 

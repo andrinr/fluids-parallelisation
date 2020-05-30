@@ -12,6 +12,7 @@ program hydro_main
 
   real(kind=prec_real)   :: dt, tps_elapsed, tps_cpu, t_deb, t_fin
   integer(kind=prec_int) :: nbp_init, nbp_final, nbp_max, freq_p
+  integer :: i
 
   ! Itialize MPI environment
   call MPI_INIT(ierror)
@@ -29,8 +30,6 @@ program hydro_main
 
   ! Initialize hydro grid
   call init_hydro
-
-  call get_surround
 
   print*,'Starting time integration, nx = ',nx,' ny = ',ny  
 
@@ -59,7 +58,7 @@ program hydro_main
 
      nstep=nstep+1
      t=t+dt
-     write(*,'("step=",I6," t=",1pe10.3," dt=",1pe10.3)')nstep,t,dt
+     !write(*,'("step=",I6," t=",1pe10.3," dt=",1pe10.3)')nstep,t,dt
 
   end do
 
