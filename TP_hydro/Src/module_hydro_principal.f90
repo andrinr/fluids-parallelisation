@@ -20,6 +20,11 @@ subroutine init_hydro
   ! Local variables
   integer(kind=prec_int) :: i,j
 
+  !imin = 1
+  !imax = nx + 4
+  !jmin = 1
+  !jmax = ny + 4
+
   imin=slabimin
   imax=slabimax
   jmin=slabjmin

@@ -139,7 +139,7 @@ contains
 
                 do ivar=1,nvar
 
-                    !if (.FALSE.) then 
+                    if (.FALSE.) then 
 
                     reqind = reqind + 1
 
@@ -169,7 +169,7 @@ contains
                         ranks(d), 1, COMM_CART, request(reqind), ierror&
                     )
 
-                    !end if
+                    end if
 
                 end do
             end if
@@ -184,7 +184,7 @@ contains
         !end do
         ! DEBUGING
 
-        call MPI_WAITALL(8*nvar, request, MPI_STATUSES_IGNORE, ierror)
+        !call MPI_WAITALL(8*nvar, request, MPI_STATUSES_IGNORE, ierror)
     
     end subroutine get_surround
 

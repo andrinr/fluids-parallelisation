@@ -24,11 +24,13 @@ program hydro_main
   ! Read run parameters
   call read_params
 
+  ! Initialize mpi
+  call init_mpi
+
   ! Initialize hydro grid
   call init_hydro
 
-  ! Initialize mpi
-  call init_mpi
+  !call get_surround
 
   print*,'Starting time integration, nx = ',nx,' ny = ',ny  
 
