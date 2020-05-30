@@ -128,6 +128,7 @@ subroutine godunov(idim,dt)
   use hydro_parameters
   use hydro_utils
   use hydro_work_space
+  use hydro_mpi
   implicit none
 
   ! Dummy arguments
@@ -143,6 +144,8 @@ subroutine godunov(idim,dt)
 
   ! Update boundary conditions
   call make_boundary(idim)
+
+  call get_surround
 
   if (idim==1)then
 
