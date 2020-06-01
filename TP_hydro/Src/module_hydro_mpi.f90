@@ -7,13 +7,11 @@ module hydro_mpi
     integer :: ndims = 2
     integer :: rankl, rankr, rankt, rankb, rank
     integer :: slabimin, slabimax, slabjmin, slabjmax = 0
-    integer, dimension(2) :: dimensions, coords = (/0,0/)
+    integer, dimension(2) :: dimensions = (/0,0/)
     logical, dimension(2) :: periods = (/.FALSE. , .FALSE./)
 
     integer, dimension(4,4) :: receivingdomain, sendingdomain
     integer, dimension(4) :: receivingtypes, sendingtypes, ranks
-
-    logical :: VERBOSE = .TRUE.
 
 contains
 
@@ -27,14 +25,11 @@ contains
         call MPI_DIMS_CREATE(nproc, ndims, dimensions, ierror)
         call MPI_CART_CREATE(MPI_COMM_WORLD, ndims, dimensions, periods, .TRUE., COMM_CART, ierror)
         call MPI_COMM_RANK(COMM_CART, rank, ierror)
-        call MPI_CART_COORDS(COMM_CART, rank, ndims, coords, ierror)
-
-        print*, 'HYDRO_MPI.INIT_MPI || ', 'I am rank ', rank, ' of ', nproc, 'and my coords are', coords
 
         call MPI_CART_SHIFT(COMM_CART, 0, 1, rankl, rankr, ierror)
         call MPI_CART_SHIFT(COMM_CART, 1, 1, rankb, rankt, ierror)
 
-        print*, 'HYDRO_MPI.INIT_MPI || ', 'I communicate with :' , rankl, rankr, rankb, rankt
+        print*, 'HYDRO_MPI.INIT_MPI || ', 'I am rank ', rank, ' of ', nproc, 'and I communicate with', rankl, rankr, rankb, rankt
 
         slabimin = 1
         slabimax = nx / dimensions(1) + 4
@@ -50,8 +45,6 @@ contains
             slabjmax = ny - (dimensions(2) -1) *  ny / dimensions(2) + 4
         end if
 
-        print*, 'HYDRO_MPI.INIT_MPI || ', 'rank', rank , 'slab', slabimin, slabjmin, 'to', slabimax, slabjmax
-
         call init_surround
 
         call MPI_BARRIER(COMM_CART, ierror)
@@ -64,6 +57,8 @@ contains
         implicit none
 
         integer :: d
+
+        ranks = (/rankl, rankr, rankt, rankb/)
 
         ! order(x,:) : left, right, top, bottom
         ! order(:,x) : imin, imax, jmin, jmax
@@ -86,23 +81,23 @@ contains
         ! create subarray dataypes because rows from a 2D array cannot be sent directly
         do d=1,4 
             call MPI_TYPE_CREATE_SUBARRAY(&
-                2,(/slabimax,slabjmax/),&
-                (/receivingdomain(d,2)-receivingdomain(d,1),receivingdomain(d,4)-receivingdomain(d,3)/),&
-                (/receivingdomain(d,1),receivingdomain(d,3)/),&
+                2,(/slabimax,slabjmax/),& ! dims, arraysize
+                (/receivingdomain(d,2)-receivingdomain(d,1),receivingdomain(d,4)-receivingdomain(d,3)/),& ! subarray size
+                (/receivingdomain(d,1),receivingdomain(d,3)/),& ! subarray start
                 MPI_ORDER_FORTRAN, MPI_DOUBLE, receivingtypes(d), ierror&
-            )
-            call MPI_TYPE_CREATE_SUBARRAY(&
-                2,(/slabimax,slabjmax/),&
-                (/sendingdomain(d,2)-sendingdomain(d,1),sendingdomain(d,4)-sendingdomain(d,3)/),&
-                (/sendingdomain(d,1),sendingdomain(d,3)/),&
-                MPI_ORDER_FORTRAN, MPI_DOUBLE, sendingtypes(d), ierror&
             )
 
             call MPI_TYPE_COMMIT(receivingtypes(d), ierror)
+
+            call MPI_TYPE_CREATE_SUBARRAY(&
+                2,(/slabimax,slabjmax/),& ! dims, arraysize
+                (/sendingdomain(d,2)-sendingdomain(d,1),sendingdomain(d,4)-sendingdomain(d,3)/),& ! subarray size
+                (/sendingdomain(d,1),sendingdomain(d,3)/),& ! subarray start
+                MPI_ORDER_FORTRAN, MPI_DOUBLE, sendingtypes(d), ierror&
+            )
+
             call MPI_TYPE_COMMIT(sendingtypes(d), ierror)
         end do
-
-        ranks = (/rankl, rankr, rankt, rankb/)
 
     end subroutine init_surround
 
@@ -122,7 +117,7 @@ contains
         reqind = 0
         request = MPI_REQUEST_NULL
 
-        ! Iterate over 2 directions along axis
+        ! Iterate over 2 directions along specified axis
 
         if (idim == 1) then
             dstart = 1
@@ -130,8 +125,11 @@ contains
             dstart = 3
         end if
 
+        ! iterate over two directions in current axis
         do d=dstart,dstart+1
+            ! check if neighbour is not border
             if (ranks(d) .NE. MPI_PROC_NULL) then
+                ! iterate over all layers
                 do ivar=1,nvar
 
                     reqind = reqind + 1
