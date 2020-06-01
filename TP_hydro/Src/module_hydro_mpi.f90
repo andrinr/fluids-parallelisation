@@ -159,65 +159,7 @@ contains
         call MPI_WAITALL(8*nvar, request, MPI_STATUSES_IGNORE, ierror)
     
     end subroutine get_surround
-
-    subroutine check(d)
-
-        use hydro_commons
-        use hydro_const
-        use hydro_parameters
-        implicit none
-
-        integer, dimension(2) :: shapesending
-        integer, dimension(2) :: shapereceiving
-        integer, intent(in) :: d
-
-        if (d == 1 .OR. d == 2) then
-            print*,'x-dir'
-        else
-            print*,'y-dir'
-        end if
-
-        print*,nx,ny,slabimax,slabjmax
-        print*,'HYDRO_MPI.GET_SURROUND || proc', rank, 'receiving: ',ranks(d),&
-            receivingdomain(d,1), receivingdomain(d,2), receivingdomain(d,3), receivingdomain(d,4)
-        print*,'HYDRO_MPI.GET_SURROUND || proc', rank, 'sending: ',ranks(d),&
-            sendingdomain(d,1), sendingdomain(d,2), sendingdomain(d,3), sendingdomain(d,4)
-
-        print*,SHAPE(uold) 
-
-        shapesending = SHAPE(uold(&
-            sendingdomain(d,1):&
-            sendingdomain(d,2),&
-            sendingdomain(d,3):&
-            sendingdomain(d,4),&
-        1))
-
-        shapereceiving = SHAPE(uold(&
-            receivingdomain(d,1):&
-            receivingdomain(d,2),&
-            receivingdomain(d,3):&
-            receivingdomain(d,4),&
-        1))
-
-
-        if (shapereceiving(1) .NE. shapesending(1) .OR. shapereceiving(2) .NE. shapesending(2)) then
-            print*,'HYDRO_MPI.CHECK || WARNING: shape mismatch'
-        end if
-
-        if (sendingdomain(d,2) > nx+4 .OR. sendingdomain(d,4) > ny+4) then
-            print*,'HYDRO_MPI.CHECK || WARNING: sending max out of bounds'
-            print*,'proc',rank,'exptected',sendingdomain(d,2),'actual',nx+4
-            print*,'proc',rank,'exptected',sendingdomain(d,4),'actual',ny+4
-        end if
-
-        if (receivingdomain(d,2) > nx+4 .OR. receivingdomain(d,4) > ny+4) then
-            print*,'HYDRO_MPI.CHECK || WARNING: receiving max out of bounds'
-            print*,'proc',rank,'exptected',receivingdomain(d,2),'actual',nx+4
-            print*,'proc',rank,'exptected',receivingdomain(d,4),'actual',ny+4
-        end if
-
-    end subroutine check
-
+    
     subroutine end_mpi
         implicit none
     
