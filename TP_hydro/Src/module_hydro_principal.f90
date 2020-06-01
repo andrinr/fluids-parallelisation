@@ -29,8 +29,8 @@ subroutine init_hydro
   imax=slabimax
   jmin=slabjmin
   jmax=slabjmax
-  nx = slabimax - 4
-  ny = slabjmax - 4
+  nx = imax - 4
+  ny = jmax - 4
   
   allocate(uold(imin:imax,jmin:jmax,1:nvar))
 
@@ -138,14 +138,14 @@ subroutine godunov(idim,dt)
   integer(kind=prec_int) :: i,j,in
   real(kind=prec_real)   :: dtdx
 
-
   ! constant
   dtdx=dt/dx
 
   ! Update boundary conditions
   call make_boundary(idim)
 
-  call get_surround
+  ! Get surroundings cells
+  call get_surround(idim)
 
   if (idim==1)then
 

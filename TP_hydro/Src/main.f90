@@ -31,6 +31,9 @@ program hydro_main
   ! Initialize hydro grid
   call init_hydro
 
+  !call get_surround(1)
+  !call get_surround(2)
+
   print*,'Starting time integration, nx = ',nx,' ny = ',ny  
 
   ! Main time loop

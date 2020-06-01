@@ -14,7 +14,7 @@ module hydro_mpi
     integer, dimension(4,4) :: receivingdomain, sendingdomain
     integer, dimension(4) :: counts, ranks
 
-    logical :: VERBOSE = .FALSE.
+    logical :: VERBOSE = .TRUE.
 
 contains
 
@@ -32,8 +32,8 @@ contains
 
         print*, 'HYDRO_MPI.INIT_MPI || ', 'I am rank ', rank, ' of ', nproc, 'and my coords are', coords
 
-        call MPI_CART_SHIFT(COMM_CART, 1, 1, rankl, rankr, ierror)
-        call MPI_CART_SHIFT(COMM_CART, 0, 1, rankb, rankt, ierror)
+        call MPI_CART_SHIFT(COMM_CART, 0, 1, rankl, rankr, ierror)
+        call MPI_CART_SHIFT(COMM_CART, 1, 1, rankb, rankt, ierror)
 
         print*, 'HYDRO_MPI.INIT_MPI || ', 'I communicate with :' , rankl, rankr, rankb, rankt
 
@@ -71,7 +71,7 @@ contains
         receivingdomain = RESHAPE(&
             (/1, 2,                     3, slabjmax-2,&
             slabimax-1, slabimax,       3, slabjmax-2,&
-            3, slabimax-2,              slabjmin, slabjmin+1,&
+            3, slabimax-2,              1, 2,&
             3, slabimax-2,              slabjmax-1, slabjmax/),&
             (/4,4/),ORDER = (/2, 1/)&
         )
@@ -84,57 +84,63 @@ contains
             (/4,4/),ORDER = (/2, 1/)&
         )
 
-        counts = (/countj, countj, counti, counti/)
-        ranks = (/rankl, rankr, rankt, rankb/)
+        ! order : left, right, top, bottom
+        !receivingdomain = RESHAPE(&
+        !    (/1, 1, 3, 4,&
+        !    1, 1, 3, 4,&
+        !    1, 2, 3, 3,&
+        !    1, 2, 3, 3/),&
+        !    (/4,4/),ORDER = (/2, 1/)&
+        !)
+!
+        !sendingdomain = RESHAPE(&
+        !    (/1, 1, 3, 4,&
+        !    1, 1, 3, 4,&
+        !    1, 2, 3, 3,&
+        !    1, 2, 3, 3/),&
+        !    (/4,4/),ORDER = (/2, 1/)&
+        !)
 
-        print*,'HYDRO_MPI.INIT_SURROUND || proc', rank, 'sizes: ', counts(1), counts(2), counts(3), counts(4)
+        counts = (/countj, countj, counti, counti/)
+        !counts = (/2, 2, 2, 2/)
+        ranks = (/rankl, rankr, rankt, rankb/)
 
     end subroutine init_surround
 
-    subroutine get_surround
+    subroutine get_surround(idim)
 
         use hydro_commons
         use hydro_const
         use hydro_parameters
         implicit none
+
+        integer(kind=prec_int), intent(in) :: idim
         
         ! Warning: initialisation only happens once !!
-        integer :: d, ivar, reqind, tmp
+        integer :: d, dstart, ivar, reqind, tmp, rowtype
         integer, dimension(8*nvar) :: request
 
         reqind = 0
         request = MPI_REQUEST_NULL
 
-        ! Iterate over 4 directions
-        
-        do d=1,4
+        ! Iterate over 2 directions along axis
+
+        if (idim == 1) then
+            dstart = 1
+        else
+            dstart = 3
+        end if
+
+        do d=dstart,dstart+1
             if (ranks(d) .NE. MPI_PROC_NULL) then
 
-                if (VERBOSE) then 
-                    print*,'HYDRO_MPI.GET_SURROUND || proc', rank ,'comm with', ranks(d)
+                call check(d)
 
-                    print*,'HYDRO_MPI.GET_SURROUND || proc', rank, 'receiving: ',&
-                        receivingdomain(d,1), receivingdomain(d,2), receivingdomain(d,3), receivingdomain(d,4)
-                    print*,'HYDRO_MPI.GET_SURROUND || proc', rank, 'sending: ',&
-                        sendingdomain(d,1), sendingdomain(d,2), sendingdomain(d,3), sendingdomain(d,4)
-
-                    print*,'HYDRO_MPI.GET_SURROUND || proc', rank, 'expected size: ', counts(d)
-
-                    print*,'HYDRO_MPI.GET_SURROUND || proc', rank, 'actual size rec: ', SIZE(uold(&
-                        receivingdomain(d,1):&
-                        receivingdomain(d,2),&
-                        receivingdomain(d,3):&
-                        receivingdomain(d,4),&
-                        1))
-
-                    print*,'HYDRO_MPI.GET_SURROUND || proc', rank, 'actual size send: ', SIZE(uold(&
-                        sendingdomain(d,1):&
-                        sendingdomain(d,2),&
-                        sendingdomain(d,3):&
-                        sendingdomain(d,4),&
-                        1))
+                if (idim == 1) then
+                    call MPI_TYPE_VECTOR(2,counts(d),counts(d), MPI_DOUBLE, rowtype, ierror)
                 end if
-
+                    call MPI_TYPE_VECTOR(counts(d),2,counts(d), MPI_DOUBLE, rowtype, ierror)
+            
                 do ivar=1,nvar
 
                     reqind = reqind + 1
@@ -154,13 +160,13 @@ contains
                     reqind = reqind + 1
                     
                     call MPI_ISEND(&
-                        uold(&
+                        RESHAPE(uold(&
                             sendingdomain(d,1):&
                             sendingdomain(d,2),&
                             sendingdomain(d,3):&
                             sendingdomain(d,4),&
                             ivar&
-                        ),&
+                        ),(/counts(d)/)),&
                         counts(d), MPI_DOUBLE,&
                         ranks(d), 1, COMM_CART, request(reqind), ierror&
                     )
@@ -172,5 +178,64 @@ contains
         call MPI_WAITALL(8*nvar, request, MPI_STATUSES_IGNORE, ierror)
     
     end subroutine get_surround
+
+    subroutine check(d)
+
+        use hydro_commons
+        use hydro_const
+        use hydro_parameters
+        implicit none
+
+        integer, dimension(2) :: shapesending
+        integer, dimension(2) :: shapereceiving
+        integer, intent(in) :: d
+
+        if (d == 1 .OR. d == 2) then
+            print*,'x-dir'
+        else
+            print*,'y-dir'
+        end if
+
+        print*,nx,ny,slabimax,slabjmax
+        print*,'HYDRO_MPI.GET_SURROUND || proc', rank, 'receiving: ',ranks(d),&
+            receivingdomain(d,1), receivingdomain(d,2), receivingdomain(d,3), receivingdomain(d,4)
+        print*,'HYDRO_MPI.GET_SURROUND || proc', rank, 'sending: ',ranks(d),&
+            sendingdomain(d,1), sendingdomain(d,2), sendingdomain(d,3), sendingdomain(d,4)
+
+        print*,SHAPE(uold) 
+
+        shapesending = SHAPE(uold(&
+            sendingdomain(d,1):&
+            sendingdomain(d,2),&
+            sendingdomain(d,3):&
+            sendingdomain(d,4),&
+        1))
+
+        shapereceiving = SHAPE(uold(&
+            receivingdomain(d,1):&
+            receivingdomain(d,2),&
+            receivingdomain(d,3):&
+            receivingdomain(d,4),&
+        1))
+
+
+        if (shapereceiving(1) .NE. shapesending(1) .OR. shapereceiving(2) .NE. shapesending(2)) then
+            print*,'HYDRO_MPI.CHECK || WARNING: shape mismatch'
+        end if
+
+        if (sendingdomain(d,2) > nx+4 .OR. sendingdomain(d,4) > ny+4) then
+            print*,'HYDRO_MPI.CHECK || WARNING: sending max out of bounds'
+            print*,'proc',rank,'exptected',sendingdomain(d,2),'actual',nx+4
+            print*,'proc',rank,'exptected',sendingdomain(d,4),'actual',ny+4
+        end if
+
+        if (receivingdomain(d,2) > nx+4 .OR. receivingdomain(d,4) > ny+4) then
+            print*,'HYDRO_MPI.CHECK || WARNING: receiving max out of bounds'
+            print*,'proc',rank,'exptected',receivingdomain(d,2),'actual',nx+4
+            print*,'proc',rank,'exptected',receivingdomain(d,4),'actual',ny+4
+        end if
+
+    end subroutine check
+
 
 end module hydro_mpi
