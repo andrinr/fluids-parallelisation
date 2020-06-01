@@ -10,10 +10,8 @@ module hydro_mpi
     integer, dimension(2) :: dimensions, coords = (/0,0/)
     logical, dimension(2) :: periods = (/.FALSE. , .FALSE./)
 
-    integer :: countj, counti
     integer, dimension(4,4) :: receivingdomain, sendingdomain
-    integer, dimension(4) :: receivingtypes, sendingtypes
-    integer, dimension(4) :: counts, ranks
+    integer, dimension(4) :: receivingtypes, sendingtypes, ranks
 
     logical :: VERBOSE = .TRUE.
 
@@ -67,10 +65,8 @@ contains
 
         integer :: d
 
-        countj = (slabjmax-4)*2
-        counti = (slabimax-4)*2
-
-        ! order : left, right, top, bottom
+        ! order(x,:) : left, right, top, bottom
+        ! order(:,x) : imin, imax, jmin, jmax
         receivingdomain = RESHAPE(&
             (/1, 2,                     3, slabjmax-2,&
             slabimax-1, slabimax,       3, slabjmax-2,&
@@ -87,6 +83,7 @@ contains
             (/4,4/),ORDER = (/2, 1/)&
         )
 
+        ! create subarray dataypes because rows from a 2D array cannot be sent directly
         do d=1,4 
             call MPI_TYPE_CREATE_SUBARRAY(&
                 2,(/slabimax,slabjmax/),&
@@ -104,8 +101,7 @@ contains
             call MPI_TYPE_COMMIT(receivingtypes(d), ierror)
             call MPI_TYPE_COMMIT(sendingtypes(d), ierror)
         end do
-    
-        counts = (/countj, countj, counti, counti/)
+
         ranks = (/rankl, rankr, rankt, rankb/)
 
     end subroutine init_surround
@@ -141,7 +137,7 @@ contains
                     reqind = reqind + 1
 
                     call MPI_IRECV(&
-                        uold,1, receivingtypes(d),&
+                        uold, 1, receivingtypes(d),&
                         ranks(d), 1, COMM_CART, request(reqind), ierror&
                     )
 
@@ -159,7 +155,7 @@ contains
         call MPI_WAITALL(8*nvar, request, MPI_STATUSES_IGNORE, ierror)
     
     end subroutine get_surround
-    
+
     subroutine end_mpi
         implicit none
     
@@ -170,6 +166,5 @@ contains
             call MPI_TYPE_FREE(sendingtypes(d), ierror)
         end do
     end subroutine end_mpi
-
 
 end module hydro_mpi
