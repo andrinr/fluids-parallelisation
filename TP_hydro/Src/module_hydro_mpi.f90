@@ -138,9 +138,12 @@ contains
 
                 if (idim == 1) then
                     call MPI_TYPE_VECTOR(2,counts(d),counts(d), MPI_DOUBLE, rowtype, ierror)
-                end if
+                else
                     call MPI_TYPE_VECTOR(counts(d),2,counts(d), MPI_DOUBLE, rowtype, ierror)
-            
+                end if
+
+                call MPI_TYPE_COMMIT(rowtype, ierror)
+                
                 do ivar=1,nvar
 
                     reqind = reqind + 1
