@@ -6,8 +6,8 @@ noutput=50
 /
 
 &MESH
-nx=200
-ny=200
+nx=500
+ny=123
 dx=0.08
 boundary_left=1
 boundary_right=1

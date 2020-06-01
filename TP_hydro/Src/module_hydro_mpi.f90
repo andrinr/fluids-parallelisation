@@ -12,6 +12,7 @@ module hydro_mpi
 
     integer :: countj, counti
     integer, dimension(4,4) :: receivingdomain, sendingdomain
+    integer, dimension(4) :: receivingtypes, sendingtypes
     integer, dimension(4) :: counts, ranks
 
     logical :: VERBOSE = .TRUE.
@@ -64,6 +65,8 @@ contains
 
         implicit none
 
+        integer :: d
+
         countj = (slabjmax-4)*2
         counti = (slabimax-4)*2
 
@@ -84,25 +87,25 @@ contains
             (/4,4/),ORDER = (/2, 1/)&
         )
 
-        ! order : left, right, top, bottom
-        !receivingdomain = RESHAPE(&
-        !    (/1, 1, 3, 4,&
-        !    1, 1, 3, 4,&
-        !    1, 2, 3, 3,&
-        !    1, 2, 3, 3/),&
-        !    (/4,4/),ORDER = (/2, 1/)&
-        !)
-!
-        !sendingdomain = RESHAPE(&
-        !    (/1, 1, 3, 4,&
-        !    1, 1, 3, 4,&
-        !    1, 2, 3, 3,&
-        !    1, 2, 3, 3/),&
-        !    (/4,4/),ORDER = (/2, 1/)&
-        !)
+        do d=1,4 
+            call MPI_TYPE_CREATE_SUBARRAY(&
+                2,(/slabimax,slabjmax/),&
+                (/receivingdomain(d,2)-receivingdomain(d,1),receivingdomain(d,4)-receivingdomain(d,3)/),&
+                (/receivingdomain(d,1),receivingdomain(d,3)/),&
+                MPI_ORDER_FORTRAN, MPI_DOUBLE, receivingtypes(d), ierror&
+            )
+            call MPI_TYPE_CREATE_SUBARRAY(&
+                2,(/slabimax,slabjmax/),&
+                (/sendingdomain(d,2)-sendingdomain(d,1),sendingdomain(d,4)-sendingdomain(d,3)/),&
+                (/sendingdomain(d,1),sendingdomain(d,3)/),&
+                MPI_ORDER_FORTRAN, MPI_DOUBLE, sendingtypes(d), ierror&
+            )
 
+            call MPI_TYPE_COMMIT(receivingtypes(d), ierror)
+            call MPI_TYPE_COMMIT(sendingtypes(d), ierror)
+        end do
+    
         counts = (/countj, countj, counti, counti/)
-        !counts = (/2, 2, 2, 2/)
         ranks = (/rankl, rankr, rankt, rankb/)
 
     end subroutine init_surround
@@ -117,7 +120,7 @@ contains
         integer(kind=prec_int), intent(in) :: idim
         
         ! Warning: initialisation only happens once !!
-        integer :: d, dstart, ivar, reqind, tmp, rowtype
+        integer :: d, dstart, ivar, reqind, tmp
         integer, dimension(8*nvar) :: request
 
         reqind = 0
@@ -133,44 +136,19 @@ contains
 
         do d=dstart,dstart+1
             if (ranks(d) .NE. MPI_PROC_NULL) then
-
-                call check(d)
-
-                if (idim == 1) then
-                    call MPI_TYPE_VECTOR(2,counts(d),counts(d), MPI_DOUBLE, rowtype, ierror)
-                else
-                    call MPI_TYPE_VECTOR(counts(d),2,counts(d), MPI_DOUBLE, rowtype, ierror)
-                end if
-
-                call MPI_TYPE_COMMIT(rowtype, ierror)
-                
                 do ivar=1,nvar
 
                     reqind = reqind + 1
 
                     call MPI_IRECV(&
-                        uold(&
-                            receivingdomain(d,1):&
-                            receivingdomain(d,2),&
-                            receivingdomain(d,3):&
-                            receivingdomain(d,4),&
-                            ivar&
-                        ),&
-                        counts(d), MPI_DOUBLE,&
+                        uold,1, receivingtypes(d),&
                         ranks(d), 1, COMM_CART, request(reqind), ierror&
                     )
 
                     reqind = reqind + 1
                     
                     call MPI_ISEND(&
-                        RESHAPE(uold(&
-                            sendingdomain(d,1):&
-                            sendingdomain(d,2),&
-                            sendingdomain(d,3):&
-                            sendingdomain(d,4),&
-                            ivar&
-                        ),(/counts(d)/)),&
-                        counts(d), MPI_DOUBLE,&
+                        uold, 1, sendingtypes(d),&
                         ranks(d), 1, COMM_CART, request(reqind), ierror&
                     )
 
@@ -239,6 +217,17 @@ contains
         end if
 
     end subroutine check
+
+    subroutine end_mpi
+        implicit none
+    
+        integer :: d
+
+        do d=1,4 
+            call MPI_TYPE_FREE(receivingtypes(d), ierror)
+            call MPI_TYPE_FREE(sendingtypes(d), ierror)
+        end do
+    end subroutine end_mpi
 
 
 end module hydro_mpi
