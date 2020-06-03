@@ -7,7 +7,6 @@ program hydro_main
   use hydro_parameters
   use hydro_IO
   use hydro_principal
-  !$ use OMP_LIB
 
   implicit none
 

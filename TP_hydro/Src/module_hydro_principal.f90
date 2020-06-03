@@ -123,6 +123,7 @@ subroutine godunov(idim,dt)
   use hydro_parameters
   use hydro_utils
   use hydro_work_space
+  !$ use OMP_LIB
   implicit none
 
   ! Dummy arguments
@@ -132,8 +133,6 @@ subroutine godunov(idim,dt)
   integer(kind=prec_int) :: i,j,in
   real(kind=prec_real)   :: dtdx
 
-  integer :: chunksize = 32
-
   ! constant
   dtdx=dt/dx
 
@@ -142,140 +141,142 @@ subroutine godunov(idim,dt)
 
   if (idim==1)then
 
-     ! Allocate work space for 1D sweeps
-     call allocate_work_space(imin,imax,nx+1)
+   !$OMP PARALLEL
 
-     !$OMP PARALLEL
-     !$OMP DO SCHEDULE(DYNAMIC,chunksize)
-     do j=jmin+2,jmax-2
+   ! Allocate work space for 1D sweeps
+   call allocate_work_space(imin,imax,nx+1)
 
-        ! Gather conservative variables
-        do i=imin,imax
-           u(i,ID)=uold(i,j,ID)
-           u(i,IU)=uold(i,j,IU)
-           u(i,IV)=uold(i,j,IV)
-           u(i,IP)=uold(i,j,IP)
-        end do
-        if(nvar>4)then
-           do in = 5,nvar
-              do i=imin,imax
-                 u(i,in)=uold(i,j,in)
-              end do
-           end do
-        end if
+   !$OMP DO 
+   do j=jmin+2,jmax-2
 
-        ! Convert to primitive variables
-        call constoprim(u,q,c)
+      ! Gather conservative variables
+      do i=imin,imax
+         u(i,ID)=uold(i,j,ID)
+         u(i,IU)=uold(i,j,IU)
+         u(i,IV)=uold(i,j,IV)
+         u(i,IP)=uold(i,j,IP)
+      end do
+      if(nvar>4)then
+         do in = 5,nvar
+            do i=imin,imax
+               u(i,in)=uold(i,j,in)
+            end do
+         end do
+      end if
 
-        ! Characteristic tracing
-        call trace(q,dq,c,qxm,qxp,dtdx)
+      ! Convert to primitive variables
+      call constoprim(u,q,c)
 
-        do in = 1,nvar
-           do i=1,nx+1
-              qleft (i,in)=qxm(i+1,in)
-              qright(i,in)=qxp(i+2,in)
-           end do
-        end do
+      ! Characteristic tracing
+      call trace(q,dq,c,qxm,qxp,dtdx)
 
-        ! Solve Riemann problem at interfaces
-        call riemann(qleft,qright,qgdnv, &
-             & rl,ul,pl,cl,wl,rr,ur,pr,cr,wr,ro,uo,po,co,wo, &
-             & rstar,ustar,pstar,cstar,sgnm,spin,spout, &
-             & ushock,frac,scr,delp,pold,ind,ind2)
+      do in = 1,nvar
+         do i=1,nx+1
+            qleft (i,in)=qxm(i+1,in)
+            qright(i,in)=qxp(i+2,in)
+         end do
+      end do
 
-        ! Compute fluxes
-        call cmpflx(qgdnv,flux)
+      ! Solve Riemann problem at interfaces
+      call riemann(qleft,qright,qgdnv, &
+            & rl,ul,pl,cl,wl,rr,ur,pr,cr,wr,ro,uo,po,co,wo, &
+            & rstar,ustar,pstar,cstar,sgnm,spin,spout, &
+            & ushock,frac,scr,delp,pold,ind,ind2)
 
-        ! Update conservative variables 
-        do i=imin+2,imax-2
-           uold(i,j,ID)=u(i,ID)+(flux(i-2,ID)-flux(i-1,ID))*dtdx
-           uold(i,j,IU)=u(i,IU)+(flux(i-2,IU)-flux(i-1,IU))*dtdx
-           uold(i,j,IV)=u(i,IV)+(flux(i-2,IV)-flux(i-1,IV))*dtdx
-           uold(i,j,IP)=u(i,IP)+(flux(i-2,IP)-flux(i-1,IP))*dtdx
-        end do
-        if(nvar>4)then
-           do in = 5,nvar
-              do i=imin+2,imax-2
-                 uold(i,j,in)=u(i,in)+(flux(i-2,in)-flux(i-1,in))*dtdx
-              end do
-           end do
-        end if
+      ! Compute fluxes
+      call cmpflx(qgdnv,flux)
 
-     end do
-     !$OMP END DO
+      ! Update conservative variables 
+      do i=imin+2,imax-2
+         uold(i,j,ID)=u(i,ID)+(flux(i-2,ID)-flux(i-1,ID))*dtdx
+         uold(i,j,IU)=u(i,IU)+(flux(i-2,IU)-flux(i-1,IU))*dtdx
+         uold(i,j,IV)=u(i,IV)+(flux(i-2,IV)-flux(i-1,IV))*dtdx
+         uold(i,j,IP)=u(i,IP)+(flux(i-2,IP)-flux(i-1,IP))*dtdx
+      end do
+      if(nvar>4)then
+         do in = 5,nvar
+            do i=imin+2,imax-2
+               uold(i,j,in)=u(i,in)+(flux(i-2,in)-flux(i-1,in))*dtdx
+            end do
+         end do
+      end if
 
-     !$OMP END PARALLEL
+   end do
+   !$OMP END DO
 
-     ! Deallocate work space
-     call deallocate_work_space()
+   ! Deallocate work space
+   call deallocate_work_space()
 
-  else
+   !$OMP END PARALLEL
+else
 
-     ! Allocate work space for 1D sweeps
-     call allocate_work_space(jmin,jmax,ny+1)
+   !$OMP PARALLEL
 
-     !$OMP PARALLEL
-      !$OMP DO SCHEDULE(DYNAMIC,chunksize)
-     do i=imin+2,imax-2
+   ! Allocate work space for 1D sweeps
+   call allocate_work_space(jmin,jmax,ny+1)
 
-        ! Gather conservative variables
-        do j=jmin,jmax
-           u(j,ID)=uold(i,j,ID)
-           u(j,IU)=uold(i,j,IV)
-           u(j,IV)=uold(i,j,IU)
-           u(j,IP)=uold(i,j,IP)
-        end do
-        if(nvar>4)then
-           do in = 5,nvar
-              do j=jmin,jmax
-                 u(j,in)=uold(i,j,in)
-              end do
-           end do
-        end if
+   !$OMP DO 
+   do i=imin+2,imax-2
+      ! Gather conservative variables
+      do j=jmin,jmax
+         u(j,ID)=uold(i,j,ID)
+         u(j,IU)=uold(i,j,IV)
+         u(j,IV)=uold(i,j,IU)
+         u(j,IP)=uold(i,j,IP)
+      end do
 
-        ! Convert to primitive variables
-        call constoprim(u,q,c)
+      if(nvar>4)then
+         do in = 5,nvar
+            do j=jmin,jmax
+               u(j,in)=uold(i,j,in)
+            end do
+         end do
+      end if
 
-        ! Characteristic tracing
-        call trace(q,dq,c,qxm,qxp,dtdx)
+      ! Convert to primitive variables
+      call constoprim(u,q,c)
 
-        do in = 1, nvar
-           do j = 1, ny+1
-              qleft (j,in)=qxm(j+1,in)
-              qright(j,in)=qxp(j+2,in)
-           end do
-        end do
+      ! Characteristic tracing
+      call trace(q,dq,c,qxm,qxp,dtdx)
 
-        ! Solve Riemann problem at interfaces
-        call riemann(qleft,qright,qgdnv, &
-             & rl,ul,pl,cl,wl,rr,ur,pr,cr,wr,ro,uo,po,co,wo, &
-             & rstar,ustar,pstar,cstar,sgnm,spin,spout, &
-             & ushock,frac,scr,delp,pold,ind,ind2)
+      do in = 1, nvar
+         do j = 1, ny+1
+            qleft (j,in)=qxm(j+1,in)
+            qright(j,in)=qxp(j+2,in)
+         end do
+      end do
 
-        ! Compute fluxes
-        call cmpflx(qgdnv,flux)
+      ! Solve Riemann problem at interfaces
+      call riemann(qleft,qright,qgdnv, &
+            & rl,ul,pl,cl,wl,rr,ur,pr,cr,wr,ro,uo,po,co,wo, &
+            & rstar,ustar,pstar,cstar,sgnm,spin,spout, &
+            & ushock,frac,scr,delp,pold,ind,ind2)
 
-        ! Update conservative variables 
-        do j=jmin+2,jmax-2
-           uold(i,j,ID)=u(j,ID)+(flux(j-2,ID)-flux(j-1,ID))*dtdx
-           uold(i,j,IU)=u(j,IV)+(flux(j-2,IV)-flux(j-1,IV))*dtdx
-           uold(i,j,IV)=u(j,IU)+(flux(j-2,IU)-flux(j-1,IU))*dtdx
-           uold(i,j,IP)=u(j,IP)+(flux(j-2,IP)-flux(j-1,IP))*dtdx
-        end do
-        if(nvar>4)then
-           do in = 5,nvar
-              do j=jmin+2,jmax-2
-                 uold(i,j,in)=u(j,in)+(flux(j-2,in)-flux(j-1,in))*dtdx
-              end do
-           end do
-        end if
+      ! Compute fluxes
+      call cmpflx(qgdnv,flux)
 
-     end do
-     !$OMP END DO
-     !$OMP END PARALLEL
+   
+      ! Update conservative variables 
+      do j=jmin+2,jmax-2
+         uold(i,j,ID)=u(j,ID)+(flux(j-2,ID)-flux(j-1,ID))*dtdx
+         uold(i,j,IU)=u(j,IV)+(flux(j-2,IV)-flux(j-1,IV))*dtdx
+         uold(i,j,IV)=u(j,IU)+(flux(j-2,IU)-flux(j-1,IU))*dtdx
+         uold(i,j,IP)=u(j,IP)+(flux(j-2,IP)-flux(j-1,IP))*dtdx
+      end do
+      if(nvar>4)then
+         do in = 5,nvar
+            do j=jmin+2,jmax-2
+               uold(i,j,in)=u(j,in)+(flux(j-2,in)-flux(j-1,in))*dtdx
+            end do
+         end do
+      end if
+   end do
+   !$OMP END DO
 
-     ! Deallocate work space
-     call deallocate_work_space()
+   ! Deallocate work space
+   call deallocate_work_space()
+   
+   !$OMP END PARALLEL
 
   end if
 end subroutine godunov
