@@ -81,7 +81,7 @@ program hydro_main
   print *,'Temps elapsed (s.) : ',tps_elapsed
 
   ! end mpi env
-  call end_mpi
+  !call end_mpi
 
   ! finallize mpi env
   call MPI_FINALIZE(ierror)

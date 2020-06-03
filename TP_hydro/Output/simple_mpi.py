@@ -46,17 +46,19 @@ for x in range(nproc):
 
         total[coordx][coordy] = dat
 
-print(total)
+print(dimx)
+print(dimy)
 cols = []
 final = []
 
-for col in total:
-    cols.append(np.concatenate(col[0:dimx],0))
+for col in total[0:dimx]:
+    print(np.shape(col[0:dimy]))
+    cols.append(np.concatenate(col[0:dimy],1))
 
 
-print(cols)
-total = np.concatenate(cols,1)
-
+print(np.shape(cols))
+total = np.concatenate(cols,2)
+print(np.shape(total))
 
 my_dpi = 96
 fig, ax = plt.subplots(figsize=(800/my_dpi, 200/my_dpi), dpi=my_dpi)
