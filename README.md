@@ -1,8 +1,10 @@
-# README #
+# HYDRO | MPI #
 
 This is the mpi version of the hydro project. 
 
-Pretty much all the magic happens inside the ``hydro_mpi`` module. 
+## Comile & Run
+
+Run ``make`` from the ``/Bin`` folder in order to compile the project. Depending on the environment ``F90`` in the makefile needs to be set to ``F90 = mpifort`` or ``F90 = gfortran``. When using ``F90 = mpifort`` the simulation can be executed with ``mpirun ./hydro``.
 
 ## Main functions
 
