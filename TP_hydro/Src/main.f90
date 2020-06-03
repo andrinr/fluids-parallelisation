@@ -10,7 +10,7 @@ program hydro_main
   use hydro_mpi
   implicit none
 
-  real(kind=prec_real)   :: dt, tps_elapsed, tps_cpu, t_deb, t_fin
+  real(kind=prec_real)   :: dt, mydt, tps_elapsed, tps_cpu, t_deb, t_fin
   integer(kind=prec_int) :: nbp_init, nbp_final, nbp_max, freq_p
   integer :: i
 
@@ -44,12 +44,12 @@ program hydro_main
 
      ! Compute new time-step
      if(MOD(nstep,2)==0)then
-        call cmpdt(dt)
-        if(nstep==0)dt=dt/2.
+        call cmpdt(mydt)
+        if(nstep==0)mydt=mydt/2.
      endif
 
      !call MPI_BCAST(dt, 1, MPI_DOUBLE, 0, COMM_CART, ierror)
-     call MPI_ALLREDUCE(dt, dt, 1, MPI_DOUBLE, MPI_MIN, COMM_CART, ierror)
+     call MPI_ALLREDUCE(mydt, dt, 1, MPI_DOUBLE, MPI_MIN, COMM_CART, ierror)
 
      ! Directional splitting
      if(MOD(nstep,2)==0)then

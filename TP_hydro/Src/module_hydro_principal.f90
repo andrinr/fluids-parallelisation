@@ -58,7 +58,7 @@ subroutine init_hydro
   end do
 
   if (rank == 0) then
-      uold(imax-4,jmax-4,IP)=1./dx/dx
+      uold(imax/2,jmax/2,IP)=1./dx/dx
   end if
 
 !!$  ! 1D Sod test

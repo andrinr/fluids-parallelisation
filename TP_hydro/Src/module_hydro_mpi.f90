@@ -86,7 +86,6 @@ contains
             (/4,4/),ORDER = (/2, 1/)&
         )
 
-
         ! create subarray dataypes because rows from a 2D array cannot be sent directly
         do d=1,4 
             if (ranks(d) .NE. MPI_PROC_NULL) then
