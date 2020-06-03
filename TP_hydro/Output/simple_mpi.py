@@ -4,15 +4,12 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from scipy.io import FortranFile
 import matplotlib
-matplotlib.use("Agg")
-
-Writer = animation.writers['FFmpeg']
-writer = Writer(fps=15, metadata=dict(artist='Me'), bitrate=1800)
-
-nproc = 4
-
-totalx = 200
-totaly = 200
+import argparse
+parser = argparse.ArgumentParser()
+parser.add_argument("nproc", help="number of processors")
+args = parser.parse_args()
+print("Reading "+args.nproc)
+nproc = int(args.nproc)
 
 numframes = 98
 # path the the file
@@ -60,9 +57,7 @@ for i in range(numframes):
     im = ax.imshow((np.concatenate(cols,2)[0, :, :]).T, interpolation='nearest', origin='lower')
     ims.append([im])
 
-ani.save('im.mp4', writer=writer)
-
 
 ani = animation.ArtistAnimation(fig,ims,interval=50,blit=True,repeat_delay=0)
-print(len(ims))
+
 plt.show()

@@ -6,6 +6,10 @@ This is the mpi version of the hydro project.
 
 Run ``make`` from the ``/Bin`` folder in order to compile the project. Depending on the environment ``F90`` in the makefile needs to be set to ``F90 = mpifort`` or ``F90 = gfortran``. When using ``F90 = mpifort`` the simulation can be executed with ``mpirun ./hydro``.
 
+## Visualize 
+
+Execute the simple_mpi.py script from the ``/Output`` folder. The script takes the number of processors as argument. e.g: ``python simple_mpi.py 4``
+
 ## Main functions
 
 - The function ``init_mpi`` initializes a 2D cartesian grid which makes sure processors are aware of their neighbours and know their slabsize.
