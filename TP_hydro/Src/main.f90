@@ -31,9 +31,6 @@ program hydro_main
   ! Initialize hydro grid
   call init_hydro
 
-  !call get_surround(1)
-  !call get_surround(2)
-
   print*,'Starting time integration, nx = ',nx,' ny = ',ny  
 
   ! Main time loop
@@ -41,7 +38,8 @@ program hydro_main
 
      ! Output results
      if(MOD(nstep,noutput)==0)then
-        call output(rank)
+         write(*,'("step=",I6," t=",1pe10.3," dt=",1pe10.3)')nstep,t,dt
+        call output(rank, coords, dimensions)
       end if
 
      ! Compute new time-step
@@ -49,6 +47,9 @@ program hydro_main
         call cmpdt(dt)
         if(nstep==0)dt=dt/2.
      endif
+
+     !call MPI_BCAST(dt, 1, MPI_DOUBLE, 0, COMM_CART, ierror)
+     call MPI_ALLREDUCE(dt, dt, 1, MPI_DOUBLE, MPI_MIN, COMM_CART, ierror)
 
      ! Directional splitting
      if(MOD(nstep,2)==0)then
@@ -61,12 +62,11 @@ program hydro_main
 
      nstep=nstep+1
      t=t+dt
-     !write(*,'("step=",I6," t=",1pe10.3," dt=",1pe10.3)')nstep,t,dt
 
   end do
 
   ! Final output
-  call output(rank)
+  call output(rank, coords, dimensions)
 
   ! Timing
   call cpu_time(t_fin)

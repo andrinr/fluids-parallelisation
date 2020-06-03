@@ -39,7 +39,7 @@ subroutine read_params
 end subroutine read_params
 
 
-subroutine output(rank)
+subroutine output(rank, coords, dimensions)
   use hydro_commons
   use hydro_parameters
   implicit none
@@ -48,16 +48,17 @@ subroutine output(rank)
   character(LEN=80) :: filename
   character(LEN=5)  :: char,charpe
   integer(kind=prec_int) :: nout,rank
+  integer, dimension(2) :: coords, dimensions
 
   nout=nstep/noutput
   call title(nout,char)
   call title(rank,charpe)
-  filename='output_'//TRIM(char)//'.'//TRIM(charpe)
+  filename='../Output/output_'//TRIM(char)//'.'//TRIM(charpe)
   open(10,file=filename,form='unformatted')
   rewind(10)
   print*,'Outputting array of size=',nx,ny,nvar
   write(10)real(t,kind=prec_output),real(gamma,kind=prec_output)
-  write(10)nx,ny,nvar,nstep
+  write(10)nx,ny,nvar,nstep, coords(1), coords(2), dimensions(1), dimensions(2)
   write(10)real(uold(imin+2:imax-2,jmin+2:jmax-2,1:nvar),kind=prec_output)
   close(10)
 

@@ -56,7 +56,10 @@ subroutine init_hydro
         uold(i,j,IP)=1.d-5
      end do
   end do
-  uold(imin+2,jmin+2,IP)=1./dx/dx
+
+  if (rank == 0) then
+      uold(imax-4,jmax-4,IP)=1./dx/dx
+  end if
 
 !!$  ! 1D Sod test
 !!$  do j=jmin+2,jmax-2
