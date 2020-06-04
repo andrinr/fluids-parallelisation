@@ -24,13 +24,20 @@ with FortranFile(path_to_output, 'r') as f:
 
         by_size.append(by_nthread)
 
-print(by_size)
+# create dataframe
 df = pd.DataFrame(data=by_size, index=sizes,columns=np.log(thread_counts))
 df = df.T
 
 print(df)
 
-sns.lineplot(data=df).set_title("Computation time by number of threads with openmp")
+# plot dataframe
+fig, ax = plt.subplots()
+
+sns.lineplot(data=df, ax=ax).set_title("Computation time by number of threads with openmp")
+
+ax.set(xlabel='Log number of threads')
+ax.set(ylabel='Execution time in seconds')
+ax.legend(title='Simulation size NxN')
 plt.show()
 
     
