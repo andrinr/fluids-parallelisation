@@ -70,8 +70,6 @@ program hydro_main
   call system_clock(nbp_final)
   tps_cpu=t_fin-t_deb
 
-  call measurement(tps_cpu)
-  
   if (nbp_final>nbp_init) then
      tps_elapsed=real(nbp_final-nbp_init)/real(freq_p)
   else
@@ -79,5 +77,7 @@ program hydro_main
   endif  
   print *,'Temps CPU (s.)     : ',tps_cpu
   print *,'Temps elapsed (s.) : ',tps_elapsed
+
+  call measurement(tps_elapsed)
   
 end program hydro_main

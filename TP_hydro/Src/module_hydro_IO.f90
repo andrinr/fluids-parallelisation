@@ -98,8 +98,8 @@ subroutine measurement(elapsedtime)
    integer :: type = 0
 
    filename='../Analysis/measurements'
-   open(10,file=filename,form='unformatted')
-   write(10)type,elapsedtime
+   open(10,file=filename,form='unformatted', position="append")
+   write(10)real(elapsedtime,kind=prec_output)
    close(10)
 
 end subroutine measurement
