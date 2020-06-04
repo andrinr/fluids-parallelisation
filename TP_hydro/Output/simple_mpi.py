@@ -9,7 +9,7 @@ nproc = 4
 totalx = 200
 totaly = 200
 
-numframes = 98
+numframes = 64
 # path the the file
 dimx = 0
 dimy = 0
