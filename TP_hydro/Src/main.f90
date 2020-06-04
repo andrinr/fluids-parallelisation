@@ -14,9 +14,7 @@ program hydro_main
   integer(kind=prec_int) :: nbp_init, nbp_final, nbp_max, freq_p
   integer :: providedsupportlevel
 
-
   ! Itialize MPI environment
-  !call MPI_INIT(ierror)
   call MPI_INIT_THREAD(1,providedsupportlevel,ierror)
   print*,"Provided mpi thread support level: ", providedsupportlevel
 
