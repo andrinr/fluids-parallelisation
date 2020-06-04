@@ -51,7 +51,9 @@ subroutine init_hydro
       end do
    end do
    ! Put point explotion in lower left corner
-   uold(imin+2,jmin+2,IP)=1./dx/dx
+   uold(imin+imax/8,jmin+jmax/8,IP)=1./dx/dx
+
+   uold(imin+imax/8,jmin+jmax/7,IP)=1./dx/dx
 
 ! 1D Sod test
 !!do j=jmin+2,jmax-2

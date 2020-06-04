@@ -3,6 +3,7 @@
 !!!!
 !! subroutine read_params
 !! subroutine output 
+!! subtoutine measurements
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 module hydro_IO
@@ -30,7 +31,6 @@ subroutine read_params
   read(1,NML=hydro)
   close(1)
 end subroutine read_params
-
 
 subroutine output
   use hydro_commons
@@ -87,5 +87,21 @@ subroutine title(n,nchar)
 end subroutine title
 
 end subroutine output
+
+subroutine measurement(elapsedtime)
+
+   use hydro_commons
+   implicit none
+
+   character(LEN=80) :: filename
+   real(kind=prec_real) :: elapsedtime
+   integer :: type = 0
+
+   filename='../Output/measurements'
+   open(10,file=filename,form='unformatted')
+   write(10)type,elapsedtime
+   close(10)
+
+end subroutine measurement
 
 end module hydro_IO
