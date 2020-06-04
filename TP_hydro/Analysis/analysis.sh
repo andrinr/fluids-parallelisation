@@ -1,6 +1,6 @@
 rm measurements
 
-for  i in 128 256 512 1024 ; do
+for  i in 128 256 512 1024 2048; do
       sed -i "s/nx=[0-9][0-9][0-9][0-9]*$/nx=$i/g" ../Input/input.nml;
       sed -i "s/ny=[0-9][0-9][0-9][0-9]*$/ny=$i/g" ../Input/input.nml;
       for j in 1 2 4 8 16 32 64 128 256 512 1024; do 

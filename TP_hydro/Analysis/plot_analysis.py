@@ -7,11 +7,12 @@ from scipy.io import FortranFile
 import matplotlib
 import os.path
 
-path_to_output = "measurements"
+# TODO: add comparision to amdahl's / gustav's law, plot weak and strong scaling
 
+path_to_output = "measurements"
 by_size = []
 
-sizes = [128,256,512,1024]
+sizes = [128,256,512,1024,2048]
 thread_counts = [1,2,4,8,16,32,64,128,256,512,1024]
 # read image data
 with FortranFile(path_to_output, 'r') as f:
@@ -20,12 +21,12 @@ with FortranFile(path_to_output, 'r') as f:
         by_nthread = []
         for nthreads in thread_counts:
             time = f.read_reals('f4')
-            by_nthread.append(time[0])
+            by_nthread.append(np.log(time[0]))
 
         by_size.append(by_nthread)
 
 # create dataframe
-df = pd.DataFrame(data=by_size, index=sizes,columns=np.log(thread_counts))
+df = pd.DataFrame(data=by_size, index=sizes,columns=np.log2(thread_counts))
 df = df.T
 
 print(df)
@@ -33,10 +34,10 @@ print(df)
 # plot dataframe
 fig, ax = plt.subplots()
 
-sns.lineplot(data=df, ax=ax).set_title("Computation time by number of threads with openmp")
+sns.lineplot(data=df, ax=ax).set_title("Strong scaling with OpenMP")
 
-ax.set(xlabel='Log number of threads')
-ax.set(ylabel='Execution time in seconds')
+ax.set(xlabel='Log2 # threads')
+ax.set(ylabel='Log execution time (s)')
 ax.legend(title='Simulation size NxN')
 plt.show()
 
