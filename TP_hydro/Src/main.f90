@@ -12,10 +12,13 @@ program hydro_main
 
   real(kind=prec_real)   :: dt, mydt, tps_elapsed, tps_cpu, t_deb, t_fin
   integer(kind=prec_int) :: nbp_init, nbp_final, nbp_max, freq_p
-  integer :: i
+  integer :: providedsupportlevel
+
 
   ! Itialize MPI environment
-  call MPI_INIT(ierror)
+  !call MPI_INIT(ierror)
+  call MPI_INIT_THREAD(1,providedsupportlevel,ierror)
+  print*,"Provided mpi thread support level: ", providedsupportlevel
 
   ! Initialize clock counter
   call system_clock(count_rate=freq_p, count_max=nbp_max)
