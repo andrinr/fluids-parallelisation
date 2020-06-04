@@ -84,13 +84,14 @@ subroutine cmpdt(dt)
   use hydro_const
   use hydro_parameters
   use hydro_utils
+  use hydro_mpi
   implicit none
 
   ! Dummy arguments
   real(kind=prec_real), intent(out) :: dt  
   ! Local variables
   integer(kind=prec_int) :: i,j
-  real(kind=prec_real)   :: cournox,cournoy,eken
+  real(kind=prec_real)   :: cournox,cournoy,eken,allmaxx,allmaxy
   real(kind=prec_real),  dimension(:,:), allocatable   :: q
   real(kind=prec_real),  dimension(:)  , allocatable   :: e,c
 
@@ -113,9 +114,12 @@ subroutine cmpdt(dt)
      end do
 
      call eos(q(1:nx,ID),e,q(1:nx,IP),c)
-  
-     cournox=max(cournox,maxval(c(1:nx)+abs(q(1:nx,IU))))
-     cournoy=max(cournoy,maxval(c(1:nx)+abs(q(1:nx,IV))))
+
+     call MPI_ALLREDUCE(maxval(c(1:nx)+abs(q(1:nx,IU))), allmaxx, 1, MPI_DOUBLE, MPI_MAX, COMM_CART, ierror)
+     call MPI_ALLREDUCE(maxval(c(1:nx)+abs(q(1:nx,IV))), allmaxy, 1, MPI_DOUBLE, MPI_MAX, COMM_CART, ierror)
+
+     cournox=max(cournox,allmaxx)
+     cournoy=max(cournoy,allmaxy)
 
   end do
 
