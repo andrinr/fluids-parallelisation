@@ -38,9 +38,9 @@ program hydro_main
 
       ! Output results
       if(MOD(nstep,noutput)==0)then
-            write(*,'("step=",I6," t=",1pe10.3," dt=",1pe10.3)')nstep,t,dt
+         write(*,'("step=",I6," t=",1pe10.3," dt=",1pe10.3)')nstep,t,dt
          call output(rank, coords, dimensions)
-         end if
+      end if
 
       ! Compute new time-step
       if(MOD(nstep,2)==0)then
@@ -65,6 +65,8 @@ program hydro_main
    ! Final output
    call output(rank, coords, dimensions)
 
+   !call MPI_BARRIER(COMM_CART, ierror)
+
    ! Timing
    call cpu_time(t_fin)
    call system_clock(nbp_final)
@@ -81,64 +83,10 @@ program hydro_main
    !call end_mpi
 
    if (rank == 0) then
-      call measurement
+      call measurement(tps_elapsed)
    end if
 
-<<<<<<< HEAD
-     ! Compute new time-step
-     if(MOD(nstep,2)==0)then
-        call cmpdt(mydt)
-        if(nstep==0)mydt=mydt/2.
-     endif
-
-     !call MPI_BCAST(dt, 1, MPI_DOUBLE, 0, COMM_CART, ierror)
-     call MPI_ALLREDUCE(mydt, dt, 1, MPI_DOUBLE, MPI_MIN, COMM_CART, ierror)
-
-     ! Directional splitting
-     if(MOD(nstep,2)==0)then
-        call godunov(1,dt)
-        call godunov(2,dt)
-     else
-        call godunov(2,dt)
-        call godunov(1,dt)
-     end if
-
-     nstep=nstep+1
-     t=t+dt
-
-  end do
-
-  ! Final output
-  call output(rank, coords, dimensions)
-
-  call MPI_BARRIER(COMM_CART, ierror)
-
-  ! Timing
-  call cpu_time(t_fin)
-  call system_clock(nbp_final)
-  tps_cpu=t_fin-t_deb
-  if (nbp_final>nbp_init) then
-     tps_elapsed=real(nbp_final-nbp_init)/real(freq_p)
-  else
-     tps_elapsed=real(nbp_final-nbp_init+nbp_max)/real(freq_p) 
-  endif  
-  print *,'Temps CPU (s.)     : ',tps_cpu
-  print *,'Temps elapsed (s.) : ',tps_elapsed
-
-  call MPI_ALLREDUCE(tps_elapsed, dt, 1, MPI_DOUBLE, MPI_MAX, COMM_CART, ierror)
-
-  if (rank == 0) then
-   call measurement(tps_elapsed)
-  end if
-  ! end mpi env
-  !call end_mpi
-
-  ! finallize mpi env
-  call MPI_FINALIZE(ierror)
-  
-=======
    ! finallize mpi env
    call MPI_FINALIZE(ierror)
    
->>>>>>> 7b37154f6deb6a5abae9374529be52c5e6dfc70b
 end program hydro_main

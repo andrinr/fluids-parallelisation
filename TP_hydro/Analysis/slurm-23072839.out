@@ -1,5 +1,0 @@
-SLURM_JOB_ID
-/var/spool/slurmd/job23072839/slurm_script: line 15: currentjobid: command not found
-srun: got SIGCONT
-slurmstepd: error: *** STEP 23072839.0 ON nid00983 CANCELLED AT 2020-06-05T15:08:20 ***
-srun: forcing job termination

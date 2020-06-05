@@ -1,6 +1,0 @@
-SLURM_JOB_ID
-/var/spool/slurmd/job23072842/slurm_script: line 15: currentjobid: command not found
-srun: Job step aborted: Waiting up to 92 seconds for job step to finish.
-srun: got SIGCONT
-slurmstepd: error: *** STEP 23072842.0 ON nid00019 CANCELLED AT 2020-06-05T15:08:21 ***
-srun: forcing job termination

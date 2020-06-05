@@ -1,6 +1,6 @@
 # HYDRO | MPI #
 
-This is the mpi version of the hydro project. 
+This is the MPI version of the hydro project. 
 
 ## Comile & Run
 
@@ -8,7 +8,7 @@ Run ``make`` from the ``/Bin`` folder in order to compile the project. Depending
 
 ## Visualize 
 
-Execute the simple_mpi.py script from the ``/Output`` folder. The script takes the number of processors as argument. e.g: ``python simple_mpi.py 4``
+Execute the render_sequence.py script from the ``/Output`` folder. It will automaticially render all output files and stitch together the outputs from the different processors. The script takes the number of processors as argument. e.g: ``python simple_mpi.py 4``
 
 ## Main functions
 
