@@ -80,6 +80,7 @@ program hydro_main
   print *,'Temps CPU (s.)     : ',tps_cpu
   print *,'Temps elapsed (s.) : ',tps_elapsed
 
+  call measurement(tps_elapsed)
   ! end mpi env
   !call end_mpi
 
