@@ -80,6 +80,10 @@ program hydro_main
    ! end mpi env
    !call end_mpi
 
+   if (rank == 0) then
+      call measurement
+   end if
+
    ! finallize mpi env
    call MPI_FINALIZE(ierror)
    
