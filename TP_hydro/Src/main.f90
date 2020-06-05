@@ -68,6 +68,8 @@ program hydro_main
   ! Final output
   call output(rank, coords, dimensions)
 
+  call MPI_BARRIER(COMM_CART, ierror)
+
   ! Timing
   call cpu_time(t_fin)
   call system_clock(nbp_final)
@@ -80,7 +82,11 @@ program hydro_main
   print *,'Temps CPU (s.)     : ',tps_cpu
   print *,'Temps elapsed (s.) : ',tps_elapsed
 
-  call measurement(tps_elapsed)
+  call MPI_ALLREDUCE(tps_elapsed, dt, 1, MPI_DOUBLE, MPI_MAX, COMM_CART, ierror)
+
+  if (rank == 0) then
+   call measurement(tps_elapsed)
+  end if
   ! end mpi env
   !call end_mpi
 
