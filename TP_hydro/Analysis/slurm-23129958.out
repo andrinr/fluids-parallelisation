@@ -1,0 +1,5 @@
+*** Error in `/users/course93/hpc_esc401/TP_hydro/Analysis/../Bin/hydro': corrupted size vs. prev_size: 0x00002aaac4004a80 ***
+*** Error in `/users/course93/hpc_esc401/TP_hydro/Analysis/../Bin/hydro': corrupted size vs. prev_size: 0x00002aaac4004a80 ***
+srun: error: nid01536: task 1: Aborted (core dumped)
+srun: Terminating job step 23129958.0
+srun: error: nid01534: task 0: Aborted (core dumped)

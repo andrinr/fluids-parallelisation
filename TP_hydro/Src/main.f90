@@ -10,7 +10,7 @@ program hydro_main
   use hydro_mpi
   implicit none
 
-  real(kind=prec_real)   :: dt, mydt, tps_elapsed, tps_cpu, t_deb, t_fin
+  real(kind=prec_real)   :: dt, mydt, tps_elapsed, max_tps_elapsed, tps_cpu, t_deb, t_fin
   integer(kind=prec_int) :: nbp_init, nbp_final, nbp_max, freq_p
   integer :: providedsupportlevel
 
@@ -81,8 +81,15 @@ program hydro_main
   print *,'Temps CPU (s.)     : ',tps_cpu
   print *,'Temps elapsed (s.) : ',tps_elapsed
 
+  call MPI_ALLREDUCE(tps_elapsed, max_tps_elapsed, 1, MPI_DOUBLE, MPI_MAX, COMM_CART, ierror)
+
   ! end mpi env
   !call end_mpi
+
+   if (rank == 0) then
+      call measurement(max_tps_elapsed, nproc)
+   end if
+
 
   ! finallize mpi env
   call MPI_FINALIZE(ierror)

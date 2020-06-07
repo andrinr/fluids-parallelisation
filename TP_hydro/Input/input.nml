@@ -3,11 +3,12 @@ This namelist contains various input parameters for HYDRO runs
 &RUN
 tend=500.0
 noutput=50
+nstepmax=10
 /
 
 &MESH
-nx=200
-ny=200
+nx=1024
+ny=1024
 dx=0.08
 boundary_left=1
 boundary_right=1

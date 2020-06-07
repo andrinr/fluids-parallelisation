@@ -1,0 +1,4 @@
+*** Error in `/users/course93/hpc_esc401/TP_hydro/Analysis/../Bin/hydro': corrupted size vs. prev_size: 0x00002aaac4008c80 ***
+srun: error: nid00206: task 1: Segmentation fault (core dumped)
+srun: Terminating job step 23129952.0
+srun: error: nid00205: task 0: Aborted (core dumped)

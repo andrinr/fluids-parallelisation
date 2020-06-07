@@ -80,49 +80,54 @@ end subroutine init_hydro
 
 
 subroutine cmpdt(dt)
-  use hydro_commons
-  use hydro_const
-  use hydro_parameters
-  use hydro_utils
-  implicit none
+   use hydro_commons
+   use hydro_const
+   use hydro_parameters
+   use hydro_utils
+   use hydro_mpi
+   implicit none
 
-  ! Dummy arguments
-  real(kind=prec_real), intent(out) :: dt  
-  ! Local variables
-  integer(kind=prec_int) :: i,j
-  real(kind=prec_real)   :: cournox,cournoy,eken
-  real(kind=prec_real),  dimension(:,:), allocatable   :: q
-  real(kind=prec_real),  dimension(:)  , allocatable   :: e,c
+   ! Dummy arguments
+   real(kind=prec_real), intent(out) :: dt  
+   ! Local variables
+   integer(kind=prec_int) :: i,j
+   real(kind=prec_real)   :: cournox,cournoy,eken,allmaxx,allmaxy
+   real(kind=prec_real),  dimension(:,:), allocatable   :: q
+   real(kind=prec_real),  dimension(:)  , allocatable   :: e,c
 
-  ! compute time step on grid interior
-  cournox = zero
-  cournoy = zero
+   ! compute time step on grid interior
+   cournox = zero
+   cournoy = zero
 
-  allocate(q(1:nx,1:IP))
-  allocate(e(1:nx),c(1:nx))
+   allocate(q(1:nx,1:IP))
+   allocate(e(1:nx),c(1:nx))
 
-  do j=jmin+2,jmax-2
+   do j=jmin+2,jmax-2
 
-     do i=1,nx
-        q(i,ID) = max(uold(i+2,j,ID),smallr)
-        q(i,IU) = uold(i+2,j,IU)/q(i,ID)
-        q(i,IV) = uold(i+2,j,IV)/q(i,ID)
-        eken = half*(q(i,IU)**2+q(i,IV)**2)
-        q(i,IP) = uold(i+2,j,IP)/q(i,ID) - eken
-        e(i)=q(i,IP)
-     end do
+      do i=1,nx
+         q(i,ID) = max(uold(i+2,j,ID),smallr)
+         q(i,IU) = uold(i+2,j,IU)/q(i,ID)
+         q(i,IV) = uold(i+2,j,IV)/q(i,ID)
+         eken = half*(q(i,IU)**2+q(i,IV)**2)
+         q(i,IP) = uold(i+2,j,IP)/q(i,ID) - eken
+         e(i)=q(i,IP)
+      end do
 
-     call eos(q(1:nx,ID),e,q(1:nx,IP),c)
-  
-     cournox=max(cournox,maxval(c(1:nx)+abs(q(1:nx,IU))))
-     cournoy=max(cournoy,maxval(c(1:nx)+abs(q(1:nx,IV))))
+      call eos(q(1:nx,ID),e,q(1:nx,IP),c)
 
-  end do
+      call MPI_ALLREDUCE(maxval(c(1:nx)+abs(q(1:nx,IU))), allmaxx, 1, MPI_DOUBLE, MPI_MAX, COMM_CART, ierror)
+      call MPI_ALLREDUCE(maxval(c(1:nx)+abs(q(1:nx,IV))), allmaxy, 1, MPI_DOUBLE, MPI_MAX, COMM_CART, ierror)
 
-  deallocate(q,e,c)
+      cournox=max(cournox,allmaxx)
+      cournoy=max(cournoy,allmaxy)
 
-  dt = courant_factor*dx/max(cournox,cournoy,smallc)
+   end do
+
+   deallocate(q,e,c)
+
+   dt = courant_factor*dx/max(cournox,cournoy,smallc)
 end subroutine cmpdt
+ 
 
 
 subroutine godunov(idim,dt)
