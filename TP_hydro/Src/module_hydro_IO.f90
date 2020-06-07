@@ -96,18 +96,21 @@ end subroutine title
 
 end subroutine output
 
-subroutine measurement(elapsedtime)
+subroutine measurement(elapsedtime, nproc)
 
    use hydro_commons
+   use hydro_parameters
    implicit none
 
    character(LEN=80) :: filename
    real(kind=prec_real) :: elapsedtime
    integer :: type = 0
+   integer(kind=prec_int) :: nproc
 
    filename='../Analysis/measurements'
    open(10,file=filename,form='unformatted', position="append")
    write(10)real(elapsedtime,kind=prec_output)
+   write(10)nx,ny,nproc
    close(10)
 
 end subroutine measurement
