@@ -107,12 +107,12 @@ subroutine measurement(elapsedtime, nproc)
    integer :: type = 0
    integer(kind=prec_int) :: nproc, nthread
 
-   nthread = OMP_NUM_THREADS
+   !nthread = OMP_NUM_THREADS
 
    filename='../Analysis/measurements'
    open(10,file=filename,form='unformatted', position="append")
    write(10)real(elapsedtime,kind=prec_output)
-   write(10)nproc, nthread
+   write(10)nproc
    close(10)
 
 end subroutine measurement

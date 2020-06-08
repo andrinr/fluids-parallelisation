@@ -1,3 +1,0 @@
-srun: error: nid01530: task 1: Segmentation fault (core dumped)
-srun: Terminating job step 23129957.0
-srun: error: nid01528: task 0: Segmentation fault (core dumped)

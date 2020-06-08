@@ -1,7 +1,0 @@
-
-lib-4412 : UNRECOVERABLE library error 
-  An argument in the DEALLOCATE statement is a disassociated pointer, an
- unallocated array, or a pointer not allocated as a pointer.
-srun: error: nid01523: task 1: Segmentation fault (core dumped)
-srun: Terminating job step 23129956.0
-srun: error: nid01516: task 0: Aborted (core dumped)

@@ -1,8 +1,0 @@
-*** Error in `/users/course93/hpc_esc401/TP_hydro/Analysis/../Bin/hydro': free(): invalid next size (normal): 0x00002aaac4031200 ***
-
-lib-4412 : UNRECOVERABLE library error 
-  An argument in the DEALLOCATE statement is a disassociated pointer, an
- unallocated array, or a pointer not allocated as a pointer.
-srun: error: nid01183: task 1: Aborted (core dumped)
-srun: Terminating job step 23129953.0
-srun: error: nid01182: task 0: Segmentation fault (core dumped)

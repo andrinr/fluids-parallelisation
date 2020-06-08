@@ -1,5 +1,0 @@
-srun: error: nid01183: task 3: Segmentation fault (core dumped)
-srun: Terminating job step 23129960.0
-srun: error: nid01182: task 2: Segmentation fault (core dumped)
-srun: error: nid00205: task 0: Segmentation fault (core dumped)
-srun: error: nid00206: task 1: Segmentation fault (core dumped)

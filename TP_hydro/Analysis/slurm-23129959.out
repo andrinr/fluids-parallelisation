@@ -1,6 +1,0 @@
-srun: error: nid01605: task 3: Segmentation fault (core dumped)
-srun: Terminating job step 23129959.0
-slurmstepd: error: *** STEP 23129959.0 ON nid00277 CANCELLED AT 2020-06-07T17:11:53 ***
-srun: error: nid01604: task 2: Segmentation fault (core dumped)
-srun: error: nid00277: task 0: Segmentation fault (core dumped)
-srun: error: nid01603: task 1: Segmentation fault (core dumped)
