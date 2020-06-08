@@ -1,0 +1,19 @@
+ Provided mpi thread support level:  1
+ Reading: /users/course93/hpc_esc401/TP_hydro/Analysis/../Bin/hydro                       
+
+sys-26 : UNRECOVERABLE error on system request 
+  Text file busy
+
+Encountered during an OPEN of unit 1
+Fortran unit 1 is not connected
+ Provided mpi thread support level:  1
+ Reading: /users/course93/hpc_esc401/TP_hydro/Analysis/../Bin/hydro                       
+
+sys-26 : UNRECOVERABLE error on system request 
+  Text file busy
+
+Encountered during an OPEN of unit 1
+Fortran unit 1 is not connected
+srun: error: nid00505: task 1: Aborted (core dumped)
+srun: Terminating job step 23155296.0
+srun: error: nid00504: task 0: Aborted (core dumped)

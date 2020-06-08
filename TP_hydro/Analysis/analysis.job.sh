@@ -11,4 +11,4 @@
 
 export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
 
-srun ../Bin/hydro "input.nml"
+srun ../Bin/hydro ../Input/test.nml

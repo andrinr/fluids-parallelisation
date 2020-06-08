@@ -10,13 +10,13 @@ module hydro_IO
 
 contains
 
-subroutine read_params(input_file_name)
+subroutine read_params
   use hydro_parameters
   implicit none
 
   ! Local variables
   integer(kind=prec_int) :: narg,iargc
-  CHARACTER(len=32) :: input_file_name
+  CHARACTER(len=80) :: infile
 
   ! Namelists
   namelist/run/nstepmax,tend,noutput
@@ -26,20 +26,19 @@ subroutine read_params(input_file_name)
 
    totalx = nx
    totaly = ny
-!   narg = iargc()
-!   IF(narg .NE. 1)THEN
-!      write(*,*)'You should type: a.out input.nml'
-!      write(*,*)'File input.nml should contain a parameter namelist'
-!      STOP
-!   END IF
-!   CALL getarg(1,infile)
-  infile="../Input/" + input_file_name + "nml"
-  print*,"Reading: ", infile
-  open(1,file=infile)
-  read(1,NML=run)
-  read(1,NML=mesh)
-  read(1,NML=hydro)
-  close(1)
+   narg = iargc()
+   IF(narg .NE. 1)THEN
+      write(*,*)'You should type: a.out input.nml'
+      write(*,*)'File input.nml should contain a parameter namelist'
+      STOP
+   END IF
+   CALL getarg(0,infile)
+   print*,"Reading: ", infile
+   open(1,file=infile)
+   read(1,NML=run)
+   read(1,NML=mesh)
+   read(1,NML=hydro)
+   close(1)
 end subroutine read_params
 
 
