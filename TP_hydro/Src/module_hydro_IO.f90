@@ -6,16 +6,17 @@
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 module hydro_IO
+   integer :: totalx, totaly
 
 contains
 
-subroutine read_params
+subroutine read_params(input_file_name)
   use hydro_parameters
   implicit none
 
   ! Local variables
   integer(kind=prec_int) :: narg,iargc
-  character(LEN=80) :: infile
+  CHARACTER(len=32) :: input_file_name
 
   ! Namelists
   namelist/run/nstepmax,tend,noutput
@@ -23,6 +24,8 @@ subroutine read_params
   namelist/hydro/gamma,courant_factor,smallr,smallc,niter_riemann, &
        &         iorder,scheme,slope_type
 
+   totalx = nx
+   totaly = ny
 !   narg = iargc()
 !   IF(narg .NE. 1)THEN
 !      write(*,*)'You should type: a.out input.nml'
@@ -30,7 +33,8 @@ subroutine read_params
 !      STOP
 !   END IF
 !   CALL getarg(1,infile)
-  infile="../Input/input.nml"
+  infile="../Input/" + input_file_name + "nml"
+  print*,"Reading: ", infile
   open(1,file=infile)
   read(1,NML=run)
   read(1,NML=mesh)
@@ -112,7 +116,7 @@ subroutine measurement(elapsedtime, nproc)
    filename='../Analysis/measurements'
    open(10,file=filename,form='unformatted', position="append")
    write(10)real(elapsedtime,kind=prec_output)
-   write(10)nproc
+   write(10)nproc, totalx, totaly
    close(10)
 
 end subroutine measurement

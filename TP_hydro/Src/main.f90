@@ -13,6 +13,7 @@ program hydro_main
   real(kind=prec_real)   :: dt, mydt, tps_elapsed, max_tps_elapsed, tps_cpu, t_deb, t_fin
   integer(kind=prec_int) :: nbp_init, nbp_final, nbp_max, freq_p
   integer :: providedsupportlevel
+  CHARACTER(len=32) :: input_file_name
 
   ! Itialize MPI environment
   call MPI_INIT_THREAD(1,providedsupportlevel,ierror)
@@ -23,8 +24,10 @@ program hydro_main
   call system_clock(nbp_init)
   call cpu_time(t_deb)
 
+  call get_command_argument(0, input_file_name)
+
   ! Read run parameters
-  call read_params
+  call read_params(input_file_name)
 
   ! Initialize mpi
   call init_mpi

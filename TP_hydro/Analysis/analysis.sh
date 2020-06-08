@@ -7,9 +7,6 @@ rm core*
 ##### Strong scaling #####
 # Only increase number of processors, keep problem size fixed 
 
-# Limit number of iterations
-sed -i '6 i\nstepmax=10' ../Input/input.nml;
-
 # Set simulation size
 sed -i "s/nx=.*$/nx=1024/g" ../Input/input.nml;
 sed -i "s/ny=.*$/ny=1024/g" ../Input/input.nml;
@@ -28,8 +25,7 @@ done
 ##### Weak scaling #####
 # Increase number of processors and simulation size
 
-# Add wait statement to job script
-sed -i '11 i\#SBATCH --wait' analysis.job.sh;
+sed -i "s/nx=.*$/ny=512/g" ../Input/input.nml;
 
 # Iterate over processors counts 
 for j in 1 2 4 8 16 32; do 
@@ -42,9 +38,3 @@ for j in 1 2 4 8 16 32; do
     # run script
     sbatch analysis.job.sh
 done
-
-
-# Remove wait statement from job script
-sed -i '11d' analysis.job.sh;
-# Remove iteration limit from input file
-sed -i '6d' ../Input/input.nml;

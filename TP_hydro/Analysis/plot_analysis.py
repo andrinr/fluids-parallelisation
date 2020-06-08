@@ -1,3 +1,7 @@
+# ANDRIN REHMANN
+# UZH HPC 2020
+# andrinrehman@gmail.com
+
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -6,21 +10,53 @@ from scipy.io import FortranFile
 import matplotlib
 import os.path
 from matplotlib.ticker import ScalarFormatter
+from scipy.optimize import curve_fit
 
 path_to_output = "measurements"
-
-measurements = []
-
 nsproc = [1, 2, 4, 8, 16, 32]
 
-# read measurement data
+
+##### READ DATA #####
+strong_timings = []
+weak_timings = []
+
 with FortranFile(path_to_output, 'r') as f:
     for nproc in nsproc: 
-        measurements.append(f.read_reals('f4')[0])
+        strong_timings.append(f.read_reals('f4')[0])
+        nproc = f.read_ints('i')
+        print(nproc)
+    
+    for nproc in nsproc: 
+        weak_timings.append(f.read_reals('f4')[0])
         nproc = f.read_ints('i')
         print(nproc)
 
-    
+
+##### PREPROCESS DATA #####
+strong_speedup = []
+weak_speedup = []
+
+for j in range(len(nsproc)):
+    strong_speedup.append( strong_timings[0] / strong_timings[j] )
+    weak_speedup.append( weak_timings[0] / weak_timings[j] )
+
+
+##### FIT IDEAL SPEEDUP CURVES #####
+
+strong_ideal_seepdup = []
+weak_ideal_speedup = []
+
+def amdahl(x, p=0.95):
+    return( 1 / (1-p) + p / x )
+
+def gustav(x, p=0.95):
+    return( (1-p) + p * x )
+
+popt_strong, pcov_strong = curve_fit(amdahl, nsproc, strong_speedup)
+popt_weak, pcov_weak = curve_fit(gustav, nsproc, weak_speedup)
+
+
+##### VISUALIZE RESULT #####
 
 #fig, ax = plt.subplots()
 #
