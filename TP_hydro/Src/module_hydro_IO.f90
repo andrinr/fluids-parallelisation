@@ -7,8 +7,8 @@
 
 module hydro_IO
    integer :: totalx, totaly
-   integer :: testn = 0
-   CHARACTER(len=80) :: infile
+   CHARACTER(len=80) :: infile, testnchar
+   integer :: testn
 
 contains
 
@@ -28,15 +28,17 @@ subroutine read_params
    totalx = nx
    totaly = ny
    narg = iargc()
-   IF(narg .NE. 1)THEN
-      write(*,*)'You should type: a.out input.nml'
-      write(*,*)'File input.nml should contain a parameter namelist'
-      STOP
-   END IF
+   !IF(narg .NE. 1)THEN
+   !   write(*,*)'You should type: a.out input.nml'
+   !   write(*,*)'File input.nml should contain a parameter namelist'
+   !   STOP
+   !END IF
    CALL getarg(1,infile)
    ! only for performance testing
-   CALL getarg(2,testn)
+   CALL getarg(2,testnchar)
+   read(testnchar,*) testn
    print*,"Reading: ", infile
+   print*,"Testno: ", testn
    open(1,file=infile)
    read(1,NML=run)
    read(1,NML=mesh)
@@ -110,10 +112,7 @@ subroutine measurement(elapsedtime, nproc)
 
    character(LEN=80) :: filename
    real(kind=prec_real) :: elapsedtime
-   integer :: type = 0
-   integer(kind=prec_int) :: nproc, nthread
-
-   !nthread = OMP_NUM_THREADS
+   integer(kind=prec_int) :: nproc
 
    filename='../Analysis/measurements'
    open(10,file=filename,form='unformatted', position="append")

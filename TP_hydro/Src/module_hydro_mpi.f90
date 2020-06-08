@@ -90,12 +90,6 @@ contains
         do d=1,4 
             if (ranks(d) .NE. MPI_PROC_NULL) then
                 do ivar=1,nvar
-
-                    !print*,'######'
-                    !print*,rank, ranks(d), d
-                    !print*,(/slabimax,slabjmax,nvar/)
-                    !print*,(/receivingdomain(d,2)-receivingdomain(d,1)+1,receivingdomain(d,4)-receivingdomain(d,3)+1,1/)
-                    !print*,(/receivingdomain(d,1)-1,receivingdomain(d,3)-1,ivar-1/)
                     
                     call MPI_TYPE_CREATE_SUBARRAY(&
                         3,(/slabimax,slabjmax,nvar/),& ! ndims, arraysize

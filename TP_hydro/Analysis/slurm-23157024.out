@@ -1,3 +1,0 @@
-srun: got SIGCONT
-slurmstepd: error: *** STEP 23157024.0 ON nid00486 CANCELLED AT 2020-06-08T15:54:03 ***
-srun: forcing job termination

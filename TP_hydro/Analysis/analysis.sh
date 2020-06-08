@@ -43,7 +43,7 @@ for j in 0 1 2 3 4 5; do
     cp test.nml test_$j.nml
     declare -i JOBID
     JOBID=$j+6
-    sed -i  "s/srun.*$/srun ..\/Bin\/hydro test_$JOBID.nml/g" analysis.job.sh;
+    sed -i  "s/srun.*$/srun ..\/Bin\/hydro test_$j.nml $JOBID/g" analysis.job.sh;
     # set nmber of nodes
     sed -i  "s/nodes=.*$/nodes=$pow/g" analysis.job.sh;
     # set simualtion size

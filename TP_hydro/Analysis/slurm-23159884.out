@@ -1,0 +1,320 @@
+ Provided mpi thread support level:  1
+ Reading: test_5.nml                                                                      
+ Testno:  11
+ HYDRO_MPI.INIT_MPI || I am rank  0  of  32 and I communicate with -1,  4,  -1,  1
+ Starting time integration, nx =  128  ny =  2048
+step=     0 t= 0.000E+00 dt= 0.000E+00
+ Outputting array of size= 128,  2048,  4
+ Outputting array of size= 128,  2048,  4
+ Temps CPU (s.)     :  3.0118420000000001
+ Temps elapsed (s.) :  1.3561146259307861
+ Provided mpi thread support level:  1
+ Reading: test_5.nml                                                                      
+ Testno:  11
+ HYDRO_MPI.INIT_MPI || I am rank  17  of  32 and I communicate with 13,  21,  16,  18
+ Starting time integration, nx =  128  ny =  2048
+step=     0 t= 0.000E+00 dt= 0.000E+00
+ Outputting array of size= 128,  2048,  4
+ Outputting array of size= 128,  2048,  4
+ Temps CPU (s.)     :  2.834057
+ Temps elapsed (s.) :  1.3896627426147461
+ Provided mpi thread support level:  1
+ Reading: test_5.nml                                                                      
+ Testno:  11
+ HYDRO_MPI.INIT_MPI || I am rank  28  of  32 and I communicate with 24,  2*-1,  29
+ Starting time integration, nx =  128  ny =  2048
+step=     0 t= 0.000E+00 dt= 0.000E+00
+ Outputting array of size= 128,  2048,  4
+ Outputting array of size= 128,  2048,  4
+ Temps CPU (s.)     :  2.8025549999999999
+ Temps elapsed (s.) :  1.3910039663314819
+ Provided mpi thread support level:  1
+ Reading: test_5.nml                                                                      
+ Testno:  11
+ HYDRO_MPI.INIT_MPI || I am rank  19  of  32 and I communicate with 15,  23,  18,  -1
+ Starting time integration, nx =  128  ny =  2048
+step=     0 t= 0.000E+00 dt= 0.000E+00
+ Outputting array of size= 128,  2048,  4
+ Outputting array of size= 128,  2048,  4
+ Temps CPU (s.)     :  2.7866039999999996
+ Temps elapsed (s.) :  1.3656518459320068
+ Provided mpi thread support level:  1
+ Reading: test_5.nml                                                                      
+ Testno:  11
+ HYDRO_MPI.INIT_MPI || I am rank  3  of  32 and I communicate with -1,  7,  2,  -1
+ Starting time integration, nx =  128  ny =  2048
+step=     0 t= 0.000E+00 dt= 0.000E+00
+ Outputting array of size= 128,  2048,  4
+ Outputting array of size= 128,  2048,  4
+ Temps CPU (s.)     :  2.7750850000000002
+ Temps elapsed (s.) :  1.3910195827484131
+ Provided mpi thread support level:  1
+ Reading: test_5.nml                                                                      
+ Testno:  11
+ HYDRO_MPI.INIT_MPI || I am rank  6  of  32 and I communicate with 2,  10,  5,  7
+ Starting time integration, nx =  128  ny =  2048
+step=     0 t= 0.000E+00 dt= 0.000E+00
+ Outputting array of size= 128,  2048,  4
+ Outputting array of size= 128,  2048,  4
+ Temps CPU (s.)     :  3.9497109999999997
+ Temps elapsed (s.) :  1.3899589776992798
+ Provided mpi thread support level:  1
+ Reading: test_5.nml                                                                      
+ Testno:  11
+ HYDRO_MPI.INIT_MPI || I am rank  9  of  32 and I communicate with 5,  13,  8,  10
+ Starting time integration, nx =  128  ny =  2048
+step=     0 t= 0.000E+00 dt= 0.000E+00
+ Outputting array of size= 128,  2048,  4
+ Outputting array of size= 128,  2048,  4
+ Temps CPU (s.)     :  2.8824360000000002
+ Temps elapsed (s.) :  1.3911054134368896
+ Provided mpi thread support level:  1
+ Reading: test_5.nml                                                                      
+ Testno:  11
+ HYDRO_MPI.INIT_MPI || I am rank  20  of  32 and I communicate with 16,  24,  -1,  21
+ Starting time integration, nx =  128  ny =  2048
+step=     0 t= 0.000E+00 dt= 0.000E+00
+ Outputting array of size= 128,  2048,  4
+ Outputting array of size= 128,  2048,  4
+ Temps CPU (s.)     :  2.856147
+ Temps elapsed (s.) :  1.3906452655792236
+ Provided mpi thread support level:  1
+ Reading: test_5.nml                                                                      
+ Testno:  11
+ HYDRO_MPI.INIT_MPI || I am rank  23  of  32 and I communicate with 19,  27,  22,  -1
+ Starting time integration, nx =  128  ny =  2048
+step=     0 t= 0.000E+00 dt= 0.000E+00
+ Outputting array of size= 128,  2048,  4
+ Outputting array of size= 128,  2048,  4
+ Temps CPU (s.)     :  2.8526739999999999
+ Temps elapsed (s.) :  1.390715479850769
+ Provided mpi thread support level:  1
+ Reading: test_5.nml                                                                      
+ Testno:  11
+ HYDRO_MPI.INIT_MPI || I am rank  30  of  32 and I communicate with 26,  -1,  29,  31
+ Starting time integration, nx =  128  ny =  2048
+step=     0 t= 0.000E+00 dt= 0.000E+00
+ Outputting array of size= 128,  2048,  4
+ Outputting array of size= 128,  2048,  4
+ Temps CPU (s.)     :  2.6649570000000002
+ Temps elapsed (s.) :  1.3910195827484131
+ Provided mpi thread support level:  1
+ Reading: test_5.nml                                                                      
+ Testno:  11
+ HYDRO_MPI.INIT_MPI || I am rank  14  of  32 and I communicate with 10,  18,  13,  15
+ Starting time integration, nx =  128  ny =  2048
+step=     0 t= 0.000E+00 dt= 0.000E+00
+ Outputting array of size= 128,  2048,  4
+ Outputting array of size= 128,  2048,  4
+ Temps CPU (s.)     :  2.7509649999999999
+ Temps elapsed (s.) :  1.3576587438583374
+ Provided mpi thread support level:  1
+ Reading: test_5.nml                                                                      
+ Testno:  11
+ HYDRO_MPI.INIT_MPI || I am rank  26  of  32 and I communicate with 22,  30,  25,  27
+ Starting time integration, nx =  128  ny =  2048
+step=     0 t= 0.000E+00 dt= 0.000E+00
+ Outputting array of size= 128,  2048,  4
+ Outputting array of size= 128,  2048,  4
+ Temps CPU (s.)     :  2.8298830000000001
+ Temps elapsed (s.) :  1.390738844871521
+ Provided mpi thread support level:  1
+ Reading: test_5.nml                                                                      
+ Testno:  11
+ HYDRO_MPI.INIT_MPI || I am rank  12  of  32 and I communicate with 8,  16,  -1,  13
+ Starting time integration, nx =  128  ny =  2048
+step=     0 t= 0.000E+00 dt= 0.000E+00
+ Outputting array of size= 128,  2048,  4
+ Outputting array of size= 128,  2048,  4
+ Temps CPU (s.)     :  2.8640099999999999
+ Temps elapsed (s.) :  1.3914874792098999
+ Provided mpi thread support level:  1
+ Reading: test_5.nml                                                                      
+ Testno:  11
+ HYDRO_MPI.INIT_MPI || I am rank  24  of  32 and I communicate with 20,  28,  -1,  25
+ Starting time integration, nx =  128  ny =  2048
+step=     0 t= 0.000E+00 dt= 0.000E+00
+ Outputting array of size= 128,  2048,  4
+ Outputting array of size= 128,  2048,  4
+ Temps CPU (s.)     :  2.6808770000000002
+ Temps elapsed (s.) :  1.3889608383178711
+ Provided mpi thread support level:  1
+ Reading: test_5.nml                                                                      
+ Testno:  11
+ HYDRO_MPI.INIT_MPI || I am rank  31  of  32 and I communicate with 27,  -1,  30,  -1
+ Starting time integration, nx =  128  ny =  2048
+step=     0 t= 0.000E+00 dt= 0.000E+00
+ Outputting array of size= 128,  2048,  4
+ Outputting array of size= 128,  2048,  4
+ Temps CPU (s.)     :  2.9392449999999997
+ Temps elapsed (s.) :  1.3784409761428833
+ Provided mpi thread support level:  1
+ Reading: test_5.nml                                                                      
+ Testno:  11
+ HYDRO_MPI.INIT_MPI || I am rank  4  of  32 and I communicate with 0,  8,  -1,  5
+ Starting time integration, nx =  128  ny =  2048
+step=     0 t= 0.000E+00 dt= 0.000E+00
+ Outputting array of size= 128,  2048,  4
+ Outputting array of size= 128,  2048,  4
+ Temps CPU (s.)     :  2.779738
+ Temps elapsed (s.) :  1.3914797306060791
+ Provided mpi thread support level:  1
+ Reading: test_5.nml                                                                      
+ Testno:  11
+ HYDRO_MPI.INIT_MPI || I am rank  21  of  32 and I communicate with 17,  25,  20,  22
+ Starting time integration, nx =  128  ny =  2048
+step=     0 t= 0.000E+00 dt= 0.000E+00
+ Outputting array of size= 128,  2048,  4
+ Outputting array of size= 128,  2048,  4
+ Temps CPU (s.)     :  2.864144
+ Temps elapsed (s.) :  1.366213321685791
+ Provided mpi thread support level:  1
+ Reading: test_5.nml                                                                      
+ Testno:  11
+ HYDRO_MPI.INIT_MPI || I am rank  16  of  32 and I communicate with 12,  20,  -1,  17
+ Starting time integration, nx =  128  ny =  2048
+step=     0 t= 0.000E+00 dt= 0.000E+00
+ Outputting array of size= 128,  2048,  4
+ Outputting array of size= 128,  2048,  4
+ Temps CPU (s.)     :  3.2209660000000002
+ Temps elapsed (s.) :  1.3546719551086426
+ Provided mpi thread support level:  1
+ Reading: test_5.nml                                                                      
+ Testno:  11
+ HYDRO_MPI.INIT_MPI || I am rank  29  of  32 and I communicate with 25,  -1,  28,  30
+ Starting time integration, nx =  128  ny =  2048
+step=     0 t= 0.000E+00 dt= 0.000E+00
+ Outputting array of size= 128,  2048,  4
+ Outputting array of size= 128,  2048,  4
+ Temps CPU (s.)     :  2.8044379999999998
+ Temps elapsed (s.) :  1.3882745504379272
+ Provided mpi thread support level:  1
+ Reading: test_5.nml                                                                      
+ Testno:  11
+ HYDRO_MPI.INIT_MPI || I am rank  27  of  32 and I communicate with 23,  31,  26,  -1
+ Starting time integration, nx =  128  ny =  2048
+step=     0 t= 0.000E+00 dt= 0.000E+00
+ Outputting array of size= 128,  2048,  4
+ Outputting array of size= 128,  2048,  4
+ Temps CPU (s.)     :  2.8433159999999997
+ Temps elapsed (s.) :  1.3862158060073853
+ Provided mpi thread support level:  1
+ Reading: test_5.nml                                                                      
+ Testno:  11
+ HYDRO_MPI.INIT_MPI || I am rank  8  of  32 and I communicate with 4,  12,  -1,  9
+ Starting time integration, nx =  128  ny =  2048
+step=     0 t= 0.000E+00 dt= 0.000E+00
+ Outputting array of size= 128,  2048,  4
+ Outputting array of size= 128,  2048,  4
+ Temps CPU (s.)     :  3.0717480000000004
+ Temps elapsed (s.) :  1.3885319232940674
+ Provided mpi thread support level:  1
+ Reading: test_5.nml                                                                      
+ Testno:  11
+ HYDRO_MPI.INIT_MPI || I am rank  22  of  32 and I communicate with 18,  26,  21,  23
+ Starting time integration, nx =  128  ny =  2048
+step=     0 t= 0.000E+00 dt= 0.000E+00
+ Outputting array of size= 128,  2048,  4
+ Outputting array of size= 128,  2048,  4
+ Temps CPU (s.)     :  2.7497390000000004
+ Temps elapsed (s.) :  1.3890310525894165
+ Provided mpi thread support level:  1
+ Reading: test_5.nml                                                                      
+ Testno:  11
+ HYDRO_MPI.INIT_MPI || I am rank  2  of  32 and I communicate with -1,  6,  1,  3
+ Starting time integration, nx =  128  ny =  2048
+step=     0 t= 0.000E+00 dt= 0.000E+00
+ Outputting array of size= 128,  2048,  4
+ Outputting array of size= 128,  2048,  4
+ Temps CPU (s.)     :  2.6919170000000001
+ Temps elapsed (s.) :  1.390192985534668
+ Provided mpi thread support level:  1
+ Reading: test_5.nml                                                                      
+ Testno:  11
+ HYDRO_MPI.INIT_MPI || I am rank  5  of  32 and I communicate with 1,  9,  4,  6
+ Starting time integration, nx =  128  ny =  2048
+step=     0 t= 0.000E+00 dt= 0.000E+00
+ Outputting array of size= 128,  2048,  4
+ Outputting array of size= 128,  2048,  4
+ Temps CPU (s.)     :  2.738143
+ Temps elapsed (s.) :  1.3583605289459229
+ Provided mpi thread support level:  1
+ Reading: test_5.nml                                                                      
+ Testno:  11
+ HYDRO_MPI.INIT_MPI || I am rank  13  of  32 and I communicate with 9,  17,  12,  14
+ Starting time integration, nx =  128  ny =  2048
+step=     0 t= 0.000E+00 dt= 0.000E+00
+ Outputting array of size= 128,  2048,  4
+ Outputting array of size= 128,  2048,  4
+ Temps CPU (s.)     :  2.7842479999999998
+ Temps elapsed (s.) :  1.3911054134368896
+ Provided mpi thread support level:  1
+ Reading: test_5.nml                                                                      
+ Testno:  11
+ HYDRO_MPI.INIT_MPI || I am rank  10  of  32 and I communicate with 6,  14,  9,  11
+ Starting time integration, nx =  128  ny =  2048
+step=     0 t= 0.000E+00 dt= 0.000E+00
+ Outputting array of size= 128,  2048,  4
+ Outputting array of size= 128,  2048,  4
+ Temps CPU (s.)     :  2.8134069999999998
+ Temps elapsed (s.) :  1.3904112577438354
+ Provided mpi thread support level:  1
+ Reading: test_5.nml                                                                      
+ Testno:  11
+ HYDRO_MPI.INIT_MPI || I am rank  11  of  32 and I communicate with 7,  15,  10,  -1
+ Starting time integration, nx =  128  ny =  2048
+step=     0 t= 0.000E+00 dt= 0.000E+00
+ Outputting array of size= 128,  2048,  4
+ Outputting array of size= 128,  2048,  4
+ Temps CPU (s.)     :  2.9062340000000004
+ Temps elapsed (s.) :  1.390169620513916
+ Provided mpi thread support level:  1
+ Reading: test_5.nml                                                                      
+ Testno:  11
+ HYDRO_MPI.INIT_MPI || I am rank  7  of  32 and I communicate with 3,  11,  6,  -1
+ Starting time integration, nx =  128  ny =  2048
+step=     0 t= 0.000E+00 dt= 0.000E+00
+ Outputting array of size= 128,  2048,  4
+ Outputting array of size= 128,  2048,  4
+ Temps CPU (s.)     :  2.8224960000000001
+ Temps elapsed (s.) :  1.3910741806030273
+ Provided mpi thread support level:  1
+ Reading: test_5.nml                                                                      
+ Testno:  11
+ HYDRO_MPI.INIT_MPI || I am rank  18  of  32 and I communicate with 14,  22,  17,  19
+ Starting time integration, nx =  128  ny =  2048
+step=     0 t= 0.000E+00 dt= 0.000E+00
+ Outputting array of size= 128,  2048,  4
+ Outputting array of size= 128,  2048,  4
+ Temps CPU (s.)     :  2.7866059999999999
+ Temps elapsed (s.) :  1.3884695768356323
+ Provided mpi thread support level:  1
+ Reading: test_5.nml                                                                      
+ Testno:  11
+ HYDRO_MPI.INIT_MPI || I am rank  25  of  32 and I communicate with 21,  29,  24,  26
+ Starting time integration, nx =  128  ny =  2048
+step=     0 t= 0.000E+00 dt= 0.000E+00
+ Outputting array of size= 128,  2048,  4
+ Outputting array of size= 128,  2048,  4
+ Temps CPU (s.)     :  2.76953
+ Temps elapsed (s.) :  1.3913938999176025
+ Provided mpi thread support level:  1
+ Reading: test_5.nml                                                                      
+ Testno:  11
+ HYDRO_MPI.INIT_MPI || I am rank  1  of  32 and I communicate with -1,  5,  0,  2
+ Starting time integration, nx =  128  ny =  2048
+step=     0 t= 0.000E+00 dt= 0.000E+00
+ Outputting array of size= 128,  2048,  4
+ Outputting array of size= 128,  2048,  4
+ Temps CPU (s.)     :  2.6202369999999995
+ Temps elapsed (s.) :  1.3912379741668701
+ Provided mpi thread support level:  1
+ Reading: test_5.nml                                                                      
+ Testno:  11
+ HYDRO_MPI.INIT_MPI || I am rank  15  of  32 and I communicate with 11,  19,  14,  -1
+ Starting time integration, nx =  128  ny =  2048
+step=     0 t= 0.000E+00 dt= 0.000E+00
+ Outputting array of size= 128,  2048,  4
+ Outputting array of size= 128,  2048,  4
+ Temps CPU (s.)     :  3.8638590000000002
+ Temps elapsed (s.) :  1.3900604248046875

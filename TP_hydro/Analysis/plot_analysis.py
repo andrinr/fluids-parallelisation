@@ -17,19 +17,24 @@ nsproc = [1, 2, 4, 8, 16, 32]
 
 
 ##### READ DATA #####
-strong_timings = []
-weak_timings = []
+raw_timings = []
+raw_order = []
 
 with FortranFile(path_to_output, 'r') as f:
     for nproc in nsproc: 
-        strong_timings.append(f.read_reals('f4')[0])
-        inputfile = f.read_
-        print(inputfile)
+        raw_timings.append(f.read_reals('f4')[0])
+        raw_order.append(f.read_ints('i')[0])
     
     for nproc in nsproc: 
-        weak_timings.append(f.read_reals('f4')[0])
-        nproc = f.read_ints('i')
-        print(nproc)
+        raw_timings.append(f.read_reals('f4')[0])
+        raw_order.append(f.read_ints('i')[0])
+
+raw_order = np.array([raw_order])
+raw_timings = np.array([raw_timings])
+
+np.argsort(raw_order)
+print(raw_timings)
+print(raw_order)
 
 
 ##### PREPROCESS DATA #####
