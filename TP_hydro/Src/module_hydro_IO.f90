@@ -7,6 +7,8 @@
 
 module hydro_IO
    integer :: totalx, totaly
+   integer :: testn = 0
+   CHARACTER(len=80) :: infile
 
 contains
 
@@ -16,7 +18,6 @@ subroutine read_params
 
   ! Local variables
   integer(kind=prec_int) :: narg,iargc
-  CHARACTER(len=80) :: infile
 
   ! Namelists
   namelist/run/nstepmax,tend,noutput
@@ -32,7 +33,9 @@ subroutine read_params
       write(*,*)'File input.nml should contain a parameter namelist'
       STOP
    END IF
-   CALL getarg(0,infile)
+   CALL getarg(1,infile)
+   ! only for performance testing
+   CALL getarg(2,testn)
    print*,"Reading: ", infile
    open(1,file=infile)
    read(1,NML=run)
@@ -115,7 +118,7 @@ subroutine measurement(elapsedtime, nproc)
    filename='../Analysis/measurements'
    open(10,file=filename,form='unformatted', position="append")
    write(10)real(elapsedtime,kind=prec_output)
-   write(10)nproc, totalx, totaly
+   write(10)testn
    close(10)
 
 end subroutine measurement

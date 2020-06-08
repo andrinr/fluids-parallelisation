@@ -23,8 +23,8 @@ weak_timings = []
 with FortranFile(path_to_output, 'r') as f:
     for nproc in nsproc: 
         strong_timings.append(f.read_reals('f4')[0])
-        nproc = f.read_ints('i')
-        print(nproc)
+        inputfile = f.read_
+        print(inputfile)
     
     for nproc in nsproc: 
         weak_timings.append(f.read_reals('f4')[0])

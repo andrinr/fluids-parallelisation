@@ -1,0 +1,11 @@
+ Provided mpi thread support level:  1
+ Reading: test_.nml                                                                       
+
+lib-4001 : UNRECOVERABLE library error 
+  A READ operation tried to read past the end-of-file.
+
+Encountered during a namelist READ from unit 1
+Fortran unit 1 is connected to a sequential formatted text file:
+  "test_.nml"
+srun: got SIGCONT
+srun: forcing job termination

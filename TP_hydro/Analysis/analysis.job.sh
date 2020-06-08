@@ -1,7 +1,7 @@
 #!/bin/bash -l
-#SBATCH --job-name="hybrid_test"                                                                         
+#SBATCH --job-name="weak-5" 
 #SBATCH --time=00:02:00
-#SBATCH --nodes=2
+#SBATCH --nodes=32
 #SBATCH --ntasks-per-core=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=36
@@ -11,4 +11,4 @@
 
 export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
 
-srun ../Bin/hydro ../Input/test.nml
+srun ../Bin/hydro test_.nml

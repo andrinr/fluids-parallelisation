@@ -1,0 +1,6 @@
+srun: got SIGCONT
+slurmstepd: error: *** STEP 23157023.0 ON nid00138 CANCELLED AT 2020-06-08T15:54:02 ***
+Mon Jun  8 15:54:02 2020: [PE_3]:inet_recv:inet_recv: recv error (fd=5) Connection reset by peer
+Mon Jun  8 15:54:02 2020: [PE_3]:_pmi_network_barrier:_pmi_inet_recv from target 0 failed pmi errno -1
+srun: forcing job termination
+Mon Jun  8 15:54:02 2020: [PE_3]:_pmi_init:network_barrier failed
