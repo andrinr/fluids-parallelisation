@@ -92,3 +92,20 @@ plt.xscale('log', basex=2)
 
 plt.plot(nsproc, strong_ideal_seepdup, color='black', ls='--')
 plt.show()
+
+
+##### VISUALIZE STRONG RESULT #####
+
+fig, ax = plt.subplots()
+
+sns.lineplot(ax=ax, x=nsproc, y=weak_speedup, markers=True, palette=sns.cubehelix_palette(len(nsproc)))
+
+ax.set_title("Speedup plot with MPI \n compared to ideal speed up (dashed)")
+
+ax.set(xlabel='Number of nodes')
+ax.set(ylabel='Speedup')
+plt.yscale('log', basey=2)
+plt.xscale('log', basex=2)
+
+plt.plot(nsproc, weak_ideal_speedup, color='black', ls='--')
+plt.show()
