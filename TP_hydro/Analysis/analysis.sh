@@ -10,6 +10,7 @@ rm test_*
 # Set simulation size
 sed -i "s/nx=.*$/nx=1024/g" test.nml;
 sed -i "s/ny=.*$/ny=1024/g" test.nml;
+sed -i "s/time=.*$/time=00:02:00 /g" analysis.job.sh;
 
 # Iterate over processors counts 
 # 1 - 32
@@ -19,7 +20,7 @@ for j in 0 1 2 3 4 5; do
     pow=$((2**$j))
     echo $pow
     # set number of nodes
-    sed -i  "s/nodes=.*$/nodes=$pow/g" analysis.job.sh;
+    sed -i  "s/ntasks-per-node=.*$/ntasks-per-node=$pow/g" analysis.job.sh;
     # Set job name
     sed -i  "s/srun.*$/srun ..\/Bin\/hydro test.nml $j/g" analysis.job.sh;
     # run script
@@ -31,6 +32,7 @@ done
 # Increase number of processors and simulation size
 
 sed -i "s/nx=.*$/nx=1024/g" test.nml;
+sed -i "s/time=.*$/time=00:04:00 /g" analysis.job.sh;
 
 # Iterate over processors counts 
 # 1 - 32
@@ -44,8 +46,8 @@ for j in 0 1 2 3 4 5; do
     declare -i JOBID
     JOBID=$j+6
     sed -i  "s/srun.*$/srun ..\/Bin\/hydro test_$j.nml $JOBID/g" analysis.job.sh;
-    # set nmber of nodes
-    sed -i  "s/nodes=.*$/nodes=$pow/g" analysis.job.sh;
+    # set number of nodes
+    sed -i  "s/ntasks-per-node=.*$/ntasks-per-node=$pow/g" analysis.job.sh;
     # set simualtion size
     declare -i SIZE
     SIZE=$pow*256

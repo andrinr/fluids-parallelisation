@@ -57,6 +57,8 @@ while(True):
             dat = np.array(dat)
             dat = dat.reshape(nvar, ny, nx)
 
+            print(dimx, dimy)
+
             grid[coordx][dimy-1-coordy] = dat
 
     cols = []

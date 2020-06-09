@@ -17,6 +17,7 @@ nsproc = [1, 2, 4, 8, 16, 32]
 
 
 ##### READ DATA #####
+
 raw_timings = []
 raw_order = []
 
@@ -41,6 +42,7 @@ print(weak_timings)
 
 
 ##### PREPROCESS DATA #####
+
 strong_speedup = []
 weak_speedup = []
 
@@ -74,7 +76,7 @@ for j in range(len(nsproc)):
 ##### VISUALIZE STRONG RESULT #####
 
 fig, axs = plt.subplots(1,2)
-fig.suptitle("Measured scaling compared to fitted ideal scaling (dashed)")
+fig.suptitle("Measured scaling compared to fitted model (dashed) ")
 axs[0].set_yscale('log', basey=2)
 axs[0].set_xscale('log', basex=2)
 
@@ -82,9 +84,8 @@ sns.lineplot(ax=axs[0], x=nsproc, y=strong_speedup, markers=True, palette=sns.cu
 axs[0].plot(nsproc, strong_ideal_seepdup, color='black', ls='--')
 axs[0].set_title("Strong scaling")
 
-axs[0].set(xlabel='Number of nodes')
+axs[0].set(xlabel='Number of ranks')
 axs[0].set(ylabel='Speedup')
-
 
 
 ##### VISUALIZE WEAK RESULT #####
@@ -93,7 +94,7 @@ sns.lineplot(ax=axs[1], x=nsproc, y=weak_speedup, markers=True, palette=sns.cube
 axs[1].plot(nsproc, weak_ideal_speedup, color='black', ls='--')
 axs[1].set_title("Weak scaling")
 
-axs[1].set(xlabel='Number of nodes')
+axs[1].set(xlabel='Number of ranks')
 axs[1].set(ylabel='Scaled speedup')
 axs[1].set_yscale('log', basey=2)
 axs[1].set_xscale('log', basex=2)

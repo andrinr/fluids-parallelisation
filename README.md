@@ -18,7 +18,11 @@ Execute the render_sequence.py script from the ``/Output`` folder. It will autom
 
 ## Speedup plots
 ![Alt text](TP_hydro/Analysis/mpi_scaling.svg)
-The ideal speed-up for the strong scaling was calculated using Amdahl's law and a coefficient for p = 0.97, for the weak scaling Gustafson's law with a coefficient of p=0.43 was used.
+
+Fitted parameters for dashed lines:
+
+- Amdahl: p = 0.97, s = 0.03
+- Gustav: p = 0.43, s = 0.56
 
 
 ### Reproduce measurements
@@ -27,3 +31,14 @@ The ideal speed-up for the strong scaling was calculated using Amdahl's law and 
 2. Run ``make`` from the ``Bin`` directory
 3. Run ``Analysis/analysis.sh`` (only works for slurm environments)
 4. Run ``python plot_analysis.py`` inside the ``Analysis`` directory
+
+## Single Node Execution Time 
+
+<img src="TP_hydro/Analysis/single_node_mpi.svg" alt="drawing" width="300"/>
+
+### Reproduce measurements
+
+1. Set ``ptest = .TRUE.`` in ``hydro_commun``
+2. Run ``make`` from the ``Bin`` directory
+3. Run ``Analysis/analysis.single.sh`` (only works for slurm environments)
+4. Run ``python plot_analysis_single.py`` inside the ``Analysis`` directory
