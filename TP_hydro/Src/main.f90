@@ -66,8 +66,10 @@ program hydro_main
 
   end do
 
-  ! Final output
-  call output(rank, coords, dimensions)
+   ! Final output
+   if (.NOT. ptest) then
+      call output(rank, coords, dimensions)
+   end if
 
   ! Timing
   call cpu_time(t_fin)
@@ -81,15 +83,11 @@ program hydro_main
   print *,'Temps CPU (s.)     : ',tps_cpu
   print *,'Temps elapsed (s.) : ',tps_elapsed
 
-  call MPI_ALLREDUCE(tps_elapsed, max_tps_elapsed, 1, MPI_DOUBLE, MPI_MAX, COMM_CART, ierror)
-
-  ! end mpi env
-  !call end_mpi
+  call MPI_ALLREDUCE(tps_cpu, max_tps_elapsed, 1, MPI_DOUBLE, MPI_MAX, COMM_CART, ierror)
 
    if (rank == 0 .AND. ptest) then
       call measurement(max_tps_elapsed, nproc)
    end if
-
 
   ! finallize mpi env
   call MPI_FINALIZE(ierror)
