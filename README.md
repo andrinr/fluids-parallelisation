@@ -8,7 +8,7 @@ Run make from the /Bin folder in order to compile the project. Depending on the 
 
 ## Visualize
 
-Execute the render_sequence.py script from the /Output folder. It will automaticially render all output files and stitch together the outputs from the different processors. The script takes the number of processors as argument. e.g: python simple_mpi.py 4
+Execute the render_sequence.py script from the /Output folder. It will automaticially render all output files and stitch together the outputs from the different processors. The script takes the number of processors as argument. e.g: python render_sequence.py.py 4
 
 
 ## Speedup
