@@ -1,14 +1,14 @@
 #!/bin/bash -l
-#SBATCH --job-name="weak-8" 
+#SBATCH --job-name="single-5" 
 #SBATCH --time=00:01:00
 #SBATCH --nodes=1
-#SBATCH --ntasks-per-core=2
+#SBATCH --ntasks-per-core=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=64
+#SBATCH --cpus-per-task=36
 #SBATCH --partition=normal
 #SBATCH --constraint=mc
 #SBATCH --hint=multithread
 
-export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
+export OMP_NUM_THREADS=32
 
-srun ../Bin/hydro test_8.nml 19
+srun ../Bin/hydro test.nml 5
