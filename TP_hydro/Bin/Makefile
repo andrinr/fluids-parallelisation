@@ -4,7 +4,7 @@
 
 
 #------------------
-F90 = ftn #mpifort
+F90 = mpifort #ftn #mpifort
 
 # Fortran compilation options
 #-----------------------------

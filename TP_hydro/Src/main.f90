@@ -66,8 +66,10 @@ program hydro_main
 
   end do
 
-  ! Final output
-  call output(rank, coords, dimensions)
+   ! Final output
+   if (.NOT. ptest) then
+         call output(rank, coords, dimensions)
+   end if
 
   ! Timing
   call cpu_time(t_fin)

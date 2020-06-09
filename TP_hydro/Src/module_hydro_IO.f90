@@ -14,6 +14,7 @@ contains
 
 subroutine read_params
   use hydro_parameters
+  use hydro_commons
   implicit none
 
   ! Local variables
@@ -37,8 +38,8 @@ subroutine read_params
    ! only for performance testing
    if (ptest) then
       CALL getarg(2,testnchar)
+      read(testnchar,*) testn
    end if
-   read(testnchar,*) testn
    print*,"Reading: ", infile
    print*,"Testno: ", testn
    open(1,file=infile)
