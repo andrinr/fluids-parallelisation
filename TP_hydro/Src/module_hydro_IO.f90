@@ -8,28 +8,41 @@
 
 module hydro_IO
 
+   CHARACTER(len=80) :: infile, testnchar
+   integer :: testn
+
 contains
 
 subroutine read_params
-  use hydro_parameters
-  implicit none
+   use hydro_parameters
+   use hydro_commons
+   implicit none
 
-  ! Local variables
-  integer(kind=prec_int) :: narg,iargc
-  character(LEN=80) :: infile
+   ! Local variables
+   integer(kind=prec_int) :: narg,iargc
+   character(LEN=80) :: infile
 
-  ! Namelists
-  namelist/run/nstepmax,tend,noutput
-  namelist/mesh/nx,ny,dx,boundary_left,boundary_right,boundary_down,boundary_up
-  namelist/hydro/gamma,courant_factor,smallr,smallc,niter_riemann, &
-       &         iorder,scheme,slope_type
+   ! Namelists
+   namelist/run/nstepmax,tend,noutput
+   namelist/mesh/nx,ny,dx,boundary_left,boundary_right,boundary_down,boundary_up
+   namelist/hydro/gamma,courant_factor,smallr,smallc,niter_riemann, &
+         &         iorder,scheme,slope_type
 
-  infile="../Input/input.nml"
-  open(1,file=infile)
-  read(1,NML=run)
-  read(1,NML=mesh)
-  read(1,NML=hydro)
-  close(1)
+   CALL getarg(1,infile)
+
+   if (ptest) then
+      CALL getarg(2,testnchar)
+   end if
+
+   read(testnchar,*) testn
+   print*,"Reading: ", infile
+   print*,"Testno: ", testn
+
+   open(1,file=infile)
+   read(1,NML=run)
+   read(1,NML=mesh)
+   read(1,NML=hydro)
+   close(1)
 end subroutine read_params
 
 subroutine output
@@ -91,15 +104,17 @@ end subroutine output
 subroutine measurement(elapsedtime)
 
    use hydro_commons
+   use hydro_parameters
    implicit none
 
    character(LEN=80) :: filename
    real(kind=prec_real) :: elapsedtime
-   integer :: type = 0
+   integer(kind=prec_int) :: nproc
 
    filename='../Analysis/measurements'
    open(10,file=filename,form='unformatted', position="append")
    write(10)real(elapsedtime,kind=prec_output)
+   write(10)testn
    close(10)
 
 end subroutine measurement

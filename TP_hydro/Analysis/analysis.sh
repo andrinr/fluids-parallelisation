@@ -1,14 +1,55 @@
+# Remove previous files
 rm measurements
+rm slurm*
+rm core*
+rm test_*
 
-for  i in 128 256 512 1024 2048; do
-      sed -i "s/nx=[0-9][0-9][0-9][0-9]*$/nx=$i/g" ../Input/input.nml;
-      sed -i "s/ny=[0-9][0-9][0-9][0-9]*$/ny=$i/g" ../Input/input.nml;
-      for j in 1 2 4 8 16 32 64 128 256 512 1024; do 
-          export OMP_NUM_THREADS="$j"
-          ../Bin/hydro
-          #((tim=($i/256)/$j))
-          #sleep $tim ;    
-      done
+##### Strong scaling #####
+# Only increase number of threads, keep problem size fixed 
+
+# Set simulation size
+sed -i "s/nx=.*$/nx=1024/g" test.nml;
+sed -i "s/ny=.*$/ny=1024/g" test.nml;
+
+# Iterate over thread counts 
+# 1 - 32
+for j in 0 1 2 3 4 5 6 7; do 
+    sed -i  "s/job-name=.*$/job-name=\"strong-$j\" /g" analysis.job.sh;
+    declare -i pow
+    pow=$((2**$j))
+    echo $pow
+    # set number of threads
+    sed -i  "s/export OMP_NUM_THREADS=.*$/export OMP_NUM_THREADS=$pow/g" analysis.job.sh;
+    # Set job name
+    sed -i  "s/srun.*$/srun ..\/Bin\/hydro test.nml $j/g" analysis.job.sh;
+    # run script
+    sbatch analysis.job.sh
 done
-#128 256 512 1024
-#1 4 16 36
+
+
+##### Weak scaling #####
+# Increase number of processors and simulation size
+
+sed -i "s/nx=.*$/nx=1024/g" test.nml;
+
+# Iterate over processors counts 
+# 1 - 32
+for j in 0 1 2 3 4 5 6 7 8; do 
+    sed -i  "s/job-name=.*$/job-name=\"weak-$j\" /g" analysis.job.sh;
+    declare -i pow
+    pow=$((2**$j))
+    echo $pow
+    # copy file
+    cp test.nml test_$j.nml
+    declare -i JOBID
+    JOBID=$j+11
+    sed -i  "s/srun.*$/srun ..\/Bin\/hydro test_$j.nml $JOBID/g" analysis.job.sh;
+    # set nmber of threads
+    sed -i  "s/export OMP_NUM_THREADS=.*$/export OMP_NUM_THREADS=$pow/g" analysis.job.sh;
+    # set simualtion size
+    declare -i SIZE
+    SIZE=$pow*128
+    sed -i "s/ny=.*$/ny=$SIZE/g" test_$j.nml;
+    # run script
+    sbatch analysis.job.sh
+done

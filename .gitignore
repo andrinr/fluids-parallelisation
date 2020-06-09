@@ -1,2 +1,4 @@
 *.o
 output_*
+*.out
+core.*
