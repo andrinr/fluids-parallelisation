@@ -32,9 +32,8 @@ subroutine read_params
 
    if (ptest) then
       CALL getarg(2,testnchar)
+      read(testnchar,*) testn
    end if
-
-   read(testnchar,*) testn
    print*,"Reading: ", infile
    print*,"Testno: ", testn
 
