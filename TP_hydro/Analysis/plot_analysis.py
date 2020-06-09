@@ -64,14 +64,14 @@ def gustav(x, p):
     return( (1-p) + p * x )
 
 popt_strong, pcov_strong = curve_fit(amdahl, nsproc, strong_speedup, bounds=(0.01,1))
-popt_weak, pcov_weak = curve_fit(gustav, nsproc, weak_speedup, bounds=(0.01,1))
+popt_weak, pcov_weak = curve_fit(gustav, nsproc, weak_speedup, bounds=(0,1))
 
 print(popt_strong)
 print(popt_weak)
 
 for j in range(len(nsproc)):
     strong_ideal_seepdup.append(amdahl(nsproc[j],popt_strong[0]))
-    weak_ideal_speedup.append(amdahl(nsproc[j],popt_weak[0]))
+    weak_ideal_speedup.append(gustav(nsproc[j],0.6))
 
 print(strong_ideal_seepdup)
 print(weak_ideal_speedup)
@@ -79,33 +79,28 @@ print(weak_ideal_speedup)
 
 ##### VISUALIZE STRONG RESULT #####
 
-fig, ax = plt.subplots()
+fig, axs = plt.subplots(2)
+fig.suptitle("Measured scaling compared to fitted ideal scaling (dashed)")
+axs[0].set_yscale('log', basey=2)
+axs[0].set_xscale('log', basex=2)
 
-sns.lineplot(ax=ax, x=nsproc, y=strong_speedup, markers=True, palette=sns.cubehelix_palette(len(nsproc)))
+sns.lineplot(ax=axs[0], x=nsproc, y=strong_speedup, markers=True, palette=sns.cubehelix_palette(len(nsproc)))
+axs[0].plot(nsproc, strong_ideal_seepdup, color='black', ls='--')
+axs[0].set_title("Strong scaling")
 
-ax.set_title("Speedup plot with MPI \n compared to ideal speed up (dashed)")
-
-ax.set(xlabel='Number of nodes')
-ax.set(ylabel='Speedup')
-plt.yscale('log', basey=2)
-plt.xscale('log', basex=2)
-
-plt.plot(nsproc, strong_ideal_seepdup, color='black', ls='--')
-plt.show()
+#axs[0].set(xlabel='Number of nodes')
+axs[0].set(ylabel='Speedup')
 
 
-##### VISUALIZE STRONG RESULT #####
 
-fig, ax = plt.subplots()
+##### VISUALIZE WEAK RESULT #####
 
-sns.lineplot(ax=ax, x=nsproc, y=weak_speedup, markers=True, palette=sns.cubehelix_palette(len(nsproc)))
+sns.lineplot(ax=axs[1], x=nsproc, y=weak_speedup, markers=True, palette=sns.cubehelix_palette(len(nsproc)))
+axs[1].plot(nsproc, weak_ideal_speedup, color='black', ls='--')
+axs[1].set_title("Weak scaling")
 
-ax.set_title("Speedup plot with MPI \n compared to ideal speed up (dashed)")
-
-ax.set(xlabel='Number of nodes')
-ax.set(ylabel='Speedup')
-plt.yscale('log', basey=2)
-plt.xscale('log', basex=2)
-
-plt.plot(nsproc, weak_ideal_speedup, color='black', ls='--')
+axs[1].set(xlabel='Number of nodes')
+axs[1].set(ylabel='Scaled speedup')
+axs[1].set_yscale('log', basey=2)
+axs[1].set_xscale('log', basex=2)
 plt.show()
