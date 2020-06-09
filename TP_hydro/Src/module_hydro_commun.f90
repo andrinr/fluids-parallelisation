@@ -19,7 +19,7 @@ module hydro_commons
   real(kind=prec_real),allocatable,dimension(:,:,:) :: uold
   real(kind=prec_real)   :: t=0.
   integer(kind=prec_int) :: nstep=0
-  logical :: ptest = .TRUE.
+  logical :: ptest = .FALSE.
 end module hydro_commons
 
 module hydro_parameters

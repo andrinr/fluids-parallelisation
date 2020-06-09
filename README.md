@@ -21,8 +21,8 @@ Execute the render_sequence.py script from the ``/Output`` folder. It will autom
 
 Fitted parameters for dashed lines:
 
-- Amdahl: p = 0.97, s = 0.03
-- Gustav: p = 0.43, s = 0.56
+- Amdahl: p = 0.98, s = 0.02
+- Gustav: p = 0.3, s = 0.7
 
 
 ### Reproduce measurements
