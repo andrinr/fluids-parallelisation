@@ -13,7 +13,6 @@ program hydro_main
   real(kind=prec_real)   :: dt, mydt, tps_elapsed, max_tps_elapsed, tps_cpu, t_deb, t_fin
   integer(kind=prec_int) :: nbp_init, nbp_final, nbp_max, freq_p
   integer :: providedsupportlevel
-  CHARACTER(len=150) :: input_file
 
   ! Itialize MPI environment
   call MPI_INIT_THREAD(1,providedsupportlevel,ierror)
@@ -87,7 +86,7 @@ program hydro_main
   ! end mpi env
   !call end_mpi
 
-   if (rank == 0) then
+   if (rank == 0 .AND. ptest) then
       call measurement(max_tps_elapsed, nproc)
    end if
 

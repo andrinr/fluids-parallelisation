@@ -35,7 +35,9 @@ subroutine read_params
    !END IF
    CALL getarg(1,infile)
    ! only for performance testing
-   CALL getarg(2,testnchar)
+   if (ptest) then
+      CALL getarg(2,testnchar)
+   end if
    read(testnchar,*) testn
    print*,"Reading: ", infile
    print*,"Testno: ", testn

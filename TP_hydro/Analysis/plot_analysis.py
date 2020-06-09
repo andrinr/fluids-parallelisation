@@ -79,7 +79,7 @@ print(weak_ideal_speedup)
 
 ##### VISUALIZE STRONG RESULT #####
 
-fig, axs = plt.subplots(2)
+fig, axs = plt.subplots(1,2)
 fig.suptitle("Measured scaling compared to fitted ideal scaling (dashed)")
 axs[0].set_yscale('log', basey=2)
 axs[0].set_xscale('log', basex=2)
