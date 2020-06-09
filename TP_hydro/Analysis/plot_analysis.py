@@ -36,6 +36,8 @@ sort_indices = np.argsort(raw_order)
 strong_timings = raw_timings[sort_indices][0:6]
 weak_timings = raw_timings[sort_indices][6:12]
 
+print(strong_timings)
+print(weak_timings)
 
 ##### PREPROCESS DATA #####
 strong_speedup = []
