@@ -1,6 +1,6 @@
 # HYDRO | Hybrid
 
-This is the MPI version of the hydro project.
+This is the HYBRID version of the hydro project.
 
 ## Compile & Run
 
