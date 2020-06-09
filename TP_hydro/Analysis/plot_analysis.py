@@ -48,9 +48,6 @@ for j in range(len(nsproc)):
     strong_speedup.append( strong_timings[0] / strong_timings[j] )
     weak_speedup.append( weak_timings[0] / weak_timings[j] * nsproc[j])
 
-print(strong_speedup)
-print(weak_speedup)
-
 
 ##### FIT IDEAL SPEEDUP CURVES #####
 
@@ -66,15 +63,12 @@ def gustav(x, p):
 popt_strong, pcov_strong = curve_fit(amdahl, nsproc, strong_speedup, bounds=(0.01,1))
 popt_weak, pcov_weak = curve_fit(gustav, nsproc, weak_speedup, bounds=(0,1))
 
-print(popt_strong)
-print(popt_weak)
+print("Optimal parameter for p to fit amdahl onto strong speedup:" ,popt_strong[0])
+print("Optimal parameter for p to fit gustav onto weak speedup:", popt_weak[0])
 
 for j in range(len(nsproc)):
     strong_ideal_seepdup.append(amdahl(nsproc[j],popt_strong[0]))
     weak_ideal_speedup.append(gustav(nsproc[j],0.6))
-
-print(strong_ideal_seepdup)
-print(weak_ideal_speedup)
 
 
 ##### VISUALIZE STRONG RESULT #####
@@ -88,7 +82,7 @@ sns.lineplot(ax=axs[0], x=nsproc, y=strong_speedup, markers=True, palette=sns.cu
 axs[0].plot(nsproc, strong_ideal_seepdup, color='black', ls='--')
 axs[0].set_title("Strong scaling")
 
-#axs[0].set(xlabel='Number of nodes')
+axs[0].set(xlabel='Number of nodes')
 axs[0].set(ylabel='Speedup')
 
 
