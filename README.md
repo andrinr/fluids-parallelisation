@@ -19,5 +19,6 @@ The ideal speed-up for the strong scaling was calculated using Amdahl's law and 
 ### Reproduce measurements
 
 1. Set ``ptest = .TRUE.`` in ``hydro_commun``
-2. Run ``Analysis/analysis.sh`` (only works for slurm environments)
-3. Run ``python plot_analysis.py`` inside the ``Analysis`` directory
+2. Run ``make`` from the ``Bin`` directory
+3. Run ``Analysis/analysis.sh`` (only works for slurm environments)
+4. Run ``python plot_analysis.py`` inside the ``Analysis`` directory
