@@ -13,7 +13,7 @@ sed -i "s/ny=.*$/ny=1024/g" test.nml;
 
 # Iterate over thread counts 
 # 1 - 32
-for j in 0 1 2 3 4 5 6 7; do 
+for j in 0 1 2 3 4 5 6 7 8; do 
     sed -i  "s/job-name=.*$/job-name=\"strong-$j\" /g" analysis.job.sh;
     declare -i pow
     pow=$((2**$j))

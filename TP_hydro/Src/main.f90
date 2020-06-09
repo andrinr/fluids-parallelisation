@@ -80,6 +80,7 @@ program hydro_main
   print *,'Temps CPU (s.)     : ',tps_cpu
   print *,'Temps elapsed (s.) : ',tps_elapsed
 
+  ! use wall time for openmp performance measurment
    if (ptest) then
       call measurement(tps_elapsed)
    end if
