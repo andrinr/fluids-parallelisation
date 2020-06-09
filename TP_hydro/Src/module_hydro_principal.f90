@@ -74,48 +74,56 @@ end subroutine init_hydro
 
 ! reduction !!!, should be the same for all processors
 subroutine cmpdt(dt)
-  use hydro_commons
-  use hydro_const
-  use hydro_parameters
-  use hydro_utils
-  implicit none
+   use hydro_commons
+   use hydro_const
+   use hydro_parameters
+   use hydro_utils
+   implicit none
 
-  ! Dummy arguments
-  real(kind=prec_real), intent(out) :: dt  
-  ! Local variables
-  integer(kind=prec_int) :: i,j
-  real(kind=prec_real)   :: cournox,cournoy,eken
-  real(kind=prec_real),  dimension(:,:), allocatable   :: q
-  real(kind=prec_real),  dimension(:)  , allocatable   :: e,c
+   ! Dummy arguments
+   real(kind=prec_real), intent(out) :: dt  
+   ! Local variables
+   integer(kind=prec_int) :: i,j
+   real(kind=prec_real)   :: cournox,cournoy,eken
+   real(kind=prec_real),  dimension(:,:), allocatable   :: q
+   real(kind=prec_real),  dimension(:)  , allocatable   :: e,c
 
-  ! compute time step on grid interior
-  cournox = zero
-  cournoy = zero
+   ! compute time step on grid interior
+   cournox = zero
+   cournoy = zero
 
-  allocate(q(1:nx,1:IP))
-  allocate(e(1:nx),c(1:nx))
+   !$OMP PARALLEL PRIVATE(e,c,q)
 
-  do j=jmin+2,jmax-2
+   allocate(q(1:nx,1:IP))
+   allocate(e(1:nx),c(1:nx))
 
-     do i=1,nx
-        q(i,ID) = max(uold(i+2,j,ID),smallr)
-        q(i,IU) = uold(i+2,j,IU)/q(i,ID)
-        q(i,IV) = uold(i+2,j,IV)/q(i,ID)
-        eken = half*(q(i,IU)**2+q(i,IV)**2)
-        q(i,IP) = uold(i+2,j,IP)/q(i,ID) - eken
-        e(i)=q(i,IP)
-     end do
+   !$OMP DO 
 
-     call eos(q(1:nx,ID),e,q(1:nx,IP),c)
+   do j=jmin+2,jmax-2
+
+      do i=1,nx
+         q(i,ID) = max(uold(i+2,j,ID),smallr)
+         q(i,IU) = uold(i+2,j,IU)/q(i,ID)
+         q(i,IV) = uold(i+2,j,IV)/q(i,ID)
+         eken = half*(q(i,IU)**2+q(i,IV)**2)
+         q(i,IP) = uold(i+2,j,IP)/q(i,ID) - eken
+         e(i)=q(i,IP)
+      end do
+
+      call eos(q(1:nx,ID),e,q(1:nx,IP),c)
   
-     cournox=max(cournox,maxval(c(1:nx)+abs(q(1:nx,IU))))
-     cournoy=max(cournoy,maxval(c(1:nx)+abs(q(1:nx,IV))))
+      cournox=max(cournox,maxval(c(1:nx)+abs(q(1:nx,IU))))
+      cournoy=max(cournoy,maxval(c(1:nx)+abs(q(1:nx,IV))))
 
-  end do
+   end do
 
-  deallocate(q,e,c)
+   !$OMP END DO
 
-  dt = courant_factor*dx/max(cournox,cournoy,smallc)
+   deallocate(q,e,c)
+
+   !$OMP END PARALLEL
+
+   dt = courant_factor*dx/max(cournox,cournoy,smallc)
 end subroutine cmpdt
 
 
