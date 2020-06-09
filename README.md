@@ -1,6 +1,6 @@
 # HYDRO | Hybrid
 
-This is the MPI version of the hydro project.
+This is the HYBRID version of the hydro project.
 
 ## Compiling
 
@@ -8,7 +8,11 @@ Run make from the ``/Bin`` folder in order to compile the project. Depending on 
 
 ## Visualize
 
+<<<<<<< HEAD
 Execute the ``Output/render_sequence.py`` script. It will automaticially render all output files and stitch together the outputs from the MPI ranks. The script takes the number of processors as argument. e.g: ``python simple_mpi.py 4``
+=======
+Execute the render_sequence.py script from the /Output folder. It will automaticially render all output files and stitch together the outputs from the different processors. The script takes the number of processors as argument. e.g: python render_sequence.py.py 4
+>>>>>>> a31aa5d5b719600f03d9ef78ac4945faebef889a
 
 
 ## Speedup
@@ -23,6 +27,12 @@ The measurements were perfomed on cscs. Hypethreading was turned on and the mult
 ### Reproduce measurements
 
 1. Set ``ptest = .TRUE.`` in ``hydro_commun``
+<<<<<<< HEAD
 2. Run ``make`` inside ``/Bin``
 3. Run ``Analysis/analysis.sh`` (only works for slurm environments)
 4. Run ``python Analysis/plot_analysis.py`` to plot the results
+=======
+2. Run ``make`` from the ``Bin`` directory
+3. Run ``Analysis/analysis.sh`` (only works for slurm environments)
+4. Run ``python plot_analysis.py`` inside the ``Analysis`` directory
+>>>>>>> a31aa5d5b719600f03d9ef78ac4945faebef889a

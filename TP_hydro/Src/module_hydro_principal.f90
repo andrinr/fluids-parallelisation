@@ -99,8 +99,12 @@ subroutine cmpdt(dt)
    cournox = zero
    cournoy = zero
 
+   !$OMP PARALLEL PRIVATE(q,e,c)
+
    allocate(q(1:nx,1:IP))
    allocate(e(1:nx),c(1:nx))
+
+   !$OMP DO
 
    do j=jmin+2,jmax-2
 
@@ -123,7 +127,11 @@ subroutine cmpdt(dt)
 
    end do
 
+   !$OMP END DO
+
    deallocate(q,e,c)
+
+   !$OMP END PARALLEL
 
    dt = courant_factor*dx/max(cournox,cournoy,smallc)
 end subroutine cmpdt
