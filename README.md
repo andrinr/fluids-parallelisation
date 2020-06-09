@@ -16,7 +16,7 @@ Execute the render_sequence.py script from the /Output folder. It will automatic
 
 The ideal speed-up for the strong scaling was calculated using Amdahl's law and a coefficient for p = 0.4, for the weak scaling Gustafson's law with a coefficient of 0.6 was used. 
 
-### Reproduce measurements:
+### Reproduce measurements
 
 1. Set ``ptest = .TRUE.`` in ``hydro_commun``
 2. Run ``Analysis/analysis.sh`` (only works for slurm environments)
