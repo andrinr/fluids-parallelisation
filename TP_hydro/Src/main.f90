@@ -62,7 +62,9 @@ program hydro_main
    end do
 
    ! Final output
-   call output(rank, coords, dimensions)
+   if (.NOT. ptest) then
+      call output(rank, coords, dimensions)
+   end if
 
    call MPI_BARRIER(COMM_CART, ierror)
 
@@ -83,7 +85,7 @@ program hydro_main
    ! end mpi env
    !call end_mpi
 
-   if (rank == 0) then
+   if (rank == 0 .AND. ptest) then
       call measurement(max_tps_elapsed, nproc)
    end if
 

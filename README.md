@@ -17,3 +17,13 @@ Execute the render_sequence.py script from the ``/Output`` folder. It will autom
 - The function ``get_surround`` fetches the surrounding cells from other processors along the defined axis. 
 
 ## Speedup plots
+![Alt text](TP_hydro/Analysis/mpi_scaling.svg)
+The ideal speed-up for the strong scaling was calculated using Amdahl's law and a coefficient for p = 0.97, for the weak scaling Gustafson's law with a coefficient of p=0.43 was used.
+
+
+### Reproduce measurements
+
+1. Set ``ptest = .TRUE.`` in ``hydro_commun``
+2. Run ``make`` from the ``Bin`` directory
+3. Run ``Analysis/analysis.sh`` (only works for slurm environments)
+4. Run ``python plot_analysis.py`` inside the ``Analysis`` directory

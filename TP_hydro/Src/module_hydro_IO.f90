@@ -7,10 +7,14 @@
 
 module hydro_IO
 
+   CHARACTER(len=80) :: testnchar
+   integer :: testn
+
 contains
 
 subroutine read_params
   use hydro_parameters
+  use hydro_commons
   implicit none
 
   ! Local variables
@@ -29,8 +33,13 @@ subroutine read_params
 !      write(*,*)'File input.nml should contain a parameter namelist'
 !      STOP
 !   END IF
-!   CALL getarg(1,infile)
-  infile="../Input/input.nml"
+   CALL getarg(1,infile)
+   if (ptest) then
+      CALL getarg(2,testnchar)
+      read(testnchar,*) testn
+   end if
+   print*,"Reading: ", infile
+   print*,"Testno: ", testn
   open(1,file=infile)
   read(1,NML=run)
   read(1,NML=mesh)
@@ -104,13 +113,12 @@ subroutine measurement(elapsedtime, nproc)
 
    character(LEN=80) :: filename
    real(kind=prec_real) :: elapsedtime
-   integer :: type = 0
    integer(kind=prec_int) :: nproc
 
    filename='../Analysis/measurements'
    open(10,file=filename,form='unformatted', position="append")
    write(10)real(elapsedtime,kind=prec_output)
-   write(10)nx,ny,nproc
+   write(10)testn
    close(10)
 
 end subroutine measurement
