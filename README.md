@@ -8,7 +8,7 @@ Run make from the ``/Bin`` folder in order to compile the project. Depending on 
 
 ## Visualize
 
-Execute the ``Output/render_sequence.py`` script. It will automaticially render all output files and stitch together the outputs from the MPI ranks. The script takes the number of processors as argument. e.g: ``python simple_mpi.py 4``
+Execute the ``Output/render_sequence.py`` script. It will automaticially render all output files and stitch together the outputs from the MPI ranks. The script takes the number of processors as argument. e.g: ``python render_sequence.py 4``
 
 
 ## Speedup

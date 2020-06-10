@@ -6,7 +6,6 @@
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 module hydro_IO
-   integer :: totalx, totaly
    CHARACTER(len=80) :: infile, testnchar
    integer :: testn
 
@@ -26,8 +25,6 @@ subroutine read_params
   namelist/hydro/gamma,courant_factor,smallr,smallc,niter_riemann, &
        &         iorder,scheme,slope_type
 
-   totalx = nx
-   totaly = ny
    narg = iargc()
    !IF(narg .NE. 1)THEN
    !   write(*,*)'You should type: a.out input.nml'

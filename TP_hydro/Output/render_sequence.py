@@ -36,8 +36,8 @@ for j in range(nproc):
 
     grid.append(sublist)
 
-
-while(True):
+maxl = 200
+while(i < maxl):
 
     path_to_output = "output_" + str(i).zfill(5)+"."+str(0).zfill(5)
     if (not os.path.isfile(path_to_output)):
@@ -56,24 +56,17 @@ while(True):
             # reshape the output
             dat = np.array(dat)
             dat = dat.reshape(nvar, ny, nx)
-
-            print(dimy)
-            print(dimx)
-
             grid[coordx][dimy-1-coordy] = dat
 
     cols = []
 
     for col in grid[0:dimx]:
-        #print(np.array(col[0:dimy]))
-        print(np.shape(col[0]))
-        print(len(col[0:dimy]))
         cols.append(np.concatenate(col[0:dimy],1))
 
-    im = ax.imshow((np.concatenate(cols,2)[1, :, :]).T, interpolation='nearest', origin='lower', vmin=0, vmax=5, cmap="inferno")
+    im = ax.imshow((np.concatenate(cols,2)[0, :, :]).T, interpolation='nearest', origin='lower', vmin=0, vmax=5, cmap="inferno")
     ims.append([im])
 
-    i += 1
+    i += 5
 
 
 ani = animation.ArtistAnimation(fig,ims,interval=50,blit=True,repeat_delay=0)
