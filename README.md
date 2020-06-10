@@ -1,8 +1,8 @@
 # README #
 
-This repository contains the **ecercise solutions** to High Performance Computing (ESC401).
+This repository contains the **exercise solutions** to High Performance Computing as well as the HYDRO project. 
 
-Checkout the other branches for **openmp**, **mpi** and **hybrid** version of the HYDRO project.
+Checkout the other branches for the **openmp**, **mpi** and **hybrid** version of the HYDRO project.
 
 ___
 
